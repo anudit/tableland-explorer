@@ -19,7 +19,7 @@ const theme = extendTheme({
     },
     config: {
       cssVarPrefix: "c",
-      initialColorMode: "dark"
+      initialColorMode: "light"
     }
 })
 
