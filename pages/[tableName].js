@@ -14,7 +14,8 @@ const IdentitySection = () => {
 
     const { data, error } = useSWR(
         tableName ? [`https://testnet.tableland.network/query?mode=json&s=select%20*%20from%20${tableName}`] : null,
-        fetcher
+        fetcher,
+        { refreshInterval: 10000, revalidateOnFocus: true }
     );
 
     if (error) return <div>failed to load</div>;
@@ -27,7 +28,7 @@ const IdentitySection = () => {
     if (data?.message){
         return (
             <>
-                <NavBar tableName={tableName}/>
+                <NavBar tableName={tableName} />
                 <chakra.div position="relative" height="calc(100vh - 50px)" width="100%">
                     <Alert status='error'>
                         <AlertIcon />
@@ -40,7 +41,7 @@ const IdentitySection = () => {
     else {
         return (
             <>
-                <NavBar tableName={tableName}/>
+                <NavBar tableName={tableName} />
                 <chakra.div position="relative" height="calc(100vh - 50px)">
                     <Grid data={data} downloadFilename={tableName}/>
                 </chakra.div>

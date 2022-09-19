@@ -90,3 +90,24 @@ export const prettifyNumber = (num, digits=2) => {
     }
     return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
 }
+
+
+export const toProperCase = (inp) => {
+    return inp.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+
+export function nameToAvatar(name){
+    let tb = name.split('_');
+    let chainId = parseInt(tb[tb.length-2]);
+
+    if(chainId === 80001 || chainId === 137){
+        return "https://res.cloudinary.com/anudit/image/upload/v1663573250/convo/polygon-token.svg"
+    }
+    else if(chainId === 10 || chainId == 420 || chainId == 69){
+        return "https://res.cloudinary.com/anudit/image/upload/v1663573617/convo/optimism.svg"
+    }
+    else {
+        return null;
+    }
+
+}
