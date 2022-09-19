@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Flex, Tag } from "@chakra-ui/react";
@@ -16,7 +16,7 @@ import {
   AutoCompleteList
 } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
-import fetcher from "../utils/fetcher";
+import {multifetch} from "../utils/fetcher";
 import {nameToAvatar, toProperCase} from "../utils/stringUtils";
 
 export default function Home() {
@@ -29,19 +29,11 @@ export default function Home() {
     setSearchValue(event.target.value);
   }
 
-  const { data } = useSWR(
-    ['https://api.thegraph.com/subgraphs/name/anudit/tableland', "POST", {
-      query: `{
-        tables(where: {name_contains_nocase: "${searchValue}"}, limit: 100) {
-          name
-          owner
-          tableId
-        }
-      }`,
-      variables: null
-    }],
-    fetcher
-  );
+  const { data, error } = useSWR([searchValue], multifetch);
+
+  useEffect(()=>{
+    console.log(error);
+  }, [error]);
 
   return (
     <>
@@ -68,7 +60,7 @@ export default function Home() {
                   autoComplete="off"
                 />
                 <AutoCompleteList id="setValue">
-                  {data && data?.data?.tables?.map((table, oid) => (
+                  {data && data?.map((table, oid) => (
                     <AutoCompleteItem
                       key={`option-${oid}`}
                       value={table.name}

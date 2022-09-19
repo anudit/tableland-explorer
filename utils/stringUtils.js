@@ -106,6 +106,9 @@ export function nameToAvatar(name){
     else if(chainId === 10 || chainId == 420 || chainId == 69){
         return "https://res.cloudinary.com/anudit/image/upload/v1663573617/convo/optimism.svg"
     }
+    else if(chainId === 421613 ){
+        return "https://res.cloudinary.com/anudit/image/upload/v1663577114/convo/Arbitrum.svg"
+    }
     else {
         return null;
     }
