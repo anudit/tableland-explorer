@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Tooltip, Button, Flex, IconButton, Text, Avatar, Tag, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import { ArrowBackIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import Link from "next/link";
