@@ -10,8 +10,8 @@ import SqlInput from "./RunSql";
 
 const NavBar = ({refresh, isLoading}) => {
 
-  const { hasCopied, onCopy } = useClipboard(Object.fromEntries(new URLSearchParams(window.location.search))?.query);
-  const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard(window? window.location.href : '');
+  const { hasCopied, onCopy } = useClipboard(global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query : "");
+  const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard(global?.window? window.location.href : '');
   const [sqlError, setSqlError] = useState(false);
 
   return (
@@ -28,7 +28,7 @@ const NavBar = ({refresh, isLoading}) => {
     >
       <Flex direction="row" justify="left" alignItems='center' w={{base: "fit-content", md:"33.33%"}}>
         <Link href="/">
-          <IconButton icon={<TablelandSmallIcon  />} colorScheme='facebook' variant='ghost' size="sm" />
+          <TablelandSmallIcon cursor="pointer" boxSize={8}/>
         </Link>
       </Flex>
       <Flex w="33.33%" align='center' justifyContent='center'>
@@ -40,13 +40,13 @@ const NavBar = ({refresh, isLoading}) => {
       </Flex>
       <Flex direction="row" justify="right" alignItems='center' w={{base: "fit-content", md:"33.33%"}} align='right'>
         <ButtonGroup size='sm' isAttached variant='ghost'>
-          <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Query"} placement='left'>
-            <IconButton colorScheme='blue' onClick={onCopy} icon={hasCopied ? <CheckIcon /> : <CopyIcon />} />
-          </Tooltip>
           <Tooltip hasArrow label={isLoading ? "Refreshing Data" : "Refresh Data"} placement='left'>
             <IconButton colorScheme='facebook' onClick={refresh} icon={isLoading ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isLoading}/>
           </Tooltip>
-          <Tooltip hasArrow label={hasCopiedLink ? "Copied" : "Share Link"} placement='left'>
+          <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Query"} placement='left'>
+            <IconButton colorScheme='blue' onClick={onCopy} icon={hasCopied ? <CheckIcon /> : <CopyIcon />} />
+          </Tooltip>
+          <Tooltip hasArrow label={hasCopiedLink ? "Copied" : "Copy Share Link"} placement='left'>
             <IconButton colorScheme='blue' onClick={onCopyLink} icon={hasCopiedLink ? <CheckIcon /> : <LinkIcon />} />
           </Tooltip>
         </ButtonGroup>

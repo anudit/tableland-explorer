@@ -1,14 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
+import { Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip, Alert, AlertIcon, AlertTitle, AlertDescription  } from "@chakra-ui/react";
 import { SqlIcon, TablelandIcon } from "@/public/icons";
-import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-} from '@chakra-ui/react';
 import {
   AutoComplete,
   AutoCompleteInput,
@@ -20,6 +13,7 @@ import {multifetch} from "../utils/fetcher";
 import {nameToAvatar, toProperCase} from "../utils/stringUtils";
 import { SearchIcon } from "@chakra-ui/icons";
 import SqlInput from "@/components/RunSql";
+import Meta from "@/components/Meta";
 
 export default function Home() {
 
@@ -47,23 +41,7 @@ export default function Home() {
 
   return (
     <>
-        <Head>
-            <title>Tableland Explorer</title>
-            <meta name="title" content="Tableland Explorer" />
-            <meta name="description" content="An explorer for Tableland Network." />
-
-            <meta property="og:type" content="website" />
-            <meta property="og:url" content="https://tableland.xyz/" />
-            <meta property="og:title" content="Tableland Explorer" />
-            <meta property="og:description" content="An explorer for Tableland Network." />
-            <meta property="og:image" content="https://i.imgur.com/5ErjwNI.png" />
-
-            <meta property="twitter:card" content="summary_large_image" />
-            <meta property="twitter:url" content="https://tableland.xyz/" />
-            <meta property="twitter:title" content="Tableland Explorer" />
-            <meta property="twitter:description" content="An explorer for Tableland Network." />
-            <meta property="twitter:image" content="https://i.imgur.com/5ErjwNI.png" />
-        </Head>
+        <Meta />
 
         <Flex direction="column" p="200px" alignItems="center" h="100vh">
           <Flex direction="column" justifyContent="center" alignItems="center" w={{base:"100vw", md:"50vw", lg: "35vw"}}>
@@ -121,18 +99,13 @@ export default function Home() {
               </Tooltip>
             </Flex>
             {
-              isSqlMode && (sqlError ? (
+              isSqlMode && sqlError && (
                   <Alert status='error'>
                       <AlertIcon />
                       <AlertTitle>Parsing Error</AlertTitle>
                       <AlertDescription>{sqlError}</AlertDescription>
                   </Alert>
-              ) : (
-                  <Alert status='success'>
-                      <AlertIcon />
-                      Your SQL looks good.
-                  </Alert>
-              ))
+              )
             }
           </Flex>
         </Flex>

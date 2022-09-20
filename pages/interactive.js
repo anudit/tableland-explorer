@@ -6,7 +6,7 @@ import useSWR from "swr";
 
 import fetcher from '@/utils/fetcher';
 import NavBar from '../components/NavbarInteractive';
-import Head from 'next/head';
+import Meta from '@/components/Meta';
 
 const IdentitySection = () => {
 
@@ -28,47 +28,28 @@ const IdentitySection = () => {
     }
 
     if (error) return <div>failed to load, {error}</div>;
-    if (!data) return (
-        <Flex alignContent="center" direction="column" height="100vh" width="100vw">
-            <Spinner />
-        </Flex>
-    );
-    else {
-        return (
-            <>
-                <Head>
-                    <title>Tableland Explorer</title>
-                    <meta name="title" content="Tableland Explorer" />
-                    <meta name="description" content="An explorer for Tableland Network." />
-
-                    <meta property="og:type" content="website" />
-                    <meta property="og:url" content="https://tableland.xyz/" />
-                    <meta property="og:title" content="Tableland Explorer" />
-                    <meta property="og:description" content="An explorer for Tableland Network." />
-                    <meta property="og:image" content='https://i.imgur.com/5ErjwNI.png' />
-
-                    <meta property="twitter:card" content="summary_large_image" />
-                    <meta property="twitter:url" content="https://tableland.xyz/" />
-                    <meta property="twitter:title" content="Tableland Explorer" />
-                    <meta property="twitter:description" content="An explorer for Tableland Network." />
-                    <meta property="twitter:image" content='https://i.imgur.com/5ErjwNI.png' />
-                </Head>
-                <NavBar refresh={refresh} isLoading={refreshing || isValidating} />
-                <chakra.div position="relative" height="calc(100vh - 50px)" width="100%">
+    return (
+        <>
+            <Meta />
+            <NavBar refresh={refresh} isLoading={refreshing || isValidating} />
+            <chakra.div position="relative" height="calc(100vh - 50px)" width="100%">
                     {
-                       data?.message ? (
-                            <Alert status='error'>
-                                <AlertIcon />
-                                {data?.message === "Row not found"? "Row not found, The table is empty." : data?.message}
-                            </Alert>
-                       ) : (
-                            <Grid data={data} downloadFilename='custom' />
-                       )
-                    }
-                </chakra.div>
-            </>
-        )
-    }
+                    data ? data?.message ? (
+                        <Alert status='error'>
+                            <AlertIcon />
+                            {data?.message === "Row not found"? "Row not found, The table is empty." : data?.message}
+                        </Alert>
+                    ) : (
+                        <Grid data={data} downloadFilename='custom' />
+                    ) : (
+                        <Flex w="100vw" h="100vh" justifyContent='center' alignItems='center'>
+                            <Spinner />
+                        </Flex>
+                    )
+                }
+            </chakra.div>
+        </>
+    )
 
 }
 

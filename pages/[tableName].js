@@ -6,8 +6,8 @@ import useSWR from "swr";
 
 import fetcher from '@/utils/fetcher';
 import NavBar from '../components/Navbar';
-import Head from 'next/head';
 import { nameToSubgraph, parseTableData } from '@/utils/stringUtils';
+import Meta from '@/components/Meta';
 
 const IdentitySection = () => {
 
@@ -57,50 +57,31 @@ const IdentitySection = () => {
     }
 
     if (error) return <div>failed to load, {error}</div>;
-    if (!data) return (
-        <Flex alignContent="center" direction="column" height="100vh" width="100vw">
-            <Spinner />
-        </Flex>
-    );
-    else {
 
-        let {tableId, chainId} = parseTableData(tableName);
-        const url = `https://render.tableland.xyz/${chainId}/${tableId}`;
-        return (
-            <>
-                <Head>
-                    <title>Tableland Explorer</title>
-                    <meta name="title" content="Tableland Explorer" />
-                    <meta name="description" content="An explorer for Tableland Network." />
-
-                    <meta property="og:type" content="website" />
-                    <meta property="og:url" content="https://tableland.xyz/" />
-                    <meta property="og:title" content="Tableland Explorer" />
-                    <meta property="og:description" content="An explorer for Tableland Network." />
-                    <meta property="og:image" content={url} />
-
-                    <meta property="twitter:card" content="summary_large_image" />
-                    <meta property="twitter:url" content="https://tableland.xyz/" />
-                    <meta property="twitter:title" content="Tableland Explorer" />
-                    <meta property="twitter:description" content="An explorer for Tableland Network." />
-                    <meta property="twitter:image" content={url} />
-                </Head>
-                <NavBar tableName={tableName} tableMetadata={tableMetadata} refresh={refresh} isLoading={refreshing || isValidating} />
-                <chakra.div position="relative" height="calc(100vh - 50px)" width="100%">
-                    {
-                       data?.message ? (
-                            <Alert status='error'>
-                                <AlertIcon />
-                                {data?.message === "Row not found"? "Row not found, The table is empty." : data?.message}
-                            </Alert>
-                       ) : (
-                            <Grid data={data} downloadFilename={tableName} />
-                       )
-                    }
-                </chakra.div>
-            </>
-        )
-    }
+    let {tableId, chainId} = parseTableData(tableName);
+    const url = `https://render.tableland.xyz/${chainId}/${tableId}`;
+    return (
+        <>
+            <Meta url={url} />
+            <NavBar tableName={tableName || ""} tableMetadata={tableMetadata} refresh={refresh} isLoading={refreshing || isValidating} />
+            <chakra.div position="relative" height="calc(100vh - 50px)" width="100%">
+                {
+                    data ? data?.message ? (
+                        <Alert status='error'>
+                            <AlertIcon />
+                            {data?.message === "Row not found"? "Row not found, The table is empty." : data?.message}
+                        </Alert>
+                    ) : (
+                        <Grid data={data} downloadFilename={tableName} />
+                    ) : (
+                        <Flex w="100vw" h="100vh" justifyContent='center' alignItems='center'>
+                            <Spinner />
+                        </Flex>
+                    )
+                }
+            </chakra.div>
+        </>
+    )
 
 }
 

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Avatar, Tooltip, Tag, Text, Flex, Spinner, Image, Button, useClipboard } from "@chakra-ui/react";
+import { ButtonGroup, IconButton, Avatar, Tooltip, Tag, Text, Flex, Spinner, Image, Button, useClipboard } from "@chakra-ui/react";
 import { nameToAvatar, parseTableData, toProperCase } from '@/utils/stringUtils';
 import Link from 'next/link';
+import { SqlIcon } from '@/public/icons';
 
 const TableCard = ({tableName}) => {
 
@@ -30,10 +31,15 @@ const TableCard = ({tableName}) => {
                     fallbackSrc='https://res.cloudinary.com/anudit/image/upload/v1663653643/convo/tableland-thumb.png'
                     alt={`Picture of the ${tableName}`}
                 />
-                <Flex direction='row'>
-                    <Link href={`/${tableName}`}>
-                        <Button w="100%" m={2} colorScheme='blue'>Explore Table</Button>
-                    </Link>
+                <Flex direction='row' m={2}>
+                    <ButtonGroup size='sm' isAttached w="100%">
+                        <Link href={`/${tableName}`}>
+                            <Button w="100%">Explore Table</Button>
+                        </Link>
+                        <Link href={`/interactive?query=${encodeURIComponent("SELECT * from " + tableName)}`}>
+                            <IconButton icon={<SqlIcon />} />
+                        </Link>
+                    </ButtonGroup>
                 </Flex>
             </Flex>
         )

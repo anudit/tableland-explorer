@@ -19,7 +19,7 @@ module.exports = (phase) => {
       return config;
     },
     images: {
-      minimumCacheTTL: 60,
+      minimumCacheTTL: 3600,
       domains: ['render.tableland.xyz'],
     },
   }

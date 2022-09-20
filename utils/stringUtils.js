@@ -130,6 +130,23 @@ export function nameToSubgraph(name){
     }
 }
 
+export function nameToExplorer(name){
+    let {chainId} = parseTableData(name);
+
+    if(chainId === 80001){
+        return "https://mumbai.polygonscan.com"
+    }
+    else if( chainId == 420){
+        return "https://goerli-optimism.etherscan.io"
+    }
+    else if(chainId === 421613 ){
+        return "https://testnet.arbiscan.io"
+    }
+    else {
+        return null;
+    }
+}
+
 export function parseTableData(tableName){
     if (tableName){
         let tableId = tableName.split('_');

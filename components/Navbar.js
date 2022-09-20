@@ -1,9 +1,9 @@
 import React from "react";
-import { Tooltip, Flex, IconButton, Textarea,  Spinner, Text, Avatar, Tag, ButtonGroup, useClipboard } from "@chakra-ui/react";
-import {  ArrowUpIcon, CheckIcon, LinkIcon, RepeatIcon } from "@chakra-ui/icons";
+import { chakra, Tooltip, Flex, IconButton, Textarea,  Spinner, Text, Avatar, Tag, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import { ArrowUpIcon, CheckIcon, LinkIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import { nameToAvatar, parseTableData, toProperCase, truncateAddress } from "@/utils/stringUtils";
-import { TablelandSmallIcon } from "@/public/icons";
+import { nameToAvatar, nameToExplorer, parseTableData, toProperCase, truncateAddress } from "@/utils/stringUtils";
+import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
 import {
   Modal,
   ModalOverlay,
@@ -22,15 +22,16 @@ import {
   StatHelpText,
   StatGroup,
 } from '@chakra-ui/react'
+import { useRouter } from "next/router";
 
 const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
 
   const { hasCopied, onCopy } = useClipboard(tableName);
   const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard("https://tableland-explorer.vercel.app/"+tableName);
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const router = useRouter();
 
-  let tableId = tableName.split('_');
-  tableId = tableId[tableId.length-1];
+  let {tableId, chainId} = parseTableData(tableName);
 
   return (
     <Flex
@@ -46,7 +47,7 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
     >
       <Flex direction="row" justify="left" alignItems='center' w={{base: "fit-content", md:"33.33%"}}>
         <Link href="/">
-          <IconButton icon={<TablelandSmallIcon  />} colorScheme='blue' variant='ghost' size="sm" />
+          <TablelandSmallIcon cursor="pointer" boxSize={8}/>
         </Link>
       </Flex>
       <Flex w="33.33%" align='center' justifyContent='center'>
@@ -94,8 +95,12 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
                     <StatGroup>
                       <Stat>
                         <StatLabel>Owner</StatLabel>
-                        <StatNumber>{truncateAddress(tableMetadata?.owner)}</StatNumber>
-                        <StatHelpText><Link target='_blank' href={`/address/${tableMetadata?.owner}`}>Tables created by Owner</Link></StatHelpText>
+                        <Link target='_blank' href={`/address/${tableMetadata?.owner}`}>
+                          <chakra.div cursor="pointer">
+                            <StatNumber>{truncateAddress(tableMetadata?.owner)}</StatNumber>
+                            <StatHelpText>View tables by Owner</StatHelpText>
+                          </chakra.div>
+                        </Link>
                       </Stat>
 
                       <Stat>
@@ -114,8 +119,28 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
                         readOnly
                     />
                     <br/><br/>
-                    <Text fontWeight={'medium'} fontSize='sm'>Token URI</Text>
-                    <Text>{tableMetadata?.tokenURI}</Text>
+
+                    <Flex direction='row' justifyContent='space-between'>
+                      <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' onClick={()=>{
+                        window.open(tableMetadata?.tokenURI, '_blank')
+                      }} _hover={{'textDecoration': 'underline'}}>
+                        Token URI <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
+                      </Text>
+
+                      <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' onClick={()=>{
+                        window.open(`https://render.tableland.xyz/${chainId}/${tableId}`, '_blank')
+                      }} _hover={{'textDecoration': 'underline'}}>
+                        Image Link <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
+                      </Text>
+
+                      <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' onClick={()=>{
+                        window.open(`${nameToExplorer(tableName)}/tx/`+tableMetadata?.id, '_blank')
+                      }} _hover={{'textDecoration': 'underline'}}>
+                        Creation Txn <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
+                      </Text>
+                    </Flex>
+
+                    <br/>
                     </ModalBody>
                   </ModalContent>
                 </Modal>
@@ -126,11 +151,13 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
               </>
             )
           }
-          <Tooltip hasArrow label='View Token URI' placement='left'>
-            <IconButton colorScheme='blue' onClick={()=>{
-              window.open(`https://testnet.tableland.network/chain/80001/tables/${tableId}`, "_blank");
-            }} icon={<ArrowUpIcon style={{'transform':'rotate(45deg)'}}/>} />
-          </Tooltip>
+
+              <Tooltip hasArrow label='Interactive SQL Mode' placement='left'>
+                  <SqlIcon color='blue.600' boxSize={8} p={1} cursor="pointer" onClick={()=>{
+                    router.push(`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}`)
+                  }}/>
+              </Tooltip>
+
         </ButtonGroup>
       </Flex>
     </Flex>

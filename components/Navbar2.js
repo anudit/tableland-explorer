@@ -27,7 +27,7 @@ const NavBar = ({address, isLoading}) => {
     >
       <Flex direction="row" justify="left" alignItems='center' w={{base: "fit-content", md:"33.33%"}}>
         <Link href="/">
-          <IconButton icon={<TablelandSmallIcon  />} colorScheme='facebook' variant='ghost' size="sm" />
+          <TablelandSmallIcon cursor="pointer" boxSize={8}/>
         </Link>
       </Flex>
       <Flex w="33.33%" align='center' justifyContent='center'>

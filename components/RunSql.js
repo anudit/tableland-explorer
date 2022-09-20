@@ -7,20 +7,14 @@ const SqlInput = ({sqlError, setSqlError, ...props}) => {
   const router = useRouter();
 
   useEffect(()=>{
-    async function setup(){
-        await init();
-        console.log('init done');
-    }
-    setup();
+    init();
   },[])
-
 
   const onChangeSql = async (event) => {
     try {
         if (window.sqlparser.parse){
             if (event.target.value.trim() != ""){
-                const parsed = await window.sqlparser.parse(event.target.value);
-                console.log('parsed', parsed);
+                await window.sqlparser.parse(event.target.value);
                 setSqlError(false);
             }
         }
@@ -38,7 +32,7 @@ const SqlInput = ({sqlError, setSqlError, ...props}) => {
       size='md'
       w="100%"
       onChange={onChangeSql}
-      defaultValue={Object.fromEntries(new URLSearchParams(window.location.search))?.query}
+      defaultValue={global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query : ""}
       mb={2}
       isInvalid={sqlError}
       focusBorderColor={sqlError ? 'red' : 'green.300'}
