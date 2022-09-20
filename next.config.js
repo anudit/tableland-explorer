@@ -3,36 +3,34 @@ const withPWA = require('next-pwa')({dest: 'public', runtimeCaching})
 const { PHASE_DEVELOPMENT_SERVER } = require('next/constants')
 
 module.exports = (phase) => {
+
+  const baseConfig = {
+    experimental: {
+      optimizeCss:true
+    },
+    reactStrictMode: true,
+    webpack: (config, { isServer }) => {
+      if (!isServer) {
+        config.resolve.fallback.fs = false;
+        config.resolve.fallback.net = false;
+        config.resolve.fallback.tls = false;
+      }
+      return config;
+    },
+    images: {
+      minimumCacheTTL: 60,
+      domains: ['render.tableland.xyz'],
+    },
+  }
+
   if (phase === PHASE_DEVELOPMENT_SERVER) {
     return {
-      experimental: {
-        optimizeCss:true
-      },
-      reactStrictMode: true,
-      webpack: (config, { isServer }) => {
-        if (!isServer) {
-          config.resolve.fallback.fs = false;
-          config.resolve.fallback.net = false;
-          config.resolve.fallback.tls = false;
-        }
-        return config;
-      },
+      ...baseConfig
     }
   }
 
   return withPWA({
-      experimental: {
-        optimizeCss:true
-      },
-      poweredByHeader: false,
-      reactStrictMode: true,
-      webpack: (config, { isServer }) => {
-        if (!isServer) {
-          config.resolve.fallback.fs = false;
-          config.resolve.fallback.net = false;
-          config.resolve.fallback.tls = false;
-        }
-        return config;
-      },
+      ...baseConfig,
+      poweredByHeader: false
    })
 }

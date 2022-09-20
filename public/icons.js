@@ -9,6 +9,22 @@ export const TablelandIcon = createIcon({
     )
 });
 
+export const TablelandSmallIcon = createIcon({
+    displayName: 'TablelandSmallIcon',
+    viewBox: '0 0 81 41',
+    path: (
+        <path fill="currentColor" d="M13 12c2-5 12 0 14-4 1-1 3-8 6-8h32a2 2 0 0 1 2 2c1 15 3 26 14 36a2 2 0 0 1-1 3H2a2 2 0 0 1-1-3c8-7 11-16 12-26Z"/>
+    )
+});
+
+export const UserIcon = createIcon({
+    displayName: 'UserIcon',
+    viewBox: '0 0 24 24',
+    path: (
+        <path fill="currentColor" d="M20.822 18.096c-3.439-.794-6.64-1.49-5.09-4.418 4.72-8.912 1.251-13.678-3.732-13.678-5.082 0-8.464 4.949-3.732 13.678 1.597 2.945-1.725 3.641-5.09 4.418-3.073.71-3.188 2.236-3.178 4.904l.004 1h23.99l.004-.969c.012-2.688-.092-4.222-3.176-4.935z"/>
+    )
+});
+
 export const VerifiedIcon = createIcon({
     displayName: 'VerifiedIcon',
     viewBox: '0 0 24 24',

@@ -29,7 +29,13 @@ export default function Home() {
     setSearchValue(event.target.value);
   }
 
-  const { data, error } = useSWR([searchValue], multifetch);
+  const { data, error } = useSWR(`{
+    tables(where: {name_contains_nocase: "${searchValue}"}, limit: 100) {
+      name
+      owner
+      tableId
+    }
+  }`, multifetch);
 
   useEffect(()=>{
     console.log(error);
@@ -39,13 +45,26 @@ export default function Home() {
     <>
         <Head>
             <title>Tableland Explorer</title>
-            <meta name="description" content="Tableland Explorer" />
-            <link rel="icon" href="/favicon.ico" />
+            <meta name="title" content="Tableland Explorer" />
+            <meta name="description" content="An explorer for Tableland Network." />
+
+            <meta property="og:type" content="website" />
+            <meta property="og:url" content="https://tableland.xyz/" />
+            <meta property="og:title" content="Tableland Explorer" />
+            <meta property="og:description" content="An explorer for Tableland Network." />
+            <meta property="og:image" content="https://i.imgur.com/5ErjwNI.png" />
+
+            <meta property="twitter:card" content="summary_large_image" />
+            <meta property="twitter:url" content="https://tableland.xyz/" />
+            <meta property="twitter:title" content="Tableland Explorer" />
+            <meta property="twitter:description" content="An explorer for Tableland Network." />
+            <meta property="twitter:image" content="https://i.imgur.com/5ErjwNI.png" />
         </Head>
+
         <Flex direction="column" p="200px" alignItems="center" h="100vh">
           <Flex direction="column" justifyContent="center" alignItems="center" w={{base:"100vw", md:"50vw"}}>
             <br/>
-            <TablelandIcon width="400px" height="auto" />
+            <TablelandIcon width={{base: "90%", md: "400px"}} height="auto" />
             <br/><br/>
             <FormControl id="table-name" width={{base: "95%", md: "70%"}}>
               <AutoComplete openOnFocus onSelectOption={(data)=>{
@@ -60,7 +79,7 @@ export default function Home() {
                   autoComplete="off"
                 />
                 <AutoCompleteList id="setValue">
-                  {data && data?.map((table, oid) => (
+                  {data && data.map(e=>e?.data?.tables).flat().map((table, oid) => (
                     <AutoCompleteItem
                       key={`option-${oid}`}
                       value={table.name}

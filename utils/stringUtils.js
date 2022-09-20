@@ -97,8 +97,7 @@ export const toProperCase = (inp) => {
 };
 
 export function nameToAvatar(name){
-    let tb = name.split('_');
-    let chainId = parseInt(tb[tb.length-2]);
+    let {chainId} = parseTableData(name);
 
     if(chainId === 80001 || chainId === 137){
         return "https://res.cloudinary.com/anudit/image/upload/v1663573250/convo/polygon-token.svg"
@@ -112,5 +111,43 @@ export function nameToAvatar(name){
     else {
         return null;
     }
-
 }
+
+export function nameToSubgraph(name){
+    let {chainId} = parseTableData(name);
+
+    if(chainId === 80001){
+        return "https://api.thegraph.com/subgraphs/name/anudit/tableland"
+    }
+    else if( chainId == 420){
+        return "https://api.thegraph.com/subgraphs/name/anudit/tableland-optimism-goerli"
+    }
+    else if(chainId === 421613 ){
+        return "https://api.thegraph.com/subgraphs/name/anudit/tableland-arbitrum-goerli"
+    }
+    else {
+        return null;
+    }
+}
+
+export function parseTableData(tableName){
+    if (tableName){
+        let tableId = tableName.split('_');
+        let chainId = tableId[tableId.length-2];
+        tableId = tableId[tableId.length-1];
+
+        return {
+            tableId: tableId,
+            chainId: parseInt(chainId),
+            tableName: tableName,
+        }
+    }
+    else {
+        return {
+            tableId: "",
+            chainId: 0,
+            tableName: "",
+        }
+    }
+}
+

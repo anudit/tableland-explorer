@@ -20,20 +20,14 @@ export const fetcher = async (url, method="GET", bodyData = {}) => {
     return respData;
 };
 
-export const multifetch = async (searchValue) => {
+export const multifetch = async (query) => {
 
     let options = {
         method: "POST",
         headers: new Headers({ 'Content-Type': 'application/json' }),
         credentials: "same-origin",
         body: JSON.stringify({
-            query: `{
-                tables(where: {name_contains_nocase: "${searchValue}"}, limit: 100) {
-                  name
-                  owner
-                  tableId
-                }
-              }`,
+            query: query,
             variables: null
         })
     };
@@ -48,7 +42,7 @@ export const multifetch = async (searchValue) => {
     for (let i = 0; i < res.length; i++) {
         if (res[i].status === 'fulfilled'){
             const dat = await res[i].value.json();
-            results = results.concat(dat?.data?.tables);
+            results.push(dat);
         }
     }
     return results;
