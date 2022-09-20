@@ -1,0 +1,6 @@
+{
+  "https://cdn.jsdelivr.net/gh/tablelandnetwork/wasm-sqlparser/main.js": { "integrity": "sha512-uBqO0IN+uC0yMuGQTOz/krrPi6PQUvbVcVVamO5pbyQ6tKMg50U4xLJY6Sk0sxBW5jnQTkxaUor/XJxWNkIB8w==", "contentType": "application/javascript; charset=utf-8" },
+  "https://cdn.jsdelivr.net/gh/tablelandnetwork/wasm-sqlparser/main.wasm": { "integrity": "sha512-2rdqjzZnAKiEcFmV7vabf75mFYyDNwAN4KSws3L9wlXTCph0H8YU+SFjeFSmJAmLwApMGX+2uCN/XriBIfunVQ==", "contentType": "application/wasm" },
+  "https://cdn.jsdelivr.net/gh/tablelandnetwork/wasm-sqlparser/wasm_exec.js": { "integrity": "sha512-xswAnfLY9tk4WYVdvQXXNNj6Ryxeb5JR7i5QNneUA2LbNYYssljuMl1H/zxcE0DvkhPWhVXhxROejV0RsCKzJg==", "contentType": "application/javascript; charset=utf-8" },
+  "version": 1
+}
