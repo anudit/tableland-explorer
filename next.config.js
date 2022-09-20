@@ -6,7 +6,8 @@ module.exports = (phase) => {
 
   const baseConfig = {
     experimental: {
-      optimizeCss:true
+      optimizeCss:true,
+      urlImports: ['https://cdn.jsdelivr.net'],
     },
     reactStrictMode: true,
     webpack: (config, { isServer }) => {

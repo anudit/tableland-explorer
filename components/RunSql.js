@@ -1,32 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Input } from "@chakra-ui/react";
-import { connect } from "@tableland/sdk";
+import init from 'https://cdn.jsdelivr.net/gh/tablelandnetwork/wasm-sqlparser/main.js';
+import { useRouter } from "next/router";
 
-const NavBar = () => {
-
-  const [tableland, setTableland] = useState(null);
+const SqlInput = ({sqlError, setSqlError, ...props}) => {
+  const router = useRouter();
 
   useEffect(()=>{
     async function setup(){
-      const connection = await connect({ network: "testnet", chain: "polygon-mumbai" });
-      setTableland(connection);
+        await init();
+        console.log('init done');
     }
     setup();
   },[])
 
+
   const onChangeSql = async (event) => {
     try {
-      const hashRes = await tableland.hash(event.target.value);
-      console.log(hashRes, event.target.value);
-
+        if (window.sqlparser.parse){
+            if (event.target.value.trim() != ""){
+                const parsed = await window.sqlparser.parse(event.target.value);
+                console.log('parsed', parsed);
+                setSqlError(false);
+            }
+        }
+        else {
+          setSqlError('Parser not Loaded.');
+        }
     } catch (error) {
-      console.log(error.message, event.target.value);
+      setSqlError(error.message);
     }
   }
 
   return (
-      <Input placeholder='Run SQL' size='sm' onChange={onChangeSql} maxWidth="200px"/>
+    <Input
+      placeholder='Run SQL'
+      size='md'
+      w="100%"
+      onChange={onChangeSql}
+      defaultValue={Object.fromEntries(new URLSearchParams(window.location.search))?.query}
+      mb={2}
+      isInvalid={sqlError}
+      focusBorderColor={sqlError ? 'red' : 'green.300'}
+      onKeyUp={(event)=>{
+        if (event.key == 'Enter' && !sqlError){
+          router.push(`/interactive?query=${encodeURIComponent(event.currentTarget.value)}`);
+        }
+      }}
+      {...props}
+    />
   );
 };
 
-export default NavBar;
+export default SqlInput;

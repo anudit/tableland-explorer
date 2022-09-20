@@ -42,3 +42,11 @@ export const WalletIcon = createIcon({
     )
 });
 
+export const SqlIcon = createIcon({
+    displayName: 'SqlIcon',
+    viewBox: '0 0 270 100',
+    path: (
+        <path fill="currentColor" d="M33 0C25 0 0 1 0 20v12c0 9 8 16 24 18h26c11 0 10 9 10 10v10c0 1 0 10-10 10H0v10h50a45 45 0 0 0 18-4c9-4 12-9 12-16V56c0-15-19-16-30-16H30c-8 0-9-5-10-10V20c1-4 3-9 10-10h50V0Zm77 0C95 2 90 9 90 20v50c0 10 5 16 16 19a37 37 0 0 0 11 1h35l11 10h23l-16-14c8-3 10-8 10-16V20c0-11-7-18-22-20Zm80 0v70c0 12 7 18 25 20h55V80h-46c-10 0-14-4-14-11V0Zm-68 10h26c6 0 11 6 12 10v50a7 7 0 0 1-2 5l-5-5h-23l11 10h-19c-7 0-11-5-12-10V21c0-5 4-11 12-11Z"/>
+    )
+});
+
