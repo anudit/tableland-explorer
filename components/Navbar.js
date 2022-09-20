@@ -1,5 +1,5 @@
 import React from "react";
-import { Tooltip, Flex, IconButton, Button, Textarea,  Spinner, Text, Avatar, Tag, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import { Tooltip, Flex, IconButton, Textarea,  Spinner, Text, Avatar, Tag, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import {  ArrowUpIcon, CheckIcon, LinkIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { nameToAvatar, parseTableData, toProperCase, truncateAddress } from "@/utils/stringUtils";
@@ -9,7 +9,6 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure
@@ -21,7 +20,6 @@ import {
   StatLabel,
   StatNumber,
   StatHelpText,
-  StatArrow,
   StatGroup,
 } from '@chakra-ui/react'
 
