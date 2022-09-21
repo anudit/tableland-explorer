@@ -148,19 +148,30 @@ export function nameToExplorer(name){
 }
 
 export function parseTableData(tableName){
-    if (tableName){
-        let tableId = tableName.split('_');
-        let chainId = tableId[tableId.length-2];
-        tableId = tableId[tableId.length-1];
+    try {
+        if (tableName){
+            let tableSplit = tableName.split('_');
+            let chainId = tableSplit[tableSplit.length-2];
+            let tableId = tableSplit[tableSplit.length-1];
 
-        return {
-            tableId: tableId,
-            chainId: parseInt(chainId),
-            tableName: tableName,
+            return {
+                valid: true,
+                tableId: tableId,
+                chainId: parseInt(chainId),
+                tableName: tableName,
+            }
         }
-    }
-    else {
+        else {
+            return {
+                valid: false,
+                tableId: "",
+                chainId: 0,
+                tableName: "",
+            }
+        }
+    } catch (error) {
         return {
+            valid: false,
             tableId: "",
             chainId: 0,
             tableName: "",

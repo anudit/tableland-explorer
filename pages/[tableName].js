@@ -30,7 +30,7 @@ const IdentitySection = () => {
                     let data = await fetcher(subgraph, "POST", {
                         query: `
                             query {
-                                tables(where: {name: "${tableName}"}, limit: 100) {
+                                tables(where: {name: "${tableName}"}, first: 1) {
                                     id
                                     name
                                     owner

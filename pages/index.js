@@ -28,7 +28,7 @@ export default function Home() {
   }
 
   const { data, error } = useSWR(`{
-    tables(where: {name_contains_nocase: "${searchValue}"}, limit: 100) {
+    tables(where: {name_contains_nocase: "${searchValue}"}, first: 10, orderBy: created, orderDirection: desc) {
       name
       owner
       tableId

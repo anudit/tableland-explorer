@@ -17,7 +17,7 @@ const NavBar = ({refresh, isLoading}) => {
   return (
     <Flex
       as="nav"
-      justify="space-between"
+      justify={{base:null, md:"space-between"}}
       alignItems='center'
       w="100%"
       py={2}
@@ -28,10 +28,10 @@ const NavBar = ({refresh, isLoading}) => {
     >
       <Flex direction="row" justify="left" alignItems='center' w={{base: "fit-content", md:"33.33%"}}>
         <Link href="/">
-          <TablelandSmallIcon cursor="pointer" boxSize={8}/>
+          <TablelandSmallIcon cursor="pointer" boxSize={8} mr={2}/>
         </Link>
       </Flex>
-      <Flex w="33.33%" align='center' justifyContent='center'>
+      <Flex w={{base: "100%" ,md:"33.33%"}} align='center' justifyContent='center'>
         <Tooltip placement="bottom" hasArrow label={sqlError || 'Looks Good' } bg={sqlError? 'red' : 'green.300'}>
           <Flex w="100%">
             <SqlInput sqlError={sqlError} setSqlError={setSqlError} size="sm" mt={2}/>
