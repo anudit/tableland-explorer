@@ -69,13 +69,13 @@ const SqlInput = ({sqlError, setSqlError, ...props}) => {
       size='md'
       w="100%"
       onChange={onChangeSql}
-      defaultValue={global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query : ""}
+      defaultValue={global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query.replaceAll('%25', '%').replaceAll('%2A', '*') : ""}
       mb={2}
       isInvalid={sqlError}
       focusBorderColor={sqlError ? 'red' : 'green.300'}
       onKeyUp={(event)=>{
         if (event.key == 'Enter' && !sqlError){
-          router.push(`/interactive?query=${encodeURIComponent(event.currentTarget.value)}`);
+          router.push(`/interactive?query=${encodeURIComponent(event.currentTarget.value.replaceAll('%', '%25').replaceAll('*', '%2A'))}`);
         }
       }}
       {...props}

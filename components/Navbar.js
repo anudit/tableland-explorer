@@ -1,37 +1,22 @@
 import React from "react";
-import { chakra, Tooltip, Flex, IconButton, Textarea,  Spinner, Text, Avatar, Tag, ButtonGroup, useClipboard } from "@chakra-ui/react";
-import { ArrowUpIcon, CheckIcon, LinkIcon, RepeatIcon } from "@chakra-ui/icons";
+import { Avatar, Tooltip, Flex, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import { CheckIcon, LinkIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import { nameToAvatar, nameToExplorer, parseTableData, toProperCase, truncateAddress } from "@/utils/stringUtils";
+import { nameToAvatar, parseTableData, toProperCase } from "@/utils/stringUtils";
 import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure
-} from '@chakra-ui/react'
 import { InfoIcon } from "@chakra-ui/icons";
-
-import {
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
-  StatGroup,
-} from '@chakra-ui/react'
 import { useRouter } from "next/router";
+import DetailsModal from "./DetailsModal";
 
 const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
 
   const { hasCopied, onCopy } = useClipboard(tableName);
   const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard("https://tableland-explorer.vercel.app/"+tableName);
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const router = useRouter();
 
-  let {tableId, chainId} = parseTableData(tableName);
+  let {tableId} = parseTableData(tableName);
 
   return (
     <Flex
@@ -50,7 +35,7 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
           <TablelandSmallIcon cursor="pointer" boxSize={8}/>
         </Link>
       </Flex>
-      <Flex w="33.33%" align='center' justifyContent='center'>
+      <Flex w={{base:"100%", md:"33.33%"}} align='center' justifyContent='center'>
         <Avatar size="xs" bg='whiteAlpha.500' src={nameToAvatar(tableName)} />
         <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Full Name"} placement='bottom'>
           <Text ml="4" fontWeight={'medium'} onClick={onCopy} cursor="pointer" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
@@ -67,83 +52,10 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
           <Tooltip hasArrow label={hasCopiedLink ? "Copied" : "Share Link"} placement='left'>
             <IconButton colorScheme='blue' onClick={onCopyLink} icon={hasCopiedLink ? <CheckIcon /> : <LinkIcon />} />
           </Tooltip>
-
-
           {
             tableMetadata && (
               <>
-                <Modal isOpen={isOpen} onClose={onClose}>
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>{tableMetadata?.name} Details</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                    <StatGroup>
-                      <Stat>
-                        <StatLabel>Table Id</StatLabel>
-                        <StatNumber>{parseTableData(tableName).tableId}</StatNumber>
-                      </Stat>
-
-                      <Stat>
-                        <StatLabel>Chain Id</StatLabel>
-                        <StatNumber>{parseTableData(tableName).chainId}</StatNumber>
-                      </Stat>
-                    </StatGroup>
-
-                    <br/>
-
-                    <StatGroup>
-                      <Stat>
-                        <StatLabel>Owner</StatLabel>
-                        <Link target='_blank' href={`/address/${tableMetadata?.owner}`}>
-                          <chakra.div cursor="pointer">
-                            <StatNumber>{truncateAddress(tableMetadata?.owner)}</StatNumber>
-                            <StatHelpText>View tables by Owner</StatHelpText>
-                          </chakra.div>
-                        </Link>
-                      </Stat>
-
-                      <Stat>
-                        <StatLabel>Created On</StatLabel>
-                        <StatNumber>{new Date(parseInt(tableMetadata?.created)*1000).toLocaleDateString()}</StatNumber>
-                        <StatHelpText>{new Date(parseInt(tableMetadata?.created)*1000).toLocaleTimeString()}</StatHelpText>
-                      </Stat>
-
-                    </StatGroup>
-                    <br/>
-
-                    <Text fontWeight={'medium'} fontSize='sm'>Creation Statement</Text>
-                    <Textarea
-                        value={tableMetadata?.statement}
-                        size='sm'
-                        readOnly
-                    />
-                    <br/><br/>
-
-                    <Flex direction='row' justifyContent='space-between'>
-                      <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' onClick={()=>{
-                        window.open(tableMetadata?.tokenURI, '_blank')
-                      }} _hover={{'textDecoration': 'underline'}}>
-                        Token URI <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
-                      </Text>
-
-                      <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' onClick={()=>{
-                        window.open(`https://render.tableland.xyz/${chainId}/${tableId}`, '_blank')
-                      }} _hover={{'textDecoration': 'underline'}}>
-                        Image Link <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
-                      </Text>
-
-                      <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' onClick={()=>{
-                        window.open(`${nameToExplorer(tableName)}/tx/`+tableMetadata?.id, '_blank')
-                      }} _hover={{'textDecoration': 'underline'}}>
-                        Creation Txn <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
-                      </Text>
-                    </Flex>
-
-                    <br/>
-                    </ModalBody>
-                  </ModalContent>
-                </Modal>
+                <DetailsModal tableMetadata={tableMetadata} onClose={onClose} isOpen={isOpen}/>
 
                 <Tooltip hasArrow label="More Details" placement='left'>
                   <IconButton colorScheme='blue' onClick={onOpen}  icon={<InfoIcon />} disabled={isOpen} />
@@ -151,13 +63,11 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
               </>
             )
           }
-
-              <Tooltip hasArrow label='Interactive SQL Mode' placement='left'>
-                  <SqlIcon color='blue.600' boxSize={8} p={1} cursor="pointer" onClick={()=>{
-                    router.push(`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}`)
-                  }}/>
-              </Tooltip>
-
+          <Tooltip hasArrow label='Interactive SQL Mode' placement='left'>
+              <SqlIcon color='blue.600' boxSize={8} p={1} cursor="pointer" onClick={()=>{
+                router.push(`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}`)
+              }}/>
+          </Tooltip>
         </ButtonGroup>
       </Flex>
     </Flex>

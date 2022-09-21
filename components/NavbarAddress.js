@@ -17,11 +17,11 @@ const NavBar = ({address, isLoading}) => {
       w="100%"
       py={2}
       px={4}
-      background="#ffffffed"
+      background="#fcfcfced"
       borderBottomWidth="1px"
       height="50px"
       position='fixed'
-      backdropBlur='xl'
+      backdropFilter='blur(4px)'
       zIndex='1000'
       top="0"
     >
@@ -30,7 +30,7 @@ const NavBar = ({address, isLoading}) => {
           <TablelandSmallIcon cursor="pointer" boxSize={8}/>
         </Link>
       </Flex>
-      <Flex w="33.33%" align='center' justifyContent='center'>
+      <Flex w={{base:"100%", md:"33.33%"}} align='center' justifyContent='center'>
         <Avatar size="xs" name={address} src={`https://gradient-avatar.glitch.me/${address}`}/>
         <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Address"} placement='bottom'>
           <Text ml="4" fontWeight={'medium'} onClick={onCopy} cursor="pointer" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">

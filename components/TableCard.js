@@ -2,9 +2,9 @@ import React from 'react';
 import { ButtonGroup, IconButton, Avatar, Tooltip, Tag, Text, Flex, Spinner, Image, Button, useClipboard } from "@chakra-ui/react";
 import { nameToAvatar, parseTableData, toProperCase } from '@/utils/stringUtils';
 import Link from 'next/link';
-import { SqlIcon } from '@/public/icons';
+import { InfoIcon } from '@chakra-ui/icons';
 
-const TableCard = ({tableName}) => {
+const TableCard = ({tableName, infoClick}) => {
 
     const { hasCopied, onCopy } = useClipboard(tableName);
 
@@ -36,9 +36,7 @@ const TableCard = ({tableName}) => {
                         <Link href={`/${tableName}`}>
                             <Button w="100%">Explore Table</Button>
                         </Link>
-                        <Link href={`/interactive?query=${encodeURIComponent("SELECT * from " + tableName)}`}>
-                            <IconButton icon={<SqlIcon />} />
-                        </Link>
+                        <IconButton icon={<InfoIcon />} onClick={infoClick}/>
                     </ButtonGroup>
                 </Flex>
             </Flex>
