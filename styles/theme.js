@@ -19,7 +19,8 @@ const theme = extendTheme({
     },
     config: {
       cssVarPrefix: "c",
-      initialColorMode: "light"
+      initialColorMode: "light",
+      useSystemColorMode: false
     }
 })
 
