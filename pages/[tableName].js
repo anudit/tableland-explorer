@@ -38,6 +38,8 @@ const IdentitySection = () => {
                                     statement
                                     tokenURI
                                     created
+                                    txnHash
+                                    controller
                                 }
                             }
                         `

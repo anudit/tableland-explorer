@@ -2,7 +2,7 @@ import React from 'react';
 import { Avatar, chakra, Flex, Textarea, Text } from "@chakra-ui/react";
 import { ArrowUpIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import { nameToAvatar, nameToExplorer, parseTableData, truncateAddress } from "@/utils/stringUtils";
+import { nameToAvatar, nameToChainName, nameToExplorer, parseTableData, truncateAddress } from "@/utils/stringUtils";
 import {
   Modal,
   ModalOverlay,
@@ -34,7 +34,15 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                     <Stat>
                     <StatLabel>Chain Id</StatLabel>
                     <StatNumber display='flex' alignItems="center"> <Avatar size='xs' src={nameToAvatar(tableMetadata?.name)} mr={2} />{parseTableData(tableMetadata?.name).chainId}</StatNumber>
+                    <StatHelpText>{nameToChainName(tableMetadata?.name)}</StatHelpText>
                     </Stat>
+
+                    <Stat>
+                    <StatLabel>Created On</StatLabel>
+                    <StatNumber>{new Date(parseInt(tableMetadata?.created)*1000).toLocaleDateString()}</StatNumber>
+                    <StatHelpText>{new Date(parseInt(tableMetadata?.created)*1000).toLocaleTimeString()}</StatHelpText>
+                    </Stat>
+
                 </StatGroup>
 
                 <br/>
@@ -51,9 +59,13 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                     </Stat>
 
                     <Stat>
-                    <StatLabel>Created On</StatLabel>
-                    <StatNumber>{new Date(parseInt(tableMetadata?.created)*1000).toLocaleDateString()}</StatNumber>
-                    <StatHelpText>{new Date(parseInt(tableMetadata?.created)*1000).toLocaleTimeString()}</StatHelpText>
+                    <StatLabel>Controller</StatLabel>
+                    <Link target='_blank' href={`/address/${tableMetadata?.controller}`}>
+                        <chakra.div cursor="pointer">
+                        <StatNumber>{truncateAddress(tableMetadata?.controller)}</StatNumber>
+                        <StatHelpText>View tables by Controller</StatHelpText>
+                        </chakra.div>
+                    </Link>
                     </Stat>
 
                 </StatGroup>
@@ -81,7 +93,7 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                     </Text>
 
                     <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' onClick={()=>{
-                        window.open(`${nameToExplorer(tableMetadata?.name)}/tx/`+tableMetadata?.id, '_blank')
+                        window.open(`${nameToExplorer(tableMetadata?.name)}/tx/`+tableMetadata?.txnHash, '_blank')
                     }} _hover={{'textDecoration': 'underline'}}>
                         Creation Txn <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
                     </Text>

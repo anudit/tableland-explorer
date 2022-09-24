@@ -4,10 +4,11 @@ import { ArrowUpIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { truncateAddress } from "@/utils/stringUtils";
 import { TablelandSmallIcon } from "@/public/icons";
+import AddressOrEns from "./AddressOrEns";
 
 const NavBar = ({address, isLoading}) => {
 
-  const { hasCopied, onCopy } = useClipboard(address);
+
 
   return (
     <Flex
@@ -32,11 +33,7 @@ const NavBar = ({address, isLoading}) => {
       </Flex>
       <Flex w={{base:"100%", md:"33.33%"}} align='center' justifyContent='center'>
         <Avatar size="xs" name={address} src={`https://gradient-avatar.glitch.me/${address}`}/>
-        <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Address"} placement='bottom'>
-          <Text ml="4" fontWeight={'medium'} onClick={onCopy} cursor="pointer" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
-            {truncateAddress(address)}
-          </Text>
-        </Tooltip>
+          <AddressOrEns address={address}/>
       </Flex>
       <Flex direction="row" justify="right" alignItems='center' w={{base: "fit-content", md:"33.33%"}} align='right'>
         <ButtonGroup size='sm' isAttached variant='ghost'>

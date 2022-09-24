@@ -1,6 +1,6 @@
 import React from 'react';
 import { ButtonGroup, IconButton, Avatar, Tooltip, Tag, Text, Flex, Spinner, Image, Button, useClipboard } from "@chakra-ui/react";
-import { nameToAvatar, parseTableData, toProperCase } from '@/utils/stringUtils';
+import { nameToAvatar, nameToChainName, parseTableData, toProperCase } from '@/utils/stringUtils';
 import Link from 'next/link';
 import { InfoIcon } from '@chakra-ui/icons';
 
@@ -14,7 +14,7 @@ const TableCard = ({tableName, infoClick}) => {
             <Flex direction='column' borderRadius={10} borderWidth={1}>
                 <Flex direction='row' p={3} justifyContent="space-between">
                     <Flex direction='row' align="center">
-                        <Avatar size="xs" src={nameToAvatar(tableName)} />
+                        <Avatar size="xs" src={nameToAvatar(tableName)} title={nameToChainName(tableName)} />
                         <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Full Name"} placement='bottom'>
                             <Text ml="2" fontWeight={'medium'} onClick={onCopy} cursor="pointer" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
                                 {toProperCase(tableName.split("_").slice(0,-2).join(' '))}

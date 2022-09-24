@@ -36,6 +36,7 @@ export const multifetch = async (query) => {
         fetch("https://api.thegraph.com/subgraphs/name/anudit/tableland", options),
         fetch("https://api.thegraph.com/subgraphs/name/anudit/tableland-optimism-goerli", options),
         fetch("https://api.thegraph.com/subgraphs/name/anudit/tableland-arbitrum-goerli", options),
+        fetch("https://api.studio.thegraph.com/query/1649/tableland-ethereum-goerli/v1.0", options),
     ];
     let res = await Promise.allSettled(promiseArray);
     let results = [];

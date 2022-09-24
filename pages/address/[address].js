@@ -25,6 +25,8 @@ const UserSection = () => {
             statement
             tokenURI
             created
+            txnHash
+            controller
         }
     }`: null, multifetch);
 

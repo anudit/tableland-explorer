@@ -96,55 +96,59 @@ export const toProperCase = (inp) => {
     return inp.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 };
 
+export const networkDeets = {
+    80001: {
+        name: "Polygon Mumbai",
+        avatar: "https://res.cloudinary.com/anudit/image/upload/v1663573250/convo/polygon-token.svg",
+        subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland",
+        explorer: "https://mumbai.polygonscan.com"
+    },
+    420: {
+        name: "Optimism Goerli",
+        avatar: "https://res.cloudinary.com/anudit/image/upload/v1663573617/convo/optimism.svg",
+        subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-optimism-goerli",
+        explorer: "https://goerli-optimism.etherscan.io"
+    },
+    421613: {
+        name: "Arbitrum Goerli",
+        avatar: "https://res.cloudinary.com/anudit/image/upload/v1663577114/convo/Arbitrum.svg",
+        subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-arbitrum-goerli",
+        explorer: "https://testnet.arbiscan.io"
+    },
+    5: {
+        name: "Ethereum Goerli",
+        avatar: "https://res.cloudinary.com/anudit/image/upload/v1664030600/convo/ethereum.svg",
+        subgraph: "https://api.studio.thegraph.com/query/1649/tableland-ethereum-goerli/v1.0",
+        explorer: "https://goerli.etherscan.io"
+    }
+}
+
 export function nameToAvatar(name){
     let {chainId} = parseTableData(name);
 
-    if(chainId === 80001 || chainId === 137){
-        return "https://res.cloudinary.com/anudit/image/upload/v1663573250/convo/polygon-token.svg"
-    }
-    else if(chainId === 10 || chainId == 420 || chainId == 69){
-        return "https://res.cloudinary.com/anudit/image/upload/v1663573617/convo/optimism.svg"
-    }
-    else if(chainId === 421613 ){
-        return "https://res.cloudinary.com/anudit/image/upload/v1663577114/convo/Arbitrum.svg"
-    }
-    else {
-        return null;
-    }
+    if(chainId) return networkDeets[chainId].avatar;
+    else return null;
+}
+
+export function nameToChainName(name){
+    let {chainId} = parseTableData(name);
+
+    if(chainId) return networkDeets[chainId].name;
+    else return null;
 }
 
 export function nameToSubgraph(name){
     let {chainId} = parseTableData(name);
 
-    if(chainId === 80001){
-        return "https://api.thegraph.com/subgraphs/name/anudit/tableland"
-    }
-    else if( chainId == 420){
-        return "https://api.thegraph.com/subgraphs/name/anudit/tableland-optimism-goerli"
-    }
-    else if(chainId === 421613 ){
-        return "https://api.thegraph.com/subgraphs/name/anudit/tableland-arbitrum-goerli"
-    }
-    else {
-        return null;
-    }
+    if(chainId) return networkDeets[chainId].subgraph;
+    else return null;
 }
 
 export function nameToExplorer(name){
     let {chainId} = parseTableData(name);
 
-    if(chainId === 80001){
-        return "https://mumbai.polygonscan.com"
-    }
-    else if( chainId == 420){
-        return "https://goerli-optimism.etherscan.io"
-    }
-    else if(chainId === 421613 ){
-        return "https://testnet.arbiscan.io"
-    }
-    else {
-        return null;
-    }
+    if(chainId) return networkDeets[chainId].explorer;
+    else return null;
 }
 
 export function parseTableData(tableName){
