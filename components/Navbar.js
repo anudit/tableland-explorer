@@ -1,17 +1,29 @@
 import React from "react";
-import { Avatar, Tooltip, Flex, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import { Button, Avatar, Tooltip, Flex, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import { CheckIcon, LinkIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import { nameToAvatar, parseTableData, toProperCase } from "@/utils/stringUtils";
+import { nameToAvatar, nameToExplorer, parseTableData, prettyTime, toProperCase } from "@/utils/stringUtils";
 import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
 import { InfoIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import DetailsModal from "./DetailsModal";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+} from '@chakra-ui/react';
+import { HamburgerIcon } from "@chakra-ui/icons";
+
 
 const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
 
   const { hasCopied, onCopy } = useClipboard(tableName);
   const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard("https://tableland-explorer.vercel.app/"+tableName);
+  const { isOpen: isOpenHistory, onOpen: onOpenHistory, onClose: onCloseHistory } = useDisclosure();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const router = useRouter();
@@ -63,6 +75,52 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
               </>
             )
           }
+
+          <Drawer
+              isOpen={isOpenHistory}
+              placement='right'
+              onClose={onCloseHistory}
+            >
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader>History</DrawerHeader>
+
+              <DrawerBody>
+                {
+                  tableMetadata && tableMetadata?.history?.sort(function(a, b){return parseInt(b.time) - parseInt(a.time)}).map(hist=>(
+                    <Flex
+                      direction='column'
+                      key={hist.id}
+                      borderWidth={1}
+                      borderRadius={4}
+                      borderColor='gray.100'
+                      p={2}
+                      _hover={{
+                        borderColor: 'gray.500'
+                      }}
+                      mb={2}
+                      cursor="pointer"
+                      onClick={()=>{
+                        window.open(`${nameToExplorer(tableName)}/tx/${hist.id}`, '_blank')
+                      }}
+                    >
+                      <Flex direction='row' justifyContent='space-between'>
+                        <Text fontWeight='bold' fontSize='small'>{hist.statement.split(' ')[0].toUpperCase()}</Text>
+                        <Text fontSize='small'>{prettyTime(parseInt(hist.time)*1000)}</Text>
+                      </Flex>
+                      <Text fontSize='lg' lineHeight='20px' mt={2}>{hist.statement}</Text>
+                    </Flex>
+                  ))
+                }
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
+
+          <Tooltip hasArrow label="History" placement='left'>
+            <IconButton colorScheme='blue' onClick={onOpenHistory}  icon={<HamburgerIcon />} disabled={isOpenHistory} />
+          </Tooltip>
+
           <Tooltip hasArrow label='Interactive SQL Mode' placement='left'>
               <SqlIcon color='blue.600' boxSize={8} p={1} cursor="pointer" onClick={()=>{
                 router.push(`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}`)

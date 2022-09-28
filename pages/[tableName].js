@@ -40,6 +40,12 @@ const IdentitySection = () => {
                                     created
                                     txnHash
                                     controller
+                                    historyCount
+                                    history {
+                                        id
+                                        statement
+                                        time
+                                    }
                                 }
                             }
                         `
