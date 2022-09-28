@@ -1,8 +1,7 @@
 import React from "react";
-import { Tooltip, Flex, IconButton, Spinner, Text, Avatar, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import { Tooltip, Flex, IconButton, Spinner, Avatar, ButtonGroup } from "@chakra-ui/react";
 import { ArrowUpIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import { truncateAddress } from "@/utils/stringUtils";
 import { TablelandSmallIcon } from "@/public/icons";
 import AddressOrEns from "./AddressOrEns";
 

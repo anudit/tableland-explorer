@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Avatar, Tooltip, Flex, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import { Avatar, Tooltip, Flex, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import { CheckIcon, LinkIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { nameToAvatar, nameToExplorer, parseTableData, prettyTime, toProperCase } from "@/utils/stringUtils";
@@ -10,7 +10,6 @@ import DetailsModal from "./DetailsModal";
 import {
   Drawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
