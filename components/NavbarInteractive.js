@@ -31,13 +31,11 @@ const NavBar = ({refresh, isLoading}) => {
           <TablelandSmallIcon cursor="pointer" boxSize={8} mr={2}/>
         </Link>
       </Flex>
-      <Flex w={{base: "100%" ,md:"33.33%"}} align='center' justifyContent='center'>
-        <Tooltip placement="bottom" hasArrow label={sqlError || 'Looks Good' } bg={sqlError? 'red' : 'green.300'}>
-          <Flex w="100%">
-            <SqlInput sqlError={sqlError} setSqlError={setSqlError} size="sm" mt={2}/>
-          </Flex>
-        </Tooltip>
-      </Flex>
+      <Tooltip placement="bottom" hasArrow label={sqlError || 'Looks Good' } bg={sqlError? 'red' : 'green.300'}>
+        <Flex w="100%">
+          <SqlInput sqlError={sqlError} setSqlError={setSqlError} size="sm" mt={2}/>
+        </Flex>
+      </Tooltip>
       <Flex direction="row" justify="right" alignItems='center' w={{base: "fit-content", md:"33.33%"}} align='right'>
         <ButtonGroup size='sm' isAttached variant='ghost'>
           <Tooltip hasArrow label={isLoading ? "Refreshing Data" : "Refresh Data"} placement='left'>

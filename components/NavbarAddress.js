@@ -7,8 +7,6 @@ import AddressOrEns from "./AddressOrEns";
 
 const NavBar = ({address, isLoading}) => {
 
-
-
   return (
     <Flex
       as="nav"

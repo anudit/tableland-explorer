@@ -1,6 +1,7 @@
 import { truncateAddress } from '@/utils/stringUtils';
 import { useClipboard, Tooltip, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { getAddress } from "ethers/lib/utils";
 
 async function addressToEns(address){
     try {
@@ -20,6 +21,23 @@ async function addressToEns(address){
     }
 }
 
+export async function ensToAddress(ensAddress){
+    try {
+
+        let resp = await fetch(`https://api.ensideas.com/ens/resolve/${ensAddress}`).then(r=>r.json());
+
+        if (Boolean(resp?.address) === false){
+            return false;
+        }
+        else {
+            return getAddress(resp.address);
+        }
+
+    } catch (error) {
+        console.log('ensToAddress.error', error)
+        return false;
+    }
+}
 
 const AddressOrEns = ({address, ...props}) => {
 

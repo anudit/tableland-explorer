@@ -1,8 +1,8 @@
 import React from "react";
-import { Code, Avatar, Tooltip, Flex, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import { Avatar, Tooltip, Flex, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import { CheckIcon, LinkIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import { nameToAvatar, nameToExplorer, parseTableData, prettyTime, toProperCase } from "@/utils/stringUtils";
+import { nameToAvatar, parseTableData, toProperCase } from "@/utils/stringUtils";
 import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
 import { InfoIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
@@ -16,6 +16,7 @@ import {
   DrawerCloseButton,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from "@chakra-ui/icons";
+import HistoryCard from "./HistoryCard";
 
 
 const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
@@ -79,6 +80,7 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
               isOpen={isOpenHistory}
               placement='right'
               onClose={onCloseHistory}
+              size='md'
             >
             <DrawerOverlay />
             <DrawerContent>
@@ -88,30 +90,7 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
               <DrawerBody>
                 {
                   tableMetadata && tableMetadata?.history?.sort(function(a, b){return parseInt(b.time) - parseInt(a.time)}).map(hist=>(
-                    <Flex
-                      direction='column'
-                      key={hist.id}
-                      borderWidth={1}
-                      borderRadius={4}
-                      borderColor='gray.100'
-                      p={2}
-                      _hover={{
-                        borderColor: 'gray.500'
-                      }}
-                      mb={2}
-                      cursor="pointer"
-                      onClick={()=>{
-                        window.open(`${nameToExplorer(tableName)}/tx/${hist.id}`, '_blank')
-                      }}
-                    >
-                      <Flex direction='row' justifyContent='space-between' mb={2}>
-                        <Text fontWeight='bold' fontSize='small'>{hist.statement.split(' ')[0].toUpperCase()}</Text>
-                        <Text fontSize='small'>{prettyTime(parseInt(hist.time)*1000)}</Text>
-                      </Flex>
-                      <Code p={1}>
-                        <Text fontSize='xs' lineHeight='20px'>{hist.statement}</Text>
-                      </Code>
-                    </Flex>
+                    <HistoryCard tableName={tableName} hist={hist} key={hist.id} />
                   ))
                 }
               </DrawerBody>

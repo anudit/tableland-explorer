@@ -14,6 +14,8 @@ import {nameToAvatar, toProperCase} from "../utils/stringUtils";
 import { SearchIcon } from "@chakra-ui/icons";
 import SqlInput from "@/components/RunSql";
 import Meta from "@/components/Meta";
+import { isAddress } from "ethers/lib/utils";
+import { ensToAddress } from "@/components/AddressOrEns";
 
 export default function Home() {
 
@@ -62,6 +64,16 @@ export default function Home() {
                         onChange={onChangeTest}
                         placeholder="Search Tableland"
                         autoComplete="off"
+                        onKeyDown={(e)=>{
+                          if(e.code == 'Enter'){
+                            if (isAddress(searchValue)) router.push(`/address/${searchValue}`);
+                            if (searchValue.endsWith('.eth')) {
+                              ensToAddress(searchValue).then(res=>{
+                                if (isAddress(res)) router.push(`/address/${res}`)
+                              })
+                            }
+                          }
+                        }}
                       />
                       <AutoCompleteList id="setValue">
                         {data && data.map(e=>e?.data?.tables).flat().map((table, oid) => (
