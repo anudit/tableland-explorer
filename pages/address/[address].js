@@ -27,6 +27,12 @@ const UserSection = () => {
             created
             txnHash
             controller
+            historyCount
+            history {
+                id
+                statement
+                time
+            }
         }
     }`: null, multifetch);
 
@@ -58,7 +64,7 @@ const UserSection = () => {
                                         data && data.map(e=>e?.data?.tables).flat().map((table, oid) => {
                                             return (
                                                 <WrapItem key={oid}>
-                                                    <TableCard tableName={table.name} infoClick={()=>{
+                                                    <TableCard tableName={table?.name} infoClick={()=>{
                                                         infoClick(oid)
                                                     }}/>
                                                 </WrapItem>

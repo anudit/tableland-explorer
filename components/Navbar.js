@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Tooltip, Flex, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import { Code, Avatar, Tooltip, Flex, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import { CheckIcon, LinkIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { nameToAvatar, nameToExplorer, parseTableData, prettyTime, toProperCase } from "@/utils/stringUtils";
@@ -82,7 +82,7 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
             >
             <DrawerOverlay />
             <DrawerContent>
-              <DrawerCloseButton />
+              <DrawerCloseButton mt="7px"/>
               <DrawerHeader>History</DrawerHeader>
 
               <DrawerBody>
@@ -104,11 +104,13 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
                         window.open(`${nameToExplorer(tableName)}/tx/${hist.id}`, '_blank')
                       }}
                     >
-                      <Flex direction='row' justifyContent='space-between'>
+                      <Flex direction='row' justifyContent='space-between' mb={2}>
                         <Text fontWeight='bold' fontSize='small'>{hist.statement.split(' ')[0].toUpperCase()}</Text>
                         <Text fontSize='small'>{prettyTime(parseInt(hist.time)*1000)}</Text>
                       </Flex>
-                      <Text fontSize='lg' lineHeight='20px' mt={2}>{hist.statement}</Text>
+                      <Code p={1}>
+                        <Text fontSize='xs' lineHeight='20px'>{hist.statement}</Text>
+                      </Code>
                     </Flex>
                   ))
                 }

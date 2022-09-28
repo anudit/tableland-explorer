@@ -30,8 +30,6 @@ const SqlInput = ({sqlError, setSqlError, ...props}) => {
                 const resp = await fetcher(nameToSubgraph(tn), "POST", {
                   query: `{
                     tables(where: {name: "${tn}"}) {
-                      name
-                      owner
                       tableId
                     }
                   }`

@@ -29,6 +29,7 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                     <Stat>
                     <StatLabel>Table Id</StatLabel>
                     <StatNumber>{parseTableData(tableMetadata?.name).tableId}</StatNumber>
+                    <StatHelpText>{tableMetadata?.history?.length} Update Op{tableMetadata?.history?.length>1?"s":""}.</StatHelpText>
                     </Stat>
 
                     <Stat>
