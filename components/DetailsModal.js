@@ -29,7 +29,7 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                     <Stat>
                     <StatLabel>Table Id</StatLabel>
                     <StatNumber>{parseTableData(tableMetadata?.name).tableId}</StatNumber>
-                    <StatHelpText>{tableMetadata?.history?.length} Update Op{tableMetadata?.history?.length>1?"s":""}.</StatHelpText>
+                    <StatHelpText>{tableMetadata?.historyCount} Operation{tableMetadata?.historyCount>1?"s":""}</StatHelpText>
                     </Stat>
 
                     <Stat>
@@ -51,9 +51,9 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                 <StatGroup>
                     <Stat>
                     <StatLabel>Owner</StatLabel>
-                    <Link target='_blank' href={`/address/${tableMetadata?.owner}`}>
+                    <Link target='_blank' href={`/address/${tableMetadata?.owner?.id}`}>
                         <chakra.div cursor="pointer">
-                        <StatNumber>{truncateAddress(tableMetadata?.owner)}</StatNumber>
+                        <StatNumber>{truncateAddress(tableMetadata?.owner?.id)}</StatNumber>
                         <StatHelpText>View tables by Owner</StatHelpText>
                         </chakra.div>
                     </Link>
@@ -61,9 +61,9 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
 
                     <Stat>
                     <StatLabel>Controller</StatLabel>
-                    <Link target='_blank' href={`/address/${tableMetadata?.controller}`}>
+                    <Link target='_blank' href={`/address/${tableMetadata?.controller?.id}`}>
                         <chakra.div cursor="pointer">
-                        <StatNumber>{truncateAddress(tableMetadata?.controller)}</StatNumber>
+                        <StatNumber>{truncateAddress(tableMetadata?.controller?.id)}</StatNumber>
                         <StatHelpText>View tables by Controller</StatHelpText>
                         </chakra.div>
                     </Link>

@@ -31,11 +31,10 @@ const HistoryCard = ({tableName, hist}) => {
                 <ExternalLinkIcon ml={2} cursor="pointer" onClick={()=>{
                     window.open(`${nameToExplorer(tableName)}/tx/${hist.id}`, '_blank')
                 }}/>
-                {hasCopied ? <CheckIcon ml={2} /> : <CopyIcon ml={2} onClick={onCopy} cursor="pointer"/>}
             </Flex>
             </Flex>
-            <Code p={1}>
-            <Text fontSize='xs' lineHeight='20px' noOfLines={4}>{hist.statement}</Text>
+            <Code p={1} onClick={onCopy}>
+                <Text fontSize='xs' lineHeight='20px' noOfLines={4}>{hasCopied? "Copied" : hist.statement}</Text>
             </Code>
         </Flex>
     )

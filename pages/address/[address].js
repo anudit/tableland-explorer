@@ -20,19 +20,18 @@ const UserSection = () => {
         tables(where: {owner: "${address.toLowerCase()}"}, orderBy: created, orderDirection: desc) {
             id
             name
-            owner
+            owner {
+                id
+            }
             tableId
             statement
             tokenURI
             created
             txnHash
-            controller
-            historyCount
-            history {
+            controller {
                 id
-                statement
-                time
             }
+            historyCount
         }
     }`: null, multifetch);
 

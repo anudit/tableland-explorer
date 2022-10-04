@@ -6,7 +6,7 @@ import useSWR from "swr";
 
 import fetcher from '@/utils/fetcher';
 import NavBar from '../components/Navbar';
-import { nameToSubgraph, parseTableData } from '@/utils/stringUtils';
+import { nameToSubgraph, nameToTime, parseTableData } from '@/utils/stringUtils';
 import Meta from '@/components/Meta';
 
 const IdentitySection = () => {
@@ -19,7 +19,7 @@ const IdentitySection = () => {
     const { data, error, mutate, isValidating } = useSWR(
         tableName ? [`https://testnet.tableland.network/query?mode=json&s=select%20*%20from%20${tableName}`] : null,
         fetcher,
-        { refreshInterval: 10000, revalidateOnFocus: true }
+        { refreshInterval: tableName? nameToTime(tableName) : 10000, revalidateOnFocus: true }
     );
 
     useEffect(()=>{
@@ -33,13 +33,17 @@ const IdentitySection = () => {
                                 tables(where: {name: "${tableName}"}, first: 1) {
                                     id
                                     name
-                                    owner
+                                    owner {
+                                        id
+                                    }
                                     tableId
                                     statement
                                     tokenURI
                                     created
                                     txnHash
-                                    controller
+                                    controller {
+                                        id
+                                    }
                                     historyCount
                                     history {
                                         id

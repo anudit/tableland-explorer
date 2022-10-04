@@ -8,7 +8,7 @@ import fetcher from '@/utils/fetcher';
 import NavBar from '../components/NavbarInteractive';
 import Meta from '@/components/Meta';
 
-const IdentitySection = () => {
+const InteractiveView = () => {
 
     const router = useRouter();
     const { query } = router.query;
@@ -53,4 +53,4 @@ const IdentitySection = () => {
 
 }
 
-export default IdentitySection;
+export default InteractiveView;

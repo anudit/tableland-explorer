@@ -101,25 +101,29 @@ export const networkDeets = {
         name: "Polygon Mumbai",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1663573250/convo/polygon-token.svg",
         subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland",
-        explorer: "https://mumbai.polygonscan.com"
+        explorer: "https://mumbai.polygonscan.com",
+        blocktime: 5,
     },
     420: {
         name: "Optimism Goerli",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1663573617/convo/optimism.svg",
         subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-optimism-goerli",
-        explorer: "https://goerli-optimism.etherscan.io"
+        explorer: "https://goerli-optimism.etherscan.io",
+        blocktime: 10,
     },
     421613: {
         name: "Arbitrum Goerli",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1663577114/convo/Arbitrum.svg",
         subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-arbitrum-goerli",
-        explorer: "https://testnet.arbiscan.io"
+        explorer: "https://testnet.arbiscan.io",
+        blocktime: 5,
     },
     5: {
         name: "Ethereum Goerli",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1664030600/convo/ethereum.svg",
-        subgraph: "https://api.studio.thegraph.com/query/1649/tableland-ethereum-goerli/v1.1",
-        explorer: "https://goerli.etherscan.io"
+        subgraph: "https://api.studio.thegraph.com/query/1649/tableland-ethereum-goerli/v1.2",
+        explorer: "https://goerli.etherscan.io",
+        blocktime: 12,
     }
 }
 
@@ -127,6 +131,13 @@ export function nameToAvatar(name){
     let {chainId} = parseTableData(name);
 
     if(chainId) return networkDeets[chainId].avatar;
+    else return null;
+}
+
+export function nameToTime(name){
+    let {chainId} = parseTableData(name);
+
+    if(chainId) return networkDeets[chainId].blocktime;
     else return null;
 }
 
