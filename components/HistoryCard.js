@@ -1,6 +1,6 @@
 import React from "react";
 import { Code, Flex, Text, useClipboard } from "@chakra-ui/react";
-import { ExternalLinkIcon, CopyIcon, CheckIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { nameToExplorer, prettyTime, stringSize } from "@/utils/stringUtils";
 
 const HistoryCard = ({tableName, hist}) => {
