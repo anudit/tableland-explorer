@@ -3,7 +3,7 @@ import { Code, Flex, Text, useClipboard } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { nameToExplorer, prettyTime, stringSize } from "@/utils/stringUtils";
 
-const HistoryCard = ({tableName, hist}) => {
+const HistoryCard = ({tableName, hist, ...props}) => {
     const { hasCopied, onCopy } = useClipboard(hist?.statement);
     return (
         <Flex
@@ -16,6 +16,7 @@ const HistoryCard = ({tableName, hist}) => {
                 borderColor: 'gray.500'
             }}
             mb={2}
+            {...props}
         >
             <Flex direction='row' justifyContent='space-between' mb={2}>
             <Flex direction='row'>

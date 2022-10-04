@@ -1,9 +1,9 @@
-import React from "react";
-import { Avatar, Tooltip, Flex, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import React, {useState} from "react";
+import { Avatar, Tooltip, Flex, Button, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import { CheckIcon, LinkIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import { nameToAvatar, parseTableData, toProperCase } from "@/utils/stringUtils";
-import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
+import { freqTable, nameToAvatar, parseTableData, toProperCase } from "@/utils/stringUtils";
+import { FilterIcon, SqlIcon, TablelandSmallIcon } from "@/public/icons";
 import { InfoIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import DetailsModal from "./DetailsModal";
@@ -25,6 +25,7 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
   const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard("https://tableland-explorer.vercel.app/"+tableName);
   const { isOpen: isOpenHistory, onOpen: onOpenHistory, onClose: onCloseHistory } = useDisclosure();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [disabledFilter, setDisabledFilter] = useState(new Set([]));
 
   const router = useRouter();
 
@@ -88,9 +89,52 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
               <DrawerHeader>History</DrawerHeader>
 
               <DrawerBody>
+                <Flex w="100%" justifyContent='center' alignItems='center'>
+                  <FilterIcon mr={2}/>
+                  {
+                    tableMetadata && tableMetadata?.history && (
+                      <ButtonGroup size='sm' isAttached >
+                        {
+                          Object.entries(freqTable(tableMetadata?.history.map(e=>e.statement.split(' ')[0].toUpperCase()))).map(([key, val])=>(
+                            <Button
+                              key={key}
+                              colorScheme={disabledFilter.has(key) ? 'gray': null}
+                              variant={disabledFilter.has(key) ? 'ghost': 'solid'}
+                              onClick={()=>{
+                                setDisabledFilter(df=>{
+                                  if (df.has(key)) {
+                                    let ndf =  df;
+                                    ndf.delete(key)
+                                    console.log('setting', ndf)
+                                    return ndf;
+                                  }
+                                  else {
+                                    let ndf = df;
+                                    ndf.add(key);
+                                    console.log('setting', ndf)
+                                    return ndf;
+                                  }
+                                })
+                              }}
+                            >
+                              {key}
+                              <Tag ml={2} size='sm' colorScheme='blue'>{val}</Tag>
+                            </Button>
+                          ))
+                        }
+                      </ButtonGroup>
+                    )
+                  }
+                </Flex>
+                <br/>
                 {
                   tableMetadata && tableMetadata?.history?.sort(function(a, b){return parseInt(b.time) - parseInt(a.time)}).map(hist=>(
-                    <HistoryCard tableName={tableName} hist={hist} key={hist.id} />
+                    <HistoryCard
+                      tableName={tableName}
+                      hist={hist}
+                      display={disabledFilter.has(hist?.statement.split(' ')[0].toUpperCase()) ? 'none' : 'flex'}
+                      key={hist.id}
+                    />
                   ))
                 }
               </DrawerBody>
