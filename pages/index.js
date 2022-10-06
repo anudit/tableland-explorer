@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
 import { Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip, Alert, AlertIcon, AlertTitle, AlertDescription  } from "@chakra-ui/react";
-import { SqlIcon, TablelandIcon } from "@/public/icons";
+import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
 import {
   AutoComplete,
   AutoCompleteInput,
@@ -45,14 +45,20 @@ export default function Home() {
 
   return (
     <>
-        <Meta />
+      <Meta />
 
-        <Flex direction="column" p="200px" alignItems="center" h="100vh">
-          <Flex direction="column" justifyContent="center" alignItems="center" w={{base:"100vw", md:"50vw", lg: "35vw"}}>
-            <br/>
-            <TablelandIcon width={{base: "90%", md: "400px"}} height="auto" />
-            <br/><br/>
-            <Flex direction="row" width="100%">
+      <Flex direction='column' m="0" h="max-content">
+
+        <Flex direction="row" justifyContent="space-around" h="70px" position='fixed' w="100%">
+          <Flex
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            w={{base:"100vw", md:"50vw", lg: "30vw"}}
+            p={2}
+          >
+            <TablelandSmallIcon boxSize={10} />
+            <Flex direction="row" width="100%" mx={2}>
               {
                 !isSqlMode ? (
                   <FormControl id="table-name" w="100%">
@@ -64,7 +70,7 @@ export default function Home() {
                         ref={searchBox}
                         autoFocus
                         onChange={onChangeTest}
-                        placeholder="Search Tableland"
+                        placeholder="Search for Tables or ENS Names"
                         autoComplete="off"
                         onKeyDown={(e)=>{
                           if(e.code == 'Enter'){
@@ -75,6 +81,13 @@ export default function Home() {
                               })
                             }
                           }
+                        }}
+                        style={{
+                          borderRadius: '30px',
+                          fontSize: '20px',
+                          padding: '10px',
+                          height: '50px',
+                          paddingLeft: '20px'
                         }}
                       />
                       <AutoCompleteList id="setValue">
@@ -98,7 +111,18 @@ export default function Home() {
                     </AutoComplete>
                   </FormControl>
                 ) : (
-                  <SqlInput sqlError={sqlError} setSqlError={setSqlError} defaultValue='SELECT image from rigs_80001_1881'/>
+                  <SqlInput
+                    sqlError={sqlError}
+                    setSqlError={setSqlError}
+                    defaultValue='SELECT image from rigs_80001_1881'
+                    style={{
+                      borderRadius: '30px',
+                      fontSize: '20px',
+                      padding: '10px',
+                      height: '50px',
+                      paddingLeft: '20px'
+                    }}
+                  />
                 )
               }
               <Tooltip
@@ -107,9 +131,17 @@ export default function Home() {
                 hasArrow
                 placement='left'
               >
-                <IconButton variant='unstyled' icon={isSqlMode? <SqlIcon /> : <SearchIcon />} onClick={()=>{
-                  setSqlMode(mode=>!mode);
-                }}/>
+                <IconButton
+                  variant='outline'
+                  borderRadius='100%'
+                  icon={isSqlMode? <SqlIcon boxSize={6}/> : <SearchIcon />}
+                  width={14}
+                  height={12}
+                  ml={2}
+                  onClick={()=>{
+                    setSqlMode(mode=>!mode);
+                  }}
+                />
               </Tooltip>
             </Flex>
             {
@@ -122,7 +154,21 @@ export default function Home() {
               )
             }
           </Flex>
+          <div></div>
         </Flex>
+        {/* <Flex direction="row" justifyContent="space-around" mt="70px" w="100%">
+            <Flex direction="column">
+              <Flex>
+                xx
+              </Flex>
+            </Flex>
+            <Flex direction="column">
+              <Flex>
+                xx
+              </Flex>
+            </Flex>
+        </Flex> */}
+      </Flex>
     </>
   )
 }
