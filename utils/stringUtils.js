@@ -121,7 +121,7 @@ export const networkDeets = {
     5: {
         name: "Ethereum Goerli",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1664030600/convo/ethereum.svg",
-        subgraph: "https://api.studio.thegraph.com/query/1649/tableland-ethereum-goerli/v1.3",
+        subgraph: "https://api.studio.thegraph.com/query/1649/tableland-ethereum-goerli/v1.2",
         explorer: "https://goerli.etherscan.io",
         blocktime: 12,
     }
