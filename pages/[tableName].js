@@ -74,8 +74,9 @@ const IdentitySection = () => {
     const url = `https://render.tableland.xyz/${chainId}/${tableId}`;
     return (
         <>
-            <Meta url={url} />
+        <Meta url={url} />
             <NavBar tableName={tableName || ""} tableMetadata={tableMetadata} refresh={refresh} isLoading={refreshing || isValidating} />
+
             <chakra.div position="relative" height="calc(100vh - 50px)" width="100%">
                 {
                     data ? data?.message ? (
@@ -92,7 +93,7 @@ const IdentitySection = () => {
                     )
                 }
             </chakra.div>
-        </>
+            </>
     )
 
 }

@@ -29,7 +29,7 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                     <Stat>
                     <StatLabel>Table Id</StatLabel>
                     <StatNumber>{parseTableData(tableMetadata?.name).tableId}</StatNumber>
-                    <StatHelpText>{tableMetadata?.historyCount} Operation{tableMetadata?.historyCount>1?"s":""}</StatHelpText>
+                    <StatHelpText>{tableMetadata?.historyCount} Operation{tableMetadata?.historyCount==1?"":"s"}</StatHelpText>
                     </Stat>
 
                     <Stat>

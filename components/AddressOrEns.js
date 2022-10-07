@@ -39,7 +39,7 @@ export async function ensToAddress(ensAddress){
     }
 }
 
-const AddressOrEns = ({address, ...props}) => {
+const AddressOrEns = ({address, tooltip, ...props}) => {
 
     let [ens, setEns] = useState(false);
     const { hasCopied, onCopy } = useClipboard(address);
@@ -50,13 +50,20 @@ const AddressOrEns = ({address, ...props}) => {
         })
     }, [address])
 
-    return(
-        <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Address"} placement='bottom'>
-            <Text onClick={onCopy} cursor="pointer" ml="4" fontWeight={'medium'} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
-                { ens || truncateAddress(address) }
-            </Text>
-        </Tooltip>
-    )
+    if(tooltip){
+        return(
+            <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Address"} placement='bottom'>
+                <Text onClick={onCopy} cursor="pointer" ml="4" fontWeight={'medium'} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
+                    { ens || truncateAddress(address) }
+                </Text>
+            </Tooltip>
+        )
+    }
+    else {
+        return (<Text cursor="pointer" ml="4" fontWeight={'medium'} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
+            { ens || truncateAddress(address) }
+        </Text>)
+    }
 }
 
 export default AddressOrEns;

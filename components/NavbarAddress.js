@@ -1,12 +1,14 @@
 import React from "react";
-import { Tooltip, Flex, IconButton, Spinner, Avatar, ButtonGroup } from "@chakra-ui/react";
+import { useColorMode, Tooltip, Flex, IconButton, Spinner, Avatar, ButtonGroup } from "@chakra-ui/react";
 import { ArrowUpIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { TablelandSmallIcon } from "@/public/icons";
 import AddressOrEns from "./AddressOrEns";
+import { MoonIcon } from "@chakra-ui/icons";
+import { SunIcon } from "@chakra-ui/icons";
 
 const NavBar = ({address, isLoading}) => {
-
+  const { colorMode, toggleColorMode } = useColorMode();
   return (
     <Flex
       as="nav"
@@ -29,8 +31,8 @@ const NavBar = ({address, isLoading}) => {
         </Link>
       </Flex>
       <Flex w={{base:"100%", md:"33.33%"}} align='center' justifyContent='center'>
-        <Avatar size="xs" name={address} src={`https://gradient-avatar.glitch.me/${address}`}/>
-          <AddressOrEns address={address}/>
+          <Avatar size="xs" name={address} src={`https://gradient-avatar.glitch.me/${address}`}/>
+          <AddressOrEns address={address} tooltip={false}/>
       </Flex>
       <Flex direction="row" justify="right" alignItems='center' w={{base: "fit-content", md:"33.33%"}} align='right'>
         <ButtonGroup size='sm' isAttached variant='ghost'>
@@ -42,6 +44,7 @@ const NavBar = ({address, isLoading}) => {
               window.open(`https://blockscan.com/address/${address}`, "_blank");
             }} icon={<ArrowUpIcon style={{'transform':'rotate(45deg)'}}/>} />
           </Tooltip>
+          <IconButton colorScheme='blue' onClick={toggleColorMode}  icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} />
         </ButtonGroup>
       </Flex>
     </Flex>

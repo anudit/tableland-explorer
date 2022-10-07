@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Avatar, Tooltip, Flex, Button, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import { useColorMode, Avatar, Tooltip, Flex, Button, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import { CheckIcon, LinkIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { freqTable, nameToAvatar, parseTableData, toProperCase } from "@/utils/stringUtils";
@@ -17,6 +17,8 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon } from "@chakra-ui/icons";
 import HistoryCard from "./HistoryCard";
+import { MoonIcon } from "@chakra-ui/icons";
+import { SunIcon } from "@chakra-ui/icons";
 
 
 const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
@@ -26,6 +28,7 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
   const { isOpen: isOpenHistory, onOpen: onOpenHistory, onClose: onCloseHistory } = useDisclosure();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [disabledFilter, setDisabledFilter] = useState(new Set([]));
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const router = useRouter();
 
@@ -146,10 +149,12 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
           </Tooltip>
 
           <Tooltip hasArrow label='Interactive SQL Mode' placement='left'>
-              <SqlIcon color='blue.600' boxSize={8} p={1} cursor="pointer" onClick={()=>{
+              <IconButton colorScheme='blue' icon={<SqlIcon boxSize={6} />} onClick={()=>{
                 router.push(`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}`)
               }}/>
           </Tooltip>
+
+          <IconButton colorScheme='blue' onClick={toggleColorMode}  icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} />
         </ButtonGroup>
       </Flex>
     </Flex>
