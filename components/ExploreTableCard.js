@@ -7,6 +7,8 @@ import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
 import Image from 'next/future/image';
 
+const loaderProp = ({ src }) => { return src }
+
 const TableCard = ({tableName, infoClick, table}) => {
 
     const { colorMode } = useColorMode()
@@ -44,6 +46,7 @@ const TableCard = ({tableName, infoClick, table}) => {
                     width={600}
                     style={{objectFit:'fill' }}
                     placeholder="blur"
+                    loader={loaderProp}
                     onError={(e) => {
                         e.currentTarget.setAttribute('src', 'https://res.cloudinary.com/anudit/image/upload/v1663653643/convo/tableland-thumb.png');
                     }}
