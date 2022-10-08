@@ -19,7 +19,6 @@ module.exports = (phase) => {
       return config;
     },
     images: {
-      minimumCacheTTL: 3600,
       domains: ['render.tableland.xyz', 'res.cloudinary.com'],
     },
   }
