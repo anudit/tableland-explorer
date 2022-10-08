@@ -1,13 +1,16 @@
 import React from 'react';
-import { useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Spinner, Image, Button } from "@chakra-ui/react";
+import { useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Spinner, Button } from "@chakra-ui/react";
 import { nameToAvatar, nameToChainName, parseTableData, toProperCase } from '@/utils/stringUtils';
 import Link from 'next/link';
 import AddressOrEns from './AddressOrEns';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 const TableCard = ({tableName, infoClick, table}) => {
 
     const { colorMode } = useColorMode()
+    const router = useRouter();
 
     if (tableName){
         let {chainId, tableId} = parseTableData(tableName);
@@ -20,10 +23,17 @@ const TableCard = ({tableName, infoClick, table}) => {
                             <Avatar size="sm" src={nameToAvatar(tableName)} title={nameToChainName(tableName)} />
                         </AvatarGroup>
                         <Flex direction='column'>
-                            <Text ml={4} fontSize='sm' color={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.700'}>Creator</Text>
-                            <Link href={`/address/${table.owner.id}`}>
-                                <AddressOrEns address={table.owner.id} tooltip={false}/>
-                            </Link>
+                            <Text ml={4} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                Creator
+                            </Text>
+                            <AddressOrEns
+                                address={table.owner.id}
+                                tooltip={false}
+                                cursor="pointer"
+                                onClick={()=>{
+                                    router.push(`/address/${table.owner.id}`)
+                                }}
+                            />
                         </Flex>
                     </Flex>
                     <IconButton icon={<InfoOutlineIcon />} onClick={infoClick} variant='ghost' borderRadius='100%'/>
@@ -31,18 +41,23 @@ const TableCard = ({tableName, infoClick, table}) => {
                 <Image
                     src={`https://render.tableland.xyz/${chainId}/${tableId}`}
                     height="600px"
-                    width="auto"
-                    objectFit='cover'
-                    fallbackSrc='https://res.cloudinary.com/anudit/image/upload/v1663653643/convo/tableland-thumb.png'
+                    width="600px"
+                    objectFit='fill'
+                    placeholder="blur"
+                    onError={(e) => {
+                        console.log('error on image', tableName);
+                        e.currentTarget.setAttribute('src', 'https://res.cloudinary.com/anudit/image/upload/v1663653643/convo/tableland-thumb.png');
+                    }}
+                    blurDataURL='https://res.cloudinary.com/anudit/image/upload/v1663653643/convo/tableland-thumb.png'
                     alt={`Picture of the ${tableName}`}
                 />
                 <Flex direction='row' m={4} alignItems='center' justifyContent='space-between'>
                     <Flex direction='row' alignItems='center'>
                         <Text fontSize='lg' fontWeight={600}>{toProperCase(tableName.split("_").slice(0,-2).join(' '))}</Text>
-                        <Text size='sm'  ml={2}>#{tableId}</Text>
+                        <Text size='sm'  ml={2} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>#{tableId}</Text>
                     </Flex>
                     <Link href={`/${tableName}`}>
-                        <Button size='sm' borderRadius="100px" colorScheme='blue'>Explore</Button>
+                        <Button size='sm' borderRadius="100px" colorScheme='blue'>Explore Table</Button>
                     </Link>
                 </Flex>
             </Flex>

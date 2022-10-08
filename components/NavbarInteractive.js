@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Tooltip, Flex, IconButton, Spinner, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import { useColorModeValue, Tooltip, Flex, IconButton, Spinner, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { TablelandSmallIcon } from "@/public/icons";
@@ -22,8 +22,8 @@ const NavBar = ({refresh, isLoading}) => {
       w="100%"
       py={2}
       px={4}
-      background="#ffffffed"
-      borderBottomWidth="1px"
+      background={useColorModeValue('#fcfcfcdb', '#0000005e')}
+      backdropFilter='blur(20px)'
       height="50px"
     >
       <Flex direction="row" justify="left" alignItems='center' w={{base: "fit-content", md:"33.33%"}}>
@@ -31,7 +31,7 @@ const NavBar = ({refresh, isLoading}) => {
           <TablelandSmallIcon cursor="pointer" boxSize={8} mr={2}/>
         </Link>
       </Flex>
-      <Tooltip placement="bottom" hasArrow label={sqlError || 'Looks Good' } bg={sqlError? 'red' : 'green.300'}>
+      <Tooltip placement="bottom" hasArrow label={sqlError || 'SQL looks good.' } bg={sqlError? 'red' : 'green.300'}>
         <Flex w="100%">
           <SqlInput sqlError={sqlError} setSqlError={setSqlError} size="sm" mt={2}/>
         </Flex>
@@ -42,10 +42,10 @@ const NavBar = ({refresh, isLoading}) => {
             <IconButton colorScheme='facebook' onClick={refresh} icon={isLoading ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isLoading}/>
           </Tooltip>
           <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Query"} placement='left'>
-            <IconButton colorScheme='blue' onClick={onCopy} icon={hasCopied ? <CheckIcon /> : <CopyIcon />} />
+            <IconButton onClick={onCopy} icon={hasCopied ? <CheckIcon /> : <CopyIcon />} />
           </Tooltip>
           <Tooltip hasArrow label={hasCopiedLink ? "Copied" : "Copy Share Link"} placement='left'>
-            <IconButton colorScheme='blue' onClick={onCopyLink} icon={hasCopiedLink ? <CheckIcon /> : <LinkIcon />} />
+            <IconButton onClick={onCopyLink} icon={hasCopiedLink ? <CheckIcon /> : <LinkIcon />} />
           </Tooltip>
         </ButtonGroup>
       </Flex>

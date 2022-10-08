@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
-import { Heading, Spinner, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip, Alert, AlertIcon, AlertTitle, AlertDescription  } from "@chakra-ui/react";
+import { Skeleton, Heading, Spinner, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip, Alert, AlertIcon, AlertTitle, AlertDescription  } from "@chakra-ui/react";
 import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
 import {
   AutoComplete,
@@ -10,7 +10,7 @@ import {
 } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
 import {multifetch} from "../utils/fetcher";
-import {nameToAvatar, nameToChainName, networkDeets, toProperCase} from "../utils/stringUtils";
+import {nameToAvatar, nameToChainName, toProperCase} from "../utils/stringUtils";
 import { SearchIcon } from "@chakra-ui/icons";
 import SqlInput from "@/components/RunSql";
 import Meta from "@/components/Meta";
@@ -33,7 +33,7 @@ export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   function infoClick(id){
-    setActiveModalData(data.map(e=>e?.data?.tables).flat()[id]);
+    setActiveModalData(data.map(e=>e?.data?.tables).flat().sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})[id]);
     onOpen();
   }
 
@@ -42,7 +42,7 @@ export default function Home() {
   }
 
   const { data, error } = useSWR(`{
-    tables(where: {name_contains_nocase: "${searchValue}"}, first: 10, orderBy: created, orderDirection: desc) {
+    tables(where: {name_contains_nocase: "${searchValue}"}, first: 2, orderBy: created, orderDirection: desc) {
           name
           owner {
               id
@@ -249,7 +249,7 @@ export default function Home() {
 
                 }
             </Flex>
-            <Flex direction="column" position='static' display={{base: 'none', sm: 'none', md: 'flex'}}>
+            <Flex direction="column" position='static' display={{base: 'none', lg: 'flex'}}>
               <ChainsSection />
             </Flex>
         </Flex>
@@ -263,49 +263,34 @@ const ChainsSection = () => {
   const { colorMode } = useColorMode();
 
   const { data } = useSWR(`{
-    tables(first: 10, orderBy: created, orderDirection: desc) {
-        id
-        name
-        owner {
-            id
-        }
-        tableId
-        statement
-        tokenURI
-        created
-        txnHash
-        controller {
-            id
-        }
-        historyCount
+    tables(first: 1, orderBy: created, orderDirection: desc) {
+      tableId
+      name
     }
   }`, multifetch);
 
   return (
     <Flex direction="column" position='fixed'>
-      {
-          data ? (
-            <Flex direction="column" width={{base: '100%', md: '200px'}}>
-              <br/><br/>
-              <Heading>Chains</Heading>
-              <br/>
-                {Object.keys(networkDeets).map(e=>`x_${e}_1`).map(e=>(
-                  <Flex direction='row' align="center" key={e} mb={2}>
-                    <Avatar size="sm" src={nameToAvatar(e)} title={nameToChainName(e)} />
-                    <Flex direction='column' ml={4}>
-                        <Text fontSize='sm' color={colorMode === 'light' ? 'gray.200': 'whiteAlpha.700'}>{nameToChainName(e)}</Text>
-                        <Text>31 Tables</Text>
-                    </Flex>
-                  </Flex>
-                ))}
+      <Flex direction="column" width={{base: '100%', md: '200px'}}>
+        <br/><br/>
+        <Heading>Chains</Heading>
+        <br/>
+        <Skeleton isLoaded={data}>
+        {
+          data && data.map(e=>e?.data?.tables).flat().map(e=>(
+            <Flex direction='row' align="center" key={e.name} mb={2}>
+              <Avatar size="sm" src={nameToAvatar(e.name)} title={nameToChainName(e.name)} />
+              <Flex direction='column' ml={4}>
+                  <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                    {nameToChainName(e.name)}
+                  </Text>
+                  <Text>{e.tableId} Tables</Text>
+              </Flex>
             </Flex>
-          ) : (
-            <Flex w="100vw" h="100vh" justifyContent='center' alignItems='center'>
-                <Spinner />
-            </Flex>
-          )
-
-      }
+          ))
+        }
+        </Skeleton>
+      </Flex>
     </Flex>
   )
 }

@@ -85,7 +85,9 @@ const IdentitySection = () => {
                             {data?.message === "Row not found"? "Row not found, The table is empty." : data?.message}
                         </Alert>
                     ) : (
-                        <Grid data={data} downloadFilename={tableName} />
+                        <chakra.div color="black !important" position="relative" height="calc(100vh - 50px)" width="100%">
+                            <Grid data={data} downloadFilename={tableName} />
+                        </chakra.div>
                     ) : (
                         <Flex w="100vw" h="100vh" justifyContent='center' alignItems='center'>
                             <Spinner />

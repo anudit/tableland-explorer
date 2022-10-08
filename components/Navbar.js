@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { useColorMode, Avatar, Tooltip, Flex, Button, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import { useColorModeValue, useColorMode, Avatar, Tooltip, Flex, Button, IconButton, Spinner, Text, Tag, useDisclosure, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import { CheckIcon, LinkIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { freqTable, nameToAvatar, parseTableData, toProperCase } from "@/utils/stringUtils";
@@ -42,8 +42,7 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
       w="100%"
       py={2}
       px={4}
-      background="#ececec30"
-      borderBottomWidth="1px"
+      background={useColorModeValue('#fcfcfcdb', '#0000005e')}
       height="50px"
     >
       <Flex direction="row" justify="left" alignItems='center' w={{base: "fit-content", md:"33.33%"}}>
@@ -63,10 +62,10 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
       <Flex direction="row" justify="right" alignItems='center' w={{base: "fit-content", md:"33.33%"}} align='right'>
         <ButtonGroup size='sm' isAttached variant='ghost'>
           <Tooltip hasArrow label={isLoading ? "Refreshing Data" : "Refresh Data"} placement='left'>
-            <IconButton colorScheme='blue' onClick={refresh} icon={isLoading ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isLoading}/>
+            <IconButton onClick={refresh} icon={isLoading ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isLoading}/>
           </Tooltip>
           <Tooltip hasArrow label={hasCopiedLink ? "Copied" : "Share Link"} placement='left'>
-            <IconButton colorScheme='blue' onClick={onCopyLink} icon={hasCopiedLink ? <CheckIcon /> : <LinkIcon />} />
+            <IconButton onClick={onCopyLink} icon={hasCopiedLink ? <CheckIcon /> : <LinkIcon />} />
           </Tooltip>
           {
             tableMetadata && (
@@ -74,7 +73,7 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
                 <DetailsModal tableMetadata={tableMetadata} onClose={onClose} isOpen={isOpen}/>
 
                 <Tooltip hasArrow label="More Details" placement='left'>
-                  <IconButton colorScheme='blue' onClick={onOpen}  icon={<InfoIcon />} disabled={isOpen} />
+                  <IconButton onClick={onOpen}  icon={<InfoIcon />} disabled={isOpen} />
                 </Tooltip>
               </>
             )
@@ -121,7 +120,7 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
                               }}
                             >
                               {key}
-                              <Tag ml={2} size='sm' colorScheme='blue'>{val}</Tag>
+                              <Tag ml={2} size='sm'>{val}</Tag>
                             </Button>
                           ))
                         }
@@ -145,16 +144,16 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
           </Drawer>
 
           <Tooltip hasArrow label="History" placement='left'>
-            <IconButton colorScheme='blue' onClick={onOpenHistory}  icon={<HamburgerIcon />} disabled={isOpenHistory} />
+            <IconButton onClick={onOpenHistory}  icon={<HamburgerIcon />} disabled={isOpenHistory} />
           </Tooltip>
 
           <Tooltip hasArrow label='Interactive SQL Mode' placement='left'>
-              <IconButton colorScheme='blue' icon={<SqlIcon boxSize={6} />} onClick={()=>{
+              <IconButton icon={<SqlIcon boxSize={6} />} onClick={()=>{
                 router.push(`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}`)
               }}/>
           </Tooltip>
 
-          <IconButton colorScheme='blue' onClick={toggleColorMode}  icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} />
+          <IconButton onClick={toggleColorMode}  icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} />
         </ButtonGroup>
       </Flex>
     </Flex>

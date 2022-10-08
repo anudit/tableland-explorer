@@ -1,5 +1,5 @@
 import React from "react";
-import { useColorMode, Tooltip, Flex, IconButton, Spinner, Avatar, ButtonGroup } from "@chakra-ui/react";
+import { useColorModeValue, useColorMode, Tooltip, Flex, IconButton, Spinner, Avatar, ButtonGroup } from "@chakra-ui/react";
 import { ArrowUpIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { TablelandSmallIcon } from "@/public/icons";
@@ -17,11 +17,10 @@ const NavBar = ({address, isLoading}) => {
       w="100%"
       py={2}
       px={4}
-      background="#fcfcfced"
-      borderBottomWidth="1px"
+      background={useColorModeValue('#fcfcfcdb', '#0000005e')}
+      backdropFilter='blur(20px)'
       height="50px"
       position='fixed'
-      backdropFilter='blur(4px)'
       zIndex='1000'
       top="0"
     >
@@ -44,7 +43,7 @@ const NavBar = ({address, isLoading}) => {
               window.open(`https://blockscan.com/address/${address}`, "_blank");
             }} icon={<ArrowUpIcon style={{'transform':'rotate(45deg)'}}/>} />
           </Tooltip>
-          <IconButton colorScheme='blue' onClick={toggleColorMode}  icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} />
+          <IconButton onClick={toggleColorMode}  icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} />
         </ButtonGroup>
       </Flex>
     </Flex>

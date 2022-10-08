@@ -1,3 +1,5 @@
+import { networkDeets } from "./stringUtils";
+
 export const fetcher = async (url, method="GET", bodyData = {}) => {
     let res;
     if (method === "GET"){
@@ -33,10 +35,13 @@ export const multifetch = async (query) => {
     };
 
     let promiseArray = [
-        fetch("https://api.thegraph.com/subgraphs/name/anudit/tableland", options),
-        fetch("https://api.thegraph.com/subgraphs/name/anudit/tableland-optimism-goerli", options),
-        fetch("https://api.thegraph.com/subgraphs/name/anudit/tableland-arbitrum-goerli", options),
-        fetch("https://api.studio.thegraph.com/query/1649/tableland-ethereum-goerli/v1.2", options),
+        fetch(networkDeets['1'].subgraph, options),
+        fetch(networkDeets['5'].subgraph, options),
+        fetch(networkDeets['137'].subgraph, options),
+        fetch(networkDeets['80001'].subgraph, options),
+        fetch(networkDeets['10'].subgraph, options),
+        fetch(networkDeets['420'].subgraph, options),
+        fetch(networkDeets['421613'].subgraph, options),
     ];
     let res = await Promise.allSettled(promiseArray);
     let results = [];

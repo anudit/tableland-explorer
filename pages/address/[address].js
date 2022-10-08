@@ -5,7 +5,7 @@ import useSWR from "swr";
 
 import { multifetch } from '@/utils/fetcher';
 import NavBar from '@/components/NavbarAddress';
-import TableCard from '@/components/TableCard';
+import TableCard from '@/components/ExploreTableCard';
 import Meta from '@/components/Meta';
 import DetailsModal from '@/components/DetailsModal';
 
@@ -40,7 +40,7 @@ const UserSection = () => {
     );
 
     function infoClick(id){
-        setActiveModalData(data.map(e=>e?.data?.tables).flat()[id]);
+        setActiveModalData(data.map(e=>e?.data?.tables).flat().sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})[id]);
         onOpen();
     }
 
@@ -60,10 +60,14 @@ const UserSection = () => {
                                 <Wrap spacing={3} align='center' justify='center' m={8} mt={16}>
                                     <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
                                     {
-                                        data && data.map(e=>e?.data?.tables).flat().map((table, oid) => {
+                                        data && data
+                                            .map(e=>e?.data?.tables)
+                                            .flat()
+                                            .sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})
+                                            .map((table, oid) => {
                                             return (
                                                 <WrapItem key={oid}>
-                                                    <TableCard tableName={table?.name} infoClick={()=>{
+                                                    <TableCard tableName={table?.name} table={table} infoClick={()=>{
                                                         infoClick(oid)
                                                     }}/>
                                                 </WrapItem>
