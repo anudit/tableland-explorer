@@ -36,10 +36,10 @@ const NavBar = ({address, isLoading}) => {
       <Flex direction="row" justify="right" alignItems='center' w={{base: "fit-content", md:"33.33%"}} align='right'>
         <ButtonGroup size='sm' isAttached variant='ghost'>
           <Tooltip hasArrow label={isLoading ? "Refreshing Data" : "Refresh Data"} placement='left'>
-            <IconButton colorScheme='facebook' icon={isLoading ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isLoading}/>
+            <IconButton icon={isLoading ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isLoading}/>
           </Tooltip>
           <Tooltip hasArrow label='View on Etherscan' placement='left'>
-            <IconButton colorScheme='facebook' onClick={()=>{
+            <IconButton onClick={()=>{
               window.open(`https://blockscan.com/address/${address}`, "_blank");
             }} icon={<ArrowUpIcon style={{'transform':'rotate(45deg)'}}/>} />
           </Tooltip>

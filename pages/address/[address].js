@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useDisclosure, Alert, AlertIcon, chakra, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { Button, Text, useDisclosure, chakra, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import useSWR from "swr";
 
 import { multifetch } from '@/utils/fetcher';
@@ -8,6 +8,8 @@ import NavBar from '@/components/NavbarAddress';
 import TableCard from '@/components/ExploreTableCard';
 import Meta from '@/components/Meta';
 import DetailsModal from '@/components/DetailsModal';
+import { TablelandSmallIcon } from '@/public/icons';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 const UserSection = () => {
 
@@ -50,36 +52,39 @@ const UserSection = () => {
             <NavBar address={address} isLoading={isValidating} />
             <chakra.div position="relative" height="calc(100vh - 50px)" width="100%">
                 {
-                    data ? data?.message ? (
-                                <Alert status='error'>
-                                    <AlertIcon />
-                                    {data?.message === "Row not found"? "Row not found, The table is empty." : data?.message}
-                                </Alert>
-                        ) : (
-                            <>
-                                <Wrap spacing={3} align='center' justify='center' m={8} mt={16}>
-                                    <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
-                                    {
-                                        data && data
-                                            .map(e=>e?.data?.tables)
-                                            .flat()
-                                            .sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})
-                                            .map((table, oid) => {
-                                            return (
+                    data ? data.map(e=>e?.data?.tables).flat().length != 0 ? (
+                            <Wrap spacing={{base: 0, md:3}} align='center' justify='center' m={{base: 0, md:8}} mt='60px' >
+                                <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
+                                {
+                                    data
+                                        .map(e=>e?.data?.tables)
+                                        .flat()
+                                        .sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})
+                                        .map((table, oid) => (
                                                 <WrapItem key={oid}>
                                                     <TableCard tableName={table?.name} table={table} infoClick={()=>{
                                                         infoClick(oid)
                                                     }}/>
                                                 </WrapItem>
                                             )
-                                        })
-                                    }
-                                </Wrap>
-                                <br/><br/>
-                            </>
+                                        )
+                                }
+                            </Wrap>
+                        ) : (
+                            <Flex direction='column' alignItems='center' h="100%" w="100%" justifyContent='center'>
+                                <Text fontSize='xl' align='center'>
+                                    You seem to have found a land with no Tables. <br/>Learn how to Create one on Tableland Docs.
+                                </Text>
+                                <br/>
+                                <Button leftIcon={<TablelandSmallIcon/>} rightIcon={<ExternalLinkIcon />} onClick={()=>{
+                                    window.open('https://docs.tableland.xyz/build-a-dynamic-nft-in-solidity', '_blank');
+                                }}>
+                                    Tableland Docs
+                                </Button>
+                            </Flex>
                         )
                     : (
-                        <Flex w="100vw" h="100vh" justifyContent='center' alignItems='center'>
+                        <Flex w="90vw" h="100vh" justifyContent='center' alignItems='center'>
                             <Spinner />
                         </Flex>
                     )

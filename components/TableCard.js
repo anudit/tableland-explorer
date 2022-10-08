@@ -33,7 +33,7 @@ const TableCard = ({tableName, infoClick}) => {
                 />
                 <Flex direction='row' m={2}>
                     <ButtonGroup size='sm' isAttached w="100%">
-                        <Link href={`/${tableName}`}>
+                        <Link href={`/${tableName.toLowerCase()}`}>
                             <Button w="100%">Explore Table</Button>
                         </Link>
                         <IconButton icon={<InfoIcon />} onClick={infoClick}/>

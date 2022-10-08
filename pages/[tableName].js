@@ -89,7 +89,7 @@ const IdentitySection = () => {
                             <Grid data={data} downloadFilename={tableName} />
                         </chakra.div>
                     ) : (
-                        <Flex w="100vw" h="100vh" justifyContent='center' alignItems='center'>
+                        <Flex w="90vw" h="100vh" justifyContent='center' alignItems='center'>
                             <Spinner />
                         </Flex>
                     )

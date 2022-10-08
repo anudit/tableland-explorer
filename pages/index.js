@@ -33,7 +33,12 @@ export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   function infoClick(id){
-    setActiveModalData(data.map(e=>e?.data?.tables).flat().sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})[id]);
+    let selectData = exploreData
+      .map(e=>e?.data?.tables)
+      .flat()
+      .sort((a, b) => parseInt(b.created) - parseInt(a.created));
+
+    setActiveModalData(selectData[id]);
     onOpen();
   }
 
@@ -60,7 +65,7 @@ export default function Home() {
   }`, multifetch);
 
   const { data: exploreData } = useSWR(`{
-    tables(first: 10, orderBy: created, orderDirection: desc, where: {historyCount_gt: 4}) {
+    tables(first: 3, orderBy: created, orderDirection: desc, where: {historyCount_gt: 4}) {
               id
               name
               owner {
@@ -112,7 +117,7 @@ export default function Home() {
                 !isSqlMode ? (
                   <FormControl id="table-name" w="100%">
                     <AutoComplete openOnFocus onSelectOption={(data)=>{
-                      router.push(`/${data.item.value}`);
+                      router.push(`/${data.item.value.toLowerCase()}`);
                     }}>
                       <AutoCompleteInput
                         variant="filled"
@@ -222,7 +227,7 @@ export default function Home() {
             <Flex direction="column" >
                   {
                     exploreData ? (
-                      <Flex direction="column" width={{base: '100%', md: '600px'}}>
+                      <Flex direction="column" width={{base: '100%', md: '600px'}} scrollSnapType="y mandatory">
                         <br/><br/>
                         <Heading>Explore</Heading>
                         <br/>
@@ -234,15 +239,20 @@ export default function Home() {
                               .sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})
                               .map((table, oid) => {
                                 return (
-                                  <TableCard key={oid} tableName={table?.name} table={table} infoClick={()=>{
+                                  <TableCard
+                                    key={oid}
+                                    tableName={table?.name}
+                                    table={table}
+                                    infoClick={()=>{
                                       infoClick(oid)
-                                  }}/>
+                                    }}
+                                  />
                                 )
                             })
                         }
                       </Flex>
                     ) : (
-                      <Flex w="100vw" h="100vh" justifyContent='center' alignItems='center'>
+                      <Flex w="90vw" h="100vh" justifyContent='center' alignItems='center' m={0}>
                           <Spinner />
                       </Flex>
                     )
