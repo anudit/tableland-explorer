@@ -58,3 +58,39 @@ export const FilterIcon = createIcon({
     )
 });
 
+export const OpenseaIcon = createIcon({
+    displayName: 'OpenseaIcon',
+    viewBox: '0 0 90 90',
+    path: (
+        <path fill="currentColor" d="M45 0a45 45 0 1 0 0 90 45 45 0 0 0 0-90ZM22 47v-1l12-18h1c2 4 3 10 3 13a20 20 0 0 1-3 6H22Zm52 6-5 4c-3 4-6 11-12 11H34c-8 0-15-7-15-15v-1h13l1 1v2l4 3h7v-5h-7v-1a49 49 0 0 0 4-7l1-1v-2a13 13 0 0 0 0-4v-4l-1-2a44 44 0 0 0-1-5l-1-1a13 13 0 0 1-1-2l-1-2 5 1h2v1-3c0-2 1-3 2-3l2 1 1 2v4h1v1h1l1 2h1a39 39 0 0 1 3 3l1 1 1 1v1a19 19 0 0 1 2 3 11 11 0 0 1 0 2v1a8 8 0 0 1 0 3v1l-1 2-1 1-1 1v1a21 21 0 0 1-2 2h-1v1l-1 1h-4v5h5l3-1 3-3v-1l14-3c0-1 0 0 0 0v3Z"/>
+    )
+});
+
+
+export const MetadataIcon = createIcon({
+    displayName: 'MetadataIcon',
+    viewBox: '0 0 24 24',
+    path: (
+        <path fill="currentColor" d="M22 24h-20v-24h14l6 6v18zm-7-23h-12v22h18v-16h-6v-6zm3 15v1h-12v-1h12zm0-3v1h-12v-1h12zm0-3v1h-12v-1h12zm-2-4h4.586l-4.586-4.586v4.586z"/>
+    )
+});
+
+export const EtherscanIcon = createIcon({
+    displayName: 'EtherscanIcon',
+    viewBox: '0 0 294 294',
+    path: (
+        <>
+            <path fill="currentColor" d="M61 140a12 12 0 0 1 13-13h20a12 12 0 0 1 13 13v78l8-2a10 10 0 0 0 8-10v-97a12 12 0 0 1 13-13h21a12 12 0 0 1 12 13v90l10-4a10 10 0 0 0 7-10V78a12 12 0 0 1 12-13h21a12 12 0 0 1 12 13v88c18-13 37-29 51-47a21 21 0 0 0 3-20A147 147 0 0 0 149 0C67-1 0 65 0 147a146 146 0 0 0 20 73 19 19 0 0 0 17 9l15-1a10 10 0 0 0 9-10v-78"/>
+            <path fill="currentColor" d="M61 266a147 147 0 0 0 233-119l-1-10c-53 80-152 117-232 129" data-name="Path 2"/>
+        </>
+    )
+});
+
+export const FullscreenIcon = createIcon({
+    displayName: 'FullscreenIcon',
+    viewBox: '0 0 24 24',
+    path: (
+        <path fill="currentColor" d="M24 9h-2v-5h-7v-2h9v7zm-9 13v-2h7v-5h2v7h-9zm-15-7h2v5h7v2h-9v-7zm9-13v2h-7v5h-2v-7h9z"/>
+    )
+});
+

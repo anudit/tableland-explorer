@@ -76,7 +76,7 @@ const UserSection = () => {
                                     You seem to have found a land with no Tables. <br/>Learn how to Create one on Tableland Docs.
                                 </Text>
                                 <br/>
-                                <Button leftIcon={<TablelandSmallIcon/>} rightIcon={<ExternalLinkIcon />} onClick={()=>{
+                                <Button variant="ghost" leftIcon={<TablelandSmallIcon/>} rightIcon={<ExternalLinkIcon />} onClick={()=>{
                                     window.open('https://docs.tableland.xyz/build-a-dynamic-nft-in-solidity', '_blank');
                                 }}>
                                     Tableland Docs
