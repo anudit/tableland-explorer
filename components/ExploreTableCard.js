@@ -5,7 +5,7 @@ import Link from 'next/link';
 import AddressOrEns from './AddressOrEns';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
-import Image from 'next/future/image';
+import Image from 'next/image';
 
 const loaderProp = ({ src }) => { return src }
 
@@ -22,10 +22,9 @@ const TableCard = ({tableName, infoClick, table}) => {
                 borderRadius={{base: 0, md: 20}}
                 borderWidth={1}
                 w={{base: '100%', md:'600px'}}
-                h={{base: '90vh', md:'auto'}}
+                h={{base: 'calc(100vh - 70px)', md:'auto'}}
                 mb={{base: 0, md: 4}}
                 borderColor={colorMode === 'light' ? 'gray.200': 'gray.800'}
-                scrollSnapAlign="center"
             >
                 <Flex direction='row' p={3} justifyContent="space-between" alignItems='center'>
                     <Flex direction='row' align="center" ml={2}>
@@ -69,7 +68,7 @@ const TableCard = ({tableName, infoClick, table}) => {
                         <Text fontSize='lg' fontWeight={600}>{toProperCase(tableName.split("_").slice(0,-2).join(' '))}</Text>
                         <Text size='sm'  ml={2} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>#{tableId}</Text>
                     </Flex>
-                    <Link href={`/${tableName.toLowerCase()}`}>
+                    <Link href={`/${tableName}`}>
                         <Button size='sm' borderRadius="100px" colorScheme='blue'>Explore Table</Button>
                     </Link>
                 </Flex>

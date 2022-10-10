@@ -194,6 +194,7 @@ export function parseTableData(tableName){
     try {
         if (tableName){
             let tableSplit = tableName.split('_');
+            // if (tableSplit.ke)
             let chainId = tableSplit[tableSplit.length-2];
             let tableId = tableSplit[tableSplit.length-1];
 

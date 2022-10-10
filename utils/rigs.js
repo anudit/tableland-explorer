@@ -10,9 +10,7 @@ export async function getMetadata(tokenIds = []){
 
 export async function getUserRigs(address){
     let userRigs = await fetch(`https://api.nftport.xyz/v0/accounts/${address}`,{
-        headers: {
-            'Authorization': 'ad985098-7dbb-4bee-9f7d-ffa06d5a44d9'
-        }
+        headers: { 'Authorization': 'ad985098-7dbb-4bee-9f7d-ffa06d5a44d9' }
     }).then(e=>e.json());
 
     if (userRigs?.nfts?.length > 0){
@@ -29,5 +27,20 @@ export async function getRigOwner(tokenId){
     let owner = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v2/demo/getOwnersForToken?contractAddress=0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d&tokenId=${tokenId}`).then(e=>e.json());
     let ret = owner?.owners[0];
     return ret;
+}
 
+export async function getRigTxns(tokenId){
+    let data = await fetch(`https://api.nftport.xyz/v0/transactions/nfts/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${tokenId}?chain=ethereum&type=all`, {
+        method: 'GET',
+        headers: {'Authorization' : 'ad985098-7dbb-4bee-9f7d-ffa06d5a44d9'}
+    }).then(e=>e.json());
+    return data?.transactions;
+}
+
+export async function getLatestRigActions(){
+    let data = await fetch(`https://api.nftport.xyz/v0/transactions/nfts/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d?chain=ethereum&type=sale`, {
+        method: 'GET',
+        headers: {'Authorization' : 'ad985098-7dbb-4bee-9f7d-ffa06d5a44d9'}
+    }).then(e=>e.json());
+    return data?.transactions;
 }

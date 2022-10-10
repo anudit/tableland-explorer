@@ -3,7 +3,7 @@ import { useClipboard, Tooltip, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { getAddress } from "ethers/lib/utils";
 
-async function addressToEns(address){
+export async function addressToEns(address){
     try {
 
         let resp = await fetch(`https://api.ensideas.com/ens/resolve/${address.toLowerCase()}`).then(r=>r.json());

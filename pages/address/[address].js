@@ -51,10 +51,16 @@ const UserSection = () => {
             <Meta />
             <NavBar address={address} isLoading={isValidating} />
             <chakra.div position="relative" height="calc(100vh - 50px)" width="100%">
+                <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
                 {
                     data ? data.map(e=>e?.data?.tables).flat().length != 0 ? (
-                            <Wrap spacing={{base: 0, md:3}} align='center' justify='center' m={{base: 0, md:8}} mt='60px' >
-                                <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
+                            <Wrap
+                                spacing={{base: 0, md:3}}
+                                align='center'
+                                justify='center'
+                                m={{base: 0, md:8}}
+                                mt={16}
+                            >
                                 {
                                     data
                                         .map(e=>e?.data?.tables)

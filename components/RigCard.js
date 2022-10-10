@@ -68,7 +68,7 @@ const RigCard = ({tableName, infoClick, table}) => {
                         <Text fontSize='lg' fontWeight={600}>{toProperCase(tableName.split("_").slice(0,-2).join(' '))}</Text>
                         <Text size='sm'  ml={2} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>#{tableId}</Text>
                     </Flex>
-                    <Link href={`/${tableName.toLowerCase()}`}>
+                    <Link href={`/${tableName}`}>
                         <Button size='sm' borderRadius="100px" colorScheme='blue'>Explore Table</Button>
                     </Link>
                 </Flex>

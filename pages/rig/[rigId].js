@@ -1,15 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 Skeleton
-import { Skeleton, Avatar, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { useClipboard, Skeleton, Avatar, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import useSWR from "swr";
 
 import NavBar from '@/components/NavbarSimple';
 import Meta from '@/components/Meta';
 import { EtherscanIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, TablelandSmallIcon } from '@/public/icons';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { constructTokenURIQuery, getMetadata, getRigOwner } from '@/utils/rigs';
+import { constructTokenURIQuery, getMetadata, getRigOwner, getRigTxns } from '@/utils/rigs';
 import AddressOrEns from '@/components/AddressOrEns';
+import { CopyIcon } from '@chakra-ui/icons';
 
 const UserSection = () => {
 
@@ -19,6 +20,7 @@ const UserSection = () => {
     const [owner, setOwner ] = useState(null);
 
     const { rigId } = router.query;
+    const { onCopy } = useClipboard(`https://tablescan.io/rig/${rigId}`);
 
     const { data, error, isValidating, mutate } = useSWR(rigId ? [rigId]: null, getMetadata);
 
@@ -37,8 +39,6 @@ const UserSection = () => {
         mutate(data);
     }
 
-
-
     return (
         <>
             <Meta />
@@ -47,8 +47,8 @@ const UserSection = () => {
                 {
                     data ? data.length != 0 ? (
                            <>
-                                <Flex h="100%" w={{base: '100%', md: '50%'}} alignItems="center" justifyContent='center' background='#80808014'>
-                                    <IconButton position='fixed' bottom='20px' right='20px'  icon={<FullscreenIcon />} borderRadius="100%" onClick={()=>{
+                                <Flex position='relative' ref={imageRef} h="100%" w={{base: '100%', md: '50%'}} alignItems="center" justifyContent='center' background='#80808014'>
+                                    <IconButton position='absolute' bottom='20px' right='20px'  icon={<FullscreenIcon />} borderRadius="100%" onClick={()=>{
                                         imageRef.current.requestFullscreen();
                                     }}/>
 
@@ -56,13 +56,12 @@ const UserSection = () => {
                                         src={'https://ipfs.io/ipfs/' + data?.thumb.replace('ipfs://','')}
                                         width="600px"
                                         height="auto"
-                                        ref={imageRef}
                                     />
 
                                 </Flex>
                                 <Flex h="100%" direction='column' w={{base: '100%', md: '50%'}} justifyContent="center" alignItems='center'>
                                     <Flex direction='column' p={8} w={{base: '100%', md: '90%'}}>
-                                        <Heading mb={{base: 4, md: 4}} size="3xl">
+                                        <Heading mb={{base: 4, md: 4}} size="3xl" mt={{base: 16, md: 0}}>
                                             {data?.name}
                                         </Heading>
                                         <Skeleton isLoaded={Boolean(owner) }>
@@ -106,15 +105,21 @@ const UserSection = () => {
                                         }
                                         </Wrap>
                                         <br/>
-                                        <Button variant='ghost' leftIcon={<OpenseaIcon />} mb={1} w="fit-content"  onClick={()=>{
-                                            window.open(`https://opensea.io/assets/ethereum/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${rigId}`, '_target');
-                                        }}>View on Opensea</Button>
-                                        <Button variant='ghost' leftIcon={<EtherscanIcon />} mb={1} w="fit-content" onClick={()=>{
-                                            window.open(`https://etherscan.io/nft/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${rigId}`, '_target');
-                                        }}>View on Etherscan</Button>
-                                        <Button variant='ghost' leftIcon={<MetadataIcon />} mb={1} w="fit-content" onClick={()=>{
-                                            window.open(constructTokenURIQuery(rigId), '_target');
-                                        }}>View Metadata</Button>
+                                        <Flex direction="row" alignItems='flex-start'>
+                                            <Button variant='ghost' leftIcon={<OpenseaIcon />} mb={1} w="fit-content"  onClick={()=>{
+                                                window.open(`https://opensea.io/assets/ethereum/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${rigId}`, '_target');
+                                            }}>View on Opensea</Button>
+                                            <Button variant='ghost' leftIcon={<EtherscanIcon />} mb={1} w="fit-content" onClick={()=>{
+                                                window.open(`https://etherscan.io/nft/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${rigId}`, '_target');
+                                            }}>View on Etherscan</Button>
+                                        </Flex>
+                                        <Flex direction="row" alignItems='flex-start'>
+                                            <Button variant='ghost' leftIcon={<MetadataIcon />} mb={1} w="fit-content" onClick={()=>{
+                                                window.open(constructTokenURIQuery(rigId), '_target');
+                                            }}>View Metadata</Button>
+                                            <Button variant='ghost' leftIcon={<CopyIcon />} mb={1} w="fit-content" onClick={onCopy}>Share Link</Button>
+                                        </Flex>
+                                        {/* <ProvSection rigId={rigId}/> */}
                                     </Flex>
                                 </Flex>
                            </>
@@ -145,3 +150,28 @@ const UserSection = () => {
 }
 
 export default UserSection;
+
+
+// const ProvSection = ({rigId}) => {
+//     const [prov, setProv] = useState(false);
+
+//     useEffect(()=>{
+//         getRigTxns(rigId).then(setProv)
+//     },[rigId])
+
+//     return (
+//         <Flex direction="column" mt="20px">
+//             {
+//                 prov && prov?.map(e=>{
+//                     return (
+//                         <Flex direction='column' key={e.transaction_hash}>
+//                             <Text textTransform='uppercase' fontSize="sm">
+//                                 {e.type}
+//                             </Text>
+//                         </Flex>
+//                     )
+//                 })
+//             }
+//         </Flex>
+//     )
+// }

@@ -46,6 +46,7 @@ export default function Home() {
     setSearchValue(event.target.value);
   }
 
+  // Autocomplete Search
   const { data, error } = useSWR(`{
     tables(where: {name_contains_nocase: "${searchValue}"}, first: 2, orderBy: created, orderDirection: desc) {
           name
@@ -64,6 +65,7 @@ export default function Home() {
     }
   }`, multifetch);
 
+  // Explore Feed
   const { data: exploreData } = useSWR(`{
     tables(first: 3, orderBy: created, orderDirection: desc, where: {historyCount_gt: 4}) {
               id
@@ -117,7 +119,7 @@ export default function Home() {
                 !isSqlMode ? (
                   <FormControl id="table-name" w="100%">
                     <AutoComplete openOnFocus onSelectOption={(data)=>{
-                      router.push(`/${data.item.value.toLowerCase()}`);
+                      router.push(`/${data.item.value}`);
                     }}>
                       <AutoCompleteInput
                         variant="filled"
@@ -225,41 +227,35 @@ export default function Home() {
         </Flex>
         <Flex direction="row" justifyContent="space-around" mt="70px" w={{base: "100%", md: "80%"}}>
             <Flex direction="column" >
+                <Flex direction="column" width={{base: '100%', md: '600px'}}>
+                  <br/>
+                  <Heading ml={2}>Explore</Heading>
+                  <br/>
+                  <ActionsSection />
+                  <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
                   {
-                    exploreData ? (
-                      <Flex direction="column" width={{base: '100%', md: '600px'}} scrollSnapType="y mandatory">
-                        <br/><br/>
-                        <Heading>Explore</Heading>
-                        <br/>
-                        <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
-                        {
-                            exploreData && exploreData
-                              .map(e=>e?.data?.tables)
-                              .flat()
-                              .sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})
-                              .map((table, oid) => {
-                                return (
-                                  <TableCard
-                                    key={oid}
-                                    tableName={table?.name}
-                                    table={table}
-                                    infoClick={()=>{
-                                      infoClick(oid)
-                                    }}
-                                  />
-                                )
-                            })
-                        }
-                      </Flex>
-                    ) : (
-                      <Flex w="90vw" h="100vh" justifyContent='center' alignItems='center' m={0}>
-                          <Spinner />
-                      </Flex>
-                    )
-
-                }
+                      exploreData ? exploreData
+                        .map(e=>e?.data?.tables)
+                        .flat()
+                        .sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})
+                        .map((table, oid) => {
+                          return (
+                            <TableCard
+                              key={oid}
+                              tableName={table?.name}
+                              table={table}
+                              infoClick={()=>{
+                                infoClick(oid)
+                              }}
+                            />
+                          )
+                      }) : (
+                        <Spinner />
+                      )
+                  }
+                </Flex>
             </Flex>
-            <Flex direction="column" position='static' display={{base: 'none', lg: 'flex'}}>
+            <Flex direction="column" display={{base: 'none', lg: 'flex'}}>
               <ChainsSection />
             </Flex>
         </Flex>
@@ -280,12 +276,12 @@ const ChainsSection = () => {
   }`, multifetch);
 
   return (
-    <Flex direction="column" position='fixed'>
-      <Flex direction="column" width={{base: '100%', md: '200px'}}>
-        <br/><br/>
-        <Heading>Chains</Heading>
-        <br/>
-        <Skeleton isLoaded={data}>
+    <Flex direction="column" width={{base: '100%', md: '200px'}} position="relative">
+      <br/><br/>
+      <Heading>Chains</Heading>
+      <br/>
+      <Skeleton isLoaded={data}>
+        <Flex position="sticky" top="0px" direction="column">
         {
           data && data.map(e=>e?.data?.tables).flat().map(e=>(
             <Flex direction='row' align="center" key={e.name} mb={2}>
@@ -299,8 +295,45 @@ const ChainsSection = () => {
             </Flex>
           ))
         }
-        </Skeleton>
-      </Flex>
+        </Flex>
+      </Skeleton>
     </Flex>
   )
 }
+
+import { getLatestRigActions } from "@/utils/rigs";
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
+import 'swiper/css/scrollbar';
+import RigAction from "@/components/RigAction";
+import { Autoplay } from "swiper";
+
+const ActionsSection = () => {
+
+  let [actions, setActions] = useState(null);
+
+  useEffect(()=>{
+    getLatestRigActions().then(e=>setActions(e));
+  }, [])
+
+  return (
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      width={{base:'100vw', md: "100%" }}
+    >
+      <Swiper
+        slidesPerView={1}
+        modules={[Autoplay]}
+        autoplay={true}
+      >
+        {actions && actions?.map && actions.map((slide, sid) => (
+          <SwiperSlide key={`slide-${sid}`}>
+            <RigAction data={slide} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </Flex>
+  );
+};
