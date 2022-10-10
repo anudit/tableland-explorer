@@ -8,7 +8,7 @@ import NavBar from '@/components/NavbarSimple';
 import Meta from '@/components/Meta';
 import { EtherscanIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, TablelandSmallIcon } from '@/public/icons';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { constructTokenURIQuery, getMetadata, getRigOwner, getRigTxns } from '@/utils/rigs';
+import { constructTokenURIQuery, getMetadata, getRigOwner } from '@/utils/rigs';
 import AddressOrEns from '@/components/AddressOrEns';
 import { CopyIcon } from '@chakra-ui/icons';
 
