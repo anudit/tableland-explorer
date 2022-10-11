@@ -7,10 +7,6 @@ export const EnsCacheProvider = ({children}) => {
 
     let [cache, setCache] = useState({});
 
-    useEffect(()=>{
-        console.log('cache now', cache);
-    },[cache])
-
     async function getEnsData(addressOrEns){
         try {
 

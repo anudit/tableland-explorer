@@ -8,6 +8,17 @@ export async function getMetadata(tokenIds = []){
     return data;
 }
 
+export async function getOpenData(tokenId){
+
+    const options = {method: 'GET', headers: {'X-API-KEY': Buffer.from('OTYwNDFlMWQxZDRiNGYyZmJlMjZiZDdkZTFiZjcxODU=', 'base64')}};
+    // let promiseArray = tokenIds.map(id=>fetch(`https://api.opensea.io/api/v1/asset/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${id}/?include_orders=true`, options).then(response => response.json()));
+    // let data = await Promise.allSettled(promiseArray);
+    // return data.map(e=>e.value);
+
+    let res = await fetch(`https://api.opensea.io/api/v1/asset/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${tokenId}/?include_orders=true`, options).then(response => response.json());
+    return res;
+}
+
 export async function getUserRigs(address){
     let userRigs = await fetch(`https://api.nftport.xyz/v0/accounts/${address}`,{
         headers: { 'Authorization': 'ad985098-7dbb-4bee-9f7d-ffa06d5a44d9' }
@@ -44,3 +55,4 @@ export async function getLatestRigActions(){
     }).then(e=>e.json());
     return data?.transactions;
 }
+

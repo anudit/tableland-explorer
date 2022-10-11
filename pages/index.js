@@ -124,10 +124,10 @@ export default function Home() {
                       <AutoCompleteInput
                         variant="filled"
                         ref={searchBox}
-                        autoFocus
                         onChange={onChangeTest}
                         placeholder="Search for Tables or ENS Names"
                         autoComplete="off"
+
                         onKeyDown={(e)=>{
                           if(e.code == 'Enter'){
                             if (isAddress(searchValue)) router.push(`/address/${searchValue}`);

@@ -19,7 +19,7 @@ module.exports = (phase) => {
       return config;
     },
     images: {
-      domains: ['render.tableland.xyz', 'res.cloudinary.com', 'ipfs.io'],
+      domains: ['render.tableland.xyz', 'res.cloudinary.com', 'ipfs.io', 'seadn.io'],
     },
   }
 

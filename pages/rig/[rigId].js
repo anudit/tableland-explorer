@@ -1,14 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { useRouter } from 'next/router';
-Skeleton
-import { useClipboard, Skeleton, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { useClipboard, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import useSWR from "swr";
 
 import NavBar from '@/components/NavbarSimple';
 import Meta from '@/components/Meta';
 import { EtherscanIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, TablelandSmallIcon } from '@/public/icons';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { constructTokenURIQuery, getMetadata, getRigOwner } from '@/utils/rigs';
+import { constructTokenURIQuery, getOpenData } from '@/utils/rigs';
 import AddressOrEns from '@/components/AddressOrEns';
 import { CopyIcon } from '@chakra-ui/icons';
 import EnsAvatar from '@/components/EnsAvatar';
@@ -20,25 +19,18 @@ const UserSection = () => {
     const router = useRouter();
     const {colorMode} = useColorMode();
     const imageRef = useRef();
-    const [owner, setOwner ] = useState(null);
 
     const { rigId } = router.query;
     const { onCopy } = useClipboard(`https://tablescan.io/rig/${rigId}`);
 
-    const { data, error, isValidating, mutate } = useSWR(rigId ? [rigId]: null, getMetadata);
-
-    useEffect(()=>{
-        if (rigId && Boolean(owner)===false) getRigOwner(rigId).then(e=>{
-            setOwner(e)
-        })
-    },[owner, rigId])
+    const { data, error, isValidating, mutate } = useSWR(rigId ? [rigId]: null, getOpenData);
 
     if (error) return (
         <div>failed to load, {error}</div>
     );
 
     async function refresh(){
-        let data = await getMetadata(rigId);
+        let data = await getOpenData(rigId);
         mutate(data);
     }
 
@@ -48,7 +40,7 @@ const UserSection = () => {
             <NavBar isLoading={isValidating} refresh={refresh} />
             <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt="50px" width="100%">
                 {
-                    data ? data.length != 0 ? (
+                    data ? data?.success !== false ? (
                            <>
                                 <Flex position='relative' ref={imageRef} h="100%" w={{base: '100%', md: '50%'}} alignItems="center" justifyContent='center' background='#80808014'>
                                     <Flex direction="row" position='absolute' bottom='20px' right='20px' >
@@ -64,7 +56,7 @@ const UserSection = () => {
                                     </Flex>
 
                                     <Image
-                                        src={'https://ipfs.io/ipfs/' + data?.thumb.replace('ipfs://','')}
+                                        src={data?.image_url}
                                         width="600px"
                                         height="auto"
                                     />
@@ -75,28 +67,48 @@ const UserSection = () => {
                                         <Heading mb={{base: 4, md: 4}} size="3xl" mt={{base: 4, md: 0}}>
                                             {data?.name}
                                         </Heading>
-                                        <Skeleton isLoaded={Boolean(owner) }>
-                                            <Flex direction='row' align="center" my={4}>
-                                                <EnsAvatar size="sm" address={owner} />
+                                        <Flex direction='row' align="center" my={4}>
+                                            <Flex direction='row' mr={4} alignItems="center">
+                                                <EnsAvatar size="sm" address={data?.owner.address} />
                                                 <Flex direction='column'>
                                                     <Text ml={4} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                                         Owner
                                                     </Text>
                                                     <AddressOrEns
-                                                        address={owner}
+                                                        address={data?.owner.address}
                                                         tooltip={false}
                                                         cursor="pointer"
                                                         onClick={()=>{
-                                                            router.push(`/address/${owner}`)
+                                                            router.push(`/address/${data?.owner.address}`)
                                                         }}
 
                                                     />
                                                 </Flex>
                                             </Flex>
-                                        </Skeleton>
+                                            {
+                                                data?.last_sale && (
+                                                    <Flex direction='row' alignItems="center">
+                                                        <Image src={data?.last_sale?.payment_token?.image_url} height={8} width={8} />
+                                                        <Flex direction='column'>
+                                                            <Text ml={4} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                                                Last Sale
+                                                            </Text>
+                                                            <Text ml={4} fontWeight={400} size={{base: 'sm', md: 'md'}}>
+                                                                {parseInt(data?.last_sale?.total_price) / (10**data?.last_sale?.payment_token?.decimals)}
+                                                                {" " + data?.last_sale?.payment_token?.symbol}
+                                                                {" "}
+                                                                (${(parseInt(data?.last_sale?.total_price) / (10**data?.last_sale?.payment_token?.decimals) * parseFloat(data?.last_sale?.payment_token?.usd_price)).toFixed(2)})
+                                                            </Text>
+                                                        </Flex>
+                                                    </Flex>
+                                                )
+                                            }
+                                        </Flex>
                                         <Wrap>
                                         {
-                                            data?.attributes.map(e=>(
+                                            data?.traits.sort((a, b)=>{
+                                                return a.trait_type.slice(0, 1) < b.trait_type.slice(0, 1)
+                                            }).map(e=>(
                                                 <WrapItem key={e?.trait_type}>
                                                     <Flex
                                                         direction="column"

@@ -30,7 +30,7 @@ const TableCard = ({tableName, infoClick, table}) => {
                 <Flex direction='row' p={3} justifyContent="space-between" alignItems='center'>
                     <Flex direction='row' align="center" ml={2}>
                         <AvatarGroup >
-                            <EnsAvatar size="sm" address={table.owner.id} />
+                            <EnsAvatar size="sm" address={table.owner.id}/>
                             <Avatar size="sm" src={nameToAvatar(tableName)} title={nameToChainName(tableName)} />
                         </AvatarGroup>
                         <Flex direction='column'>
