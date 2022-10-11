@@ -24,16 +24,20 @@ const RigAction = ({data}) => {
             >
                 <Flex direction="column" justifyContent='space-between'>
                     <Flex direction="row" textAlign='left' alignItems='center' mb={2} justifyContent="space-between">
-                        <Flex fontSize={{base:'sm', sm: 'lg', md:'2xl'}}>
+                        <Flex fontSize={{base:'sm', sm: 'lg', md:'2xl'}} alignItems='center'>
                             <Link href={`/rig/${data?.nft?.token_id}`} >
-                                <Text mr={2} fontWeight={700} cursor="pointer">Rig #{data?.nft?.token_id}</Text>
+                                <Text mr={{base: 1, md: 2}} fontWeight={700} cursor="pointer">Rig #{data?.nft?.token_id}</Text>
                             </Link>
-                            <Text mr={2}>
+                            <Text mr={{base: 1, md: 2}}>
                                 sold for
                             </Text>
-                            <Text fontWeight='medium'>
+                            <Text fontWeight='medium' mr={{base: 1, md: 2}}>
                                 {data?.price_details?.price} ETH
                             </Text>
+                            <Text mr={{base: 1, md: 2}} >on</Text>
+                            {data?.marketplace === 'opensea' && (
+                                <Avatar size="xs" src={'https://storage.googleapis.com/opensea-static/Logomark/Logomark-Blue.svg'} title={'Opensea'} />
+                            )}
                         </Flex>
                         <Flex fontSize={{base:'xs', sm: 'sm'}}>
                             {prettyTime(new Date(data?.transaction_date).getTime())}
@@ -42,18 +46,15 @@ const RigAction = ({data}) => {
                     <Flex direction="row" alignItems='center' justifyContent='space-between'>
                         <Flex w="100%" alignItems='center'>
                             <EnsAvatar address={data?.seller_address} />
-                            <AddressOrEns ml={2} mr={2} address={data?.seller_address} tooltip={false} onClick={()=>{
+                            <AddressOrEns size={{base: 'xs', md: 'sm'}} ml={2} mr={2} address={data?.seller_address} tooltip={false} onClick={()=>{
                                 router.push(`/address/${data?.seller_address}`)
                             }}/>
                             <Text>to</Text>
                             <EnsAvatar ml={2} address={data?.buyer_address} />
-                            <AddressOrEns ml={2} mr={2} address={data?.buyer_address} tooltip={false} onClick={()=>{
+                            <AddressOrEns size={{base: 'xs', md: 'sm'}} ml={2} mr={2} address={data?.buyer_address} tooltip={false} onClick={()=>{
                                 router.push(`/address/${data?.buyer_address}`)
                             }}/>
-                            <Text>on</Text>
-                            {data?.marketplace === 'opensea' && (
-                                <Avatar ml={2} size="sm" src={'https://storage.googleapis.com/opensea-static/Logomark/Logomark-Blue.svg'} title={'Opensea'} />
-                            )}
+
                         </Flex>
                         <IconButton variant='ghost' icon={<ExternalLinkIcon/>} onClick={()=>{
                             window.open(`https://etherscan.io/tx/${data?.transaction_hash}`, '_target')

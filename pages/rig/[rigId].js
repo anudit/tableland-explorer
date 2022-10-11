@@ -78,7 +78,7 @@ const UserSection = () => {
                                         <Skeleton isLoaded={Boolean(owner) }>
                                             <Flex direction='row' align="center" my={4}>
                                                 <EnsAvatar size="sm" address={owner} />
-                                                <Flex direction='column' mb='2'>
+                                                <Flex direction='column'>
                                                     <Text ml={4} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                                         Owner
                                                     </Text>
@@ -89,6 +89,7 @@ const UserSection = () => {
                                                         onClick={()=>{
                                                             router.push(`/address/${owner}`)
                                                         }}
+
                                                     />
                                                 </Flex>
                                             </Flex>

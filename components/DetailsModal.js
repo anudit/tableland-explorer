@@ -2,7 +2,7 @@ import React from 'react';
 import { Avatar, chakra, Flex, Textarea, Text } from "@chakra-ui/react";
 import { ArrowUpIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import { nameToAvatar, nameToChainName, nameToExplorer, parseTableData, truncateAddress } from "@/utils/stringUtils";
+import { nameToAvatar, nameToChainName, nameToExplorer, parseTableData } from "@/utils/stringUtils";
 import {
   Modal,
   ModalOverlay,
@@ -16,6 +16,8 @@ import {
   StatHelpText,
   StatGroup,
 } from '@chakra-ui/react';
+import AddressOrEns from './AddressOrEns';
+import EnsAvatar from './EnsAvatar';
 
 const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
     return(
@@ -53,8 +55,13 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                     <StatLabel>Owner</StatLabel>
                     <Link target='_blank' href={`/address/${tableMetadata?.owner?.id}`}>
                         <chakra.div cursor="pointer">
-                        <StatNumber>{truncateAddress(tableMetadata?.owner?.id)}</StatNumber>
-                        <StatHelpText>View tables by Owner</StatHelpText>
+                            <StatNumber>
+                                <Flex direction="row" py={2} alignItems="center">
+                                    <EnsAvatar address={tableMetadata?.owner?.id}/>
+                                    <AddressOrEns address={tableMetadata?.owner?.id} tooltip={false} fontSize={{base: 'sm', md:'lg'}} ml={2}/>
+                                </Flex>
+                            </StatNumber>
+                            <StatHelpText>View tables by Owner</StatHelpText>
                         </chakra.div>
                     </Link>
                     </Stat>
@@ -63,8 +70,13 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                     <StatLabel>Controller</StatLabel>
                     <Link target='_blank' href={`/address/${tableMetadata?.controller?.id}`}>
                         <chakra.div cursor="pointer">
-                        <StatNumber>{truncateAddress(tableMetadata?.controller?.id)}</StatNumber>
-                        <StatHelpText>View tables by Controller</StatHelpText>
+                            <StatNumber>
+                                <Flex direction="row" py={2} alignItems="center">
+                                    <EnsAvatar address={tableMetadata?.controller?.id}/>
+                                    <AddressOrEns address={tableMetadata?.controller?.id} tooltip={false} fontSize={{base: 'sm', md:'lg'}} ml={2}/>
+                                </Flex>
+                            </StatNumber>
+                            <StatHelpText>View tables by Controller</StatHelpText>
                         </chakra.div>
                     </Link>
                     </Stat>

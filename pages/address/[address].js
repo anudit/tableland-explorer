@@ -50,7 +50,7 @@ const UserSection = () => {
         <>
             <Meta />
             <NavBar address={address} isLoading={isValidating} />
-            <chakra.div position="relative" height="calc(100vh - 50px)" width="100%">
+            <chakra.div position="relative" height="calc(100vh - 50px)" width="100%" mt={16}>
                 <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
                 {
                     data ? data.map(e=>e?.data?.tables).flat().length != 0 ? (

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
 import { Skeleton, Heading, Spinner, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip, Alert, AlertIcon, AlertTitle, AlertDescription  } from "@chakra-ui/react";
 import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
@@ -15,7 +15,6 @@ import { SearchIcon } from "@chakra-ui/icons";
 import SqlInput from "@/components/RunSql";
 import Meta from "@/components/Meta";
 import { isAddress } from "ethers/lib/utils";
-import { ensToAddress } from "@/components/AddressOrEns";
 import { SunIcon } from "@chakra-ui/icons";
 import { MoonIcon } from "@chakra-ui/icons";
 import DetailsModal from '@/components/DetailsModal';
@@ -31,6 +30,7 @@ export default function Home() {
   const [sqlError, setSqlError] = useState(false);
   const [activeModalData, setActiveModalData] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { ensToAddress } = useContext(EnsCacheContext);
 
   function infoClick(id){
     let selectData = exploreData
@@ -232,6 +232,7 @@ export default function Home() {
                   <Heading ml={2}>Explore</Heading>
                   <br/>
                   <ActionsSection />
+                  <br/>
                   <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
                   {
                       exploreData ? exploreData
@@ -308,6 +309,7 @@ import 'swiper/css';
 import 'swiper/css/scrollbar';
 import RigAction from "@/components/RigAction";
 import { Autoplay } from "swiper";
+import { EnsCacheContext } from "@/contexts/EnsCache";
 
 const ActionsSection = () => {
 
@@ -326,7 +328,11 @@ const ActionsSection = () => {
       <Swiper
         slidesPerView={1}
         modules={[Autoplay]}
-        autoplay={true}
+
+        autoplay={{
+          delay: 2000,
+          pauseOnMouseEnter: true
+        }}
       >
         {actions && actions?.map && actions.map((slide, sid) => (
           <SwiperSlide key={`slide-${sid}`}>
