@@ -1,11 +1,12 @@
 import React from "react";
-import { useColorModeValue, useColorMode, Tooltip, Flex, IconButton, Spinner, Avatar, ButtonGroup } from "@chakra-ui/react";
+import { useColorModeValue, useColorMode, Tooltip, Flex, IconButton, Spinner, ButtonGroup } from "@chakra-ui/react";
 import { ArrowUpIcon, RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { TablelandSmallIcon } from "@/public/icons";
 import AddressOrEns from "./AddressOrEns";
 import { MoonIcon } from "@chakra-ui/icons";
 import { SunIcon } from "@chakra-ui/icons";
+import EnsAvatar from "./EnsAvatar";
 
 const NavBar = ({address, isLoading}) => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -30,7 +31,7 @@ const NavBar = ({address, isLoading}) => {
         </Link>
       </Flex>
       <Flex w={{base:"100%", md:"33.33%"}} align='center' justifyContent='center'>
-          <Avatar size="xs" name={address} src={`https://gradient-avatar.glitch.me/${address}`}/>
+          <EnsAvatar size="xs" address={address} />
           <AddressOrEns address={address} tooltip={false}/>
       </Flex>
       <Flex direction="row" justify="right" alignItems='center' w={{base: "fit-content", md:"33.33%"}} align='right'>

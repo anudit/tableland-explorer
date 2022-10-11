@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 Skeleton
-import { useClipboard, Skeleton, Avatar, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { useClipboard, Skeleton, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import useSWR from "swr";
 
 import NavBar from '@/components/NavbarSimple';
@@ -11,6 +11,9 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { constructTokenURIQuery, getMetadata, getRigOwner } from '@/utils/rigs';
 import AddressOrEns from '@/components/AddressOrEns';
 import { CopyIcon } from '@chakra-ui/icons';
+import EnsAvatar from '@/components/EnsAvatar';
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import { ArrowForwardIcon } from '@chakra-ui/icons';
 
 const UserSection = () => {
 
@@ -48,9 +51,17 @@ const UserSection = () => {
                     data ? data.length != 0 ? (
                            <>
                                 <Flex position='relative' ref={imageRef} h="100%" w={{base: '100%', md: '50%'}} alignItems="center" justifyContent='center' background='#80808014'>
-                                    <IconButton position='absolute' bottom='20px' right='20px'  icon={<FullscreenIcon />} borderRadius="100%" onClick={()=>{
-                                        imageRef.current.requestFullscreen();
-                                    }}/>
+                                    <Flex direction="row" position='absolute' bottom='20px' right='20px' >
+                                        <IconButton mr={1} icon={<ArrowBackIcon />} borderRadius="100%" onClick={()=>{
+                                            router.push(`/rig/${parseInt(rigId)-1}`)
+                                        }}/>
+                                        <IconButton mr={1} icon={<ArrowForwardIcon />} borderRadius="100%" onClick={()=>{
+                                            router.push(`/rig/${parseInt(rigId)+1}`)
+                                        }}/>
+                                        <IconButton icon={<FullscreenIcon />} borderRadius="100%" onClick={()=>{
+                                            imageRef.current.requestFullscreen();
+                                        }}/>
+                                    </Flex>
 
                                     <Image
                                         src={'https://ipfs.io/ipfs/' + data?.thumb.replace('ipfs://','')}
@@ -61,12 +72,12 @@ const UserSection = () => {
                                 </Flex>
                                 <Flex h="100%" direction='column' w={{base: '100%', md: '50%'}} justifyContent="center" alignItems='center'>
                                     <Flex direction='column' p={8} w={{base: '100%', md: '90%'}}>
-                                        <Heading mb={{base: 4, md: 4}} size="3xl" mt={{base: 16, md: 0}}>
+                                        <Heading mb={{base: 4, md: 4}} size="3xl" mt={{base: 4, md: 0}}>
                                             {data?.name}
                                         </Heading>
                                         <Skeleton isLoaded={Boolean(owner) }>
                                             <Flex direction='row' align="center" my={4}>
-                                                <Avatar size="sm" src={`https://gradient-avatar.glitch.me/${owner}`} title={owner} />
+                                                <EnsAvatar size="sm" address={owner} />
                                                 <Flex direction='column' mb='2'>
                                                     <Text ml={4} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                                         Owner

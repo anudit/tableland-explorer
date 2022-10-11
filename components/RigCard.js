@@ -1,11 +1,12 @@
 import React from 'react';
-import { useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Spinner, Button } from "@chakra-ui/react";
+import { useColorMode, AvatarGroup, IconButton, Text, Flex, Spinner, Button } from "@chakra-ui/react";
 import { parseTableData, toProperCase } from '@/utils/stringUtils';
 import Link from 'next/link';
 import AddressOrEns from './AddressOrEns';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
 import Image from 'next/future/image';
+import EnsAvatar from './EnsAvatar';
 
 const loaderProp = ({ src }) => { return src }
 
@@ -30,7 +31,7 @@ const RigCard = ({tableName, infoClick, table}) => {
                 <Flex direction='row' p={3} justifyContent="space-between" alignItems='center'>
                     <Flex direction='row' align="center" ml={2}>
                         <AvatarGroup >
-                            <Avatar size="sm" src={`https://gradient-avatar.glitch.me/${table.owner.id}`} title={table.owner.id} />
+                            <EnsAvatar size="sm" address={table.owner.id} />
                         </AvatarGroup>
                         <Flex direction='column'>
                             <Text ml={4} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>

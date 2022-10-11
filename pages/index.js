@@ -67,7 +67,7 @@ export default function Home() {
 
   // Explore Feed
   const { data: exploreData } = useSWR(`{
-    tables(first: 3, orderBy: created, orderDirection: desc, where: {historyCount_gt: 4}) {
+    tables(first: 3, orderBy: created, orderDirection: desc, where: {historyCount_gt: 3}) {
               id
               name
               owner {

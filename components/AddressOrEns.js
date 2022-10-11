@@ -53,14 +53,14 @@ const AddressOrEns = ({address, tooltip, ...props}) => {
     if(tooltip){
         return(
             <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Address"} placement='bottom'>
-                <Text onClick={onCopy} cursor="pointer" ml="4" fontWeight={'medium'} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
+                <Text title={address} onClick={onCopy} cursor="pointer" ml="4" fontWeight={'medium'} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
                     { ens || truncateAddress(address) }
                 </Text>
             </Tooltip>
         )
     }
     else {
-        return (<Text cursor="pointer" ml="4" fontWeight={'medium'} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
+        return (<Text title={address} cursor="pointer" ml="4" fontWeight={'medium'} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
             { ens || truncateAddress(address) }
         </Text>)
     }

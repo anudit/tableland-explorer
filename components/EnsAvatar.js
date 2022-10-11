@@ -1,14 +1,21 @@
 import { Avatar } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { addressToEns } from './AddressOrEns';
+import { isAddress } from 'ethers/lib/utils';
 
 const EnsAvatar = ({address, ...props}) => {
 
     let [link, setLink] = useState(`https://gradient-avatar.glitch.me/${address}`);
 
     useEffect(()=>{
-        if (address) addressToEns(address).then(res=>{
-            if(res && res?.avatar) setLink(res?.avatar)
+        if (isAddress(address)) fetch(`https://api.ensideas.com/ens/resolve/${address}`).then(r=>r.json()).then(res=>{
+            if(res && res?.avatar) {
+                if (res.avatar.includes('ipfs://')){
+                    setLink('https://ipfs.io/ipfs/' + res.avatar.replace('ipfs://',''));
+                }
+                else{
+                    setLink(res?.avatar)
+                }
+            }
         })
     }, [address])
 
