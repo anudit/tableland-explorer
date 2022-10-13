@@ -27,13 +27,17 @@ export async function getOpenStats(){
 }
 
 export async function getUserRigs(address){
-    let userRigs = await fetch(`https://api.nftport.xyz/v0/accounts/${address}`,{
+    let userRigs = await fetch(`https://api.nftport.xyz/v0/accounts/${address}?chain=ethereum&contract_address=0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d`,{
         headers: { 'Authorization': 'ad985098-7dbb-4bee-9f7d-ffa06d5a44d9' }
     }).then(e=>e.json());
 
+
     if (userRigs?.nfts?.length > 0){
-        let userRigsData = await getMetadata(userRigs?.nfts?.map(e=>parseInt(e?.token_id)));
-        return userRigsData;
+        let userRigsData = userRigs?.nfts?.map(e=>({...e, thumb_alpha: `https://bafybeib3bbctx2gpuzicibprsa3h3zbusogxplccnlgbtmargfnh7bcria.ipfs.dweb.link/${e.token_id}/thumb.png`}))
+
+        // let userRigsData = await getMetadata(userRigs?.nfts?.map(e=>parseInt(e?.token_id)));
+
+        return [userRigsData].flat();
     }
     else {
         return [];

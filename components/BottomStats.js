@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HStack, useColorMode, Flex, Text } from '@chakra-ui/react';
 import Marquee from 'react-fast-marquee';
 import { getOpenStats } from '@/utils/rigs';
@@ -28,7 +28,7 @@ const BottomStats = ({props}) => {
                 position='fixed'
                 bottom="0"
                 borderTopWidth='1px'
-                borderTopColor={colorMode === 'light' ? 'black' : 'white'}
+                borderTopColor={colorMode === 'light' ? '#fffc' : '#000c'}
                 background={colorMode === 'light' ? '#fffc' : '#000c'}
                 backdropFilter='blur(20px)'
                 fontSize='lg' fontWeight={600}
