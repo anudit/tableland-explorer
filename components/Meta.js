@@ -8,6 +8,7 @@ const Meta = ({url}) => {
             <meta name="title" content="Tablescan" />
             <meta name="description" content="An explorer for Tableland Network." />
             <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+            <link rel="manifest" href="/manifest.json"></link>
 
             <meta property="og:type" content="website" />
             <meta property="og:url" content="https://tableland.xyz/" />

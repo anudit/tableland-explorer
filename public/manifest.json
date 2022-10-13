@@ -1,0 +1,32 @@
+{
+    "name": "Tablescan",
+    "short_name": "Tablescan",
+    "description": "An explorer for Tableland Network.",
+    "iconPath": "icons/icon.svg",
+    "providedBy": {
+        "name": "Anudit Nagar",
+        "url": "https://anudit.dev"
+    },
+    "icons": [
+        {
+            "src": "./icons/icon-192x192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "./icons/icon-384x384.png",
+            "type": "image/png",
+            "sizes": "384x384"
+        },
+        {
+            "src": "./icons/icon-512x512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "theme_color": "#FFFFFF",
+    "background_color": "#FFFFFF",
+    "start_url": ".",
+    "display": "standalone",
+    "orientation": "any"
+}

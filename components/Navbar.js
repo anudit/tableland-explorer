@@ -43,7 +43,7 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
       py={2}
       px={4}
       background={useColorModeValue('#fcfcfcdb', '#0000005e')}
-      height="50px"
+      height="40px"
     >
       <Flex direction="row" justify="left" alignItems='center' w={{base: "fit-content", md:"33.33%"}}>
         <Link href="/">
@@ -51,9 +51,9 @@ const NavBar = ({tableName, tableMetadata, refresh, isLoading}) => {
         </Link>
       </Flex>
       <Flex w={{base:"100%", md:"33.33%"}} align='center' justifyContent='center'>
-        <Avatar size="xs" bg='whiteAlpha.500' src={nameToAvatar(tableName)} />
+        <Avatar boxSize={5} bg='whiteAlpha.500' src={nameToAvatar(tableName)} />
         <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Full Name"} placement='bottom'>
-          <Text ml="4" fontWeight={'medium'} onClick={onCopy} cursor="pointer" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
+          <Text  fontSize="sm" ml="4" fontWeight={'medium'} onClick={onCopy} cursor="pointer" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
             {toProperCase(tableName.split("_").slice(0,-2).join(' '))}
           </Text>
         </Tooltip>
