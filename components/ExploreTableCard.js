@@ -23,7 +23,7 @@ const TableCard = ({tableName, infoClick, table}) => {
                 borderRadius={{base: 0, md: 20}}
                 borderWidth={1}
                 w={{base: '100%', md:'600px'}}
-                h={{base: 'calc(100vh - 70px)', md:'auto'}}
+                h={{base: 'calc(100vh - 100px)', md:'auto'}}
                 mb={{base: 0, md: 4}}
                 borderColor={colorMode === 'light' ? 'gray.200': 'gray.800'}
             >

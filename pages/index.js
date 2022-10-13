@@ -260,6 +260,8 @@ export default function Home() {
               <ChainsSection />
             </Flex>
         </Flex>
+
+        <BottomStats />
       </Flex>
     </>
   )
@@ -310,6 +312,7 @@ import 'swiper/css/scrollbar';
 import RigAction from "@/components/RigAction";
 import { Autoplay } from "swiper";
 import { EnsCacheContext } from "@/contexts/EnsCache";
+import BottomStats from "@/components/BottomStats";
 
 const ActionsSection = () => {
 

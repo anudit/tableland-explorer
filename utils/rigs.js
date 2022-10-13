@@ -19,6 +19,13 @@ export async function getOpenData(tokenId){
     return res;
 }
 
+export async function getOpenStats(){
+
+    const options = {method: 'GET', headers: {'X-API-KEY': Buffer.from('OTYwNDFlMWQxZDRiNGYyZmJlMjZiZDdkZTFiZjcxODU=', 'base64')}};
+    let res = await fetch(`https://api.opensea.io/api/v1/collection/tableland-rigs`, options).then(response => response.json());
+    return res;
+}
+
 export async function getUserRigs(address){
     let userRigs = await fetch(`https://api.nftport.xyz/v0/accounts/${address}`,{
         headers: { 'Authorization': 'ad985098-7dbb-4bee-9f7d-ffa06d5a44d9' }

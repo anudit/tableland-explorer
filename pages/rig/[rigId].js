@@ -71,7 +71,7 @@ const UserSection = () => {
                                             <Flex direction='row' mr={4} alignItems="center">
                                                 <EnsAvatar size="sm" address={data?.owner.address} />
                                                 <Flex direction='column'>
-                                                    <Text ml={4} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                                    <Text ml={2} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                                         Owner
                                                     </Text>
                                                     <AddressOrEns
@@ -81,7 +81,7 @@ const UserSection = () => {
                                                         onClick={()=>{
                                                             router.push(`/address/${data?.owner.address}`)
                                                         }}
-
+                                                        ml={2}
                                                     />
                                                 </Flex>
                                             </Flex>
@@ -90,10 +90,10 @@ const UserSection = () => {
                                                     <Flex direction='row' alignItems="center">
                                                         <Image src={data?.last_sale?.payment_token?.image_url} height={8} width={8} />
                                                         <Flex direction='column'>
-                                                            <Text ml={4} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                                            <Text ml={2} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                                                 Last Sale
                                                             </Text>
-                                                            <Text ml={4} fontWeight={400} size={{base: 'sm', md: 'md'}}>
+                                                            <Text ml={2} fontWeight={400} size={{base: 'sm', md: 'md'}}>
                                                                 {parseInt(data?.last_sale?.total_price) / (10**data?.last_sale?.payment_token?.decimals)}
                                                                 {" " + data?.last_sale?.payment_token?.symbol}
                                                                 {" "}
@@ -107,7 +107,7 @@ const UserSection = () => {
                                         <Wrap>
                                         {
                                             data?.traits.sort((a, b)=>{
-                                                return a.trait_type.slice(0, 1) < b.trait_type.slice(0, 1)
+                                                return a.value.length < b.value.length
                                             }).map(e=>(
                                                 <WrapItem key={e?.trait_type}>
                                                     <Flex
