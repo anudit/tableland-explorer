@@ -10,7 +10,7 @@ import EnsAvatar from './EnsAvatar';
 
 const loaderProp = ({ src }) => { return src }
 
-const TableCard = ({tableName, infoClick, table}) => {
+const TableCard = ({tableName, infoClick, table, ...props}) => {
 
     const { colorMode } = useColorMode()
     const router = useRouter();
@@ -24,8 +24,9 @@ const TableCard = ({tableName, infoClick, table}) => {
                 borderWidth={1}
                 w={{base: '100%', md:'600px'}}
                 h={{base: 'calc(100vh - 100px)', md:'auto'}}
-                mb={{base: 0, md: 4}}
+                mb={{base: 0, md: 0}}
                 borderColor={colorMode === 'light' ? 'gray.200': 'gray.800'}
+                {...props}
             >
                 <Flex direction='row' p={3} justifyContent="space-between" alignItems='center'>
                     <Flex direction='row' align="center" ml={2}>
@@ -55,7 +56,7 @@ const TableCard = ({tableName, infoClick, table}) => {
                         src={`https://render.tableland.xyz/${chainId}/${tableId}`}
                         height={600}
                         width={600}
-                        style={{objectFit:'fill' }}
+                        style={{objectFit:'fill'}}
                         placeholder="blur"
                         loader={loaderProp}
                         onError={(e) => {

@@ -37,7 +37,7 @@ const BottomStats = ({props}) => {
                <Marquee
                 gradient={false}
                 pauseOnHover={true}
-                speed={20}
+                speed={30}
                 >
                     <Stat
                         title='Volume (1d)'

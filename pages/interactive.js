@@ -44,7 +44,7 @@ const InteractiveView = () => {
                             <Grid data={data} downloadFilename='custom' />
                         </chakra.div>
                     ) : (
-                        <Flex w="90vw" h="100vh" justifyContent='center' alignItems='center'>
+                        <Flex w="100%" h="calc(100vh - 50px)" justifyContent='center' alignItems='center'>
                             <Spinner />
                         </Flex>
                     )

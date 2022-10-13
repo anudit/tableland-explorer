@@ -5,7 +5,7 @@ import Image from 'next/future/image';
 
 const loaderProp = ({ src }) => { return src }
 
-const RigCard = ({id}) => {
+const RigCard = ({id, ...props}) => {
 
     const { colorMode } = useColorMode();
 
@@ -20,6 +20,7 @@ const RigCard = ({id}) => {
                 mb={{base: 0, md: 4}}
                 borderColor={colorMode === 'light' ? 'gray.200': 'gray.800'}
                 scrollSnapAlign="center"
+                {...props}
             >
                 <Flex alignItems='center' h="100%">
                     <Image

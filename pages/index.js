@@ -248,6 +248,7 @@ export default function Home() {
                               infoClick={()=>{
                                 infoClick(oid)
                               }}
+                              mb={{base:0, md:2}}
                             />
                           )
                       }) : (

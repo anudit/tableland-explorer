@@ -8,7 +8,7 @@ import NavBar from '@/components/NavbarAddress';
 import TableCard from '@/components/ExploreTableCard';
 import Meta from '@/components/Meta';
 import DetailsModal from '@/components/DetailsModal';
-import { TablelandSmallIcon } from '@/public/icons';
+import { OpenseaIcon, TablelandSmallIcon } from '@/public/icons';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { getUserRigs } from '@/utils/rigs';
@@ -70,7 +70,7 @@ const UserSection = () => {
                 </TabList>
 
                 <TabPanels>
-                    <TabPanel>
+                    <TabPanel p={0}>
                         {
                             data ? data.map(e=>e?.data?.tables).flat().length != 0 ? (
                                     <Wrap
@@ -78,7 +78,7 @@ const UserSection = () => {
                                         align='center'
                                         justify='center'
                                         m={{base: 0, md:8}}
-                                        mt={16}
+                                        mt={{base: 4, md:8}}
                                     >
                                         {
                                             data
@@ -87,7 +87,7 @@ const UserSection = () => {
                                                 .sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})
                                                 .map((table, oid) => (
                                                         <WrapItem key={oid}>
-                                                            <TableCard tableName={table?.name} table={table} infoClick={()=>{
+                                                            <TableCard tableName={table?.name} table={table} w={{base: '100%', md:'500px'}} infoClick={()=>{
                                                                 infoClick(oid)
                                                             }}/>
                                                         </WrapItem>
@@ -115,9 +115,9 @@ const UserSection = () => {
                             )
                         }
                     </TabPanel>
-                    <TabPanel>
+                    <TabPanel p={0}>
                         {
-                            Boolean(userRigs) === true ? (
+                            Boolean(userRigs) === true ? userRigs.length>0 ? (
                                 <Wrap
                                     spacing={{base: 0, md:3}}
                                     align='center'
@@ -129,12 +129,24 @@ const UserSection = () => {
                                         userRigs
                                             .map((rig) => (
                                                 <WrapItem key={rig?.name}>
-                                                    <RigCard id={rig?.token_id} image={rig?.thumb_alpha}/>
+                                                    <RigCard id={rig?.token_id} image={rig?.thumb_alpha} w={{base: '100%', md:'500px'}} />
                                                 </WrapItem>
                                             )
                                         )
                                     }
                                 </Wrap>
+                            ) : (
+                                <Flex direction='column' alignItems='center' h="100%" w="100%" justifyContent='center'>
+                                    <Text fontSize='xl' align='center' w={{base: '90%', md: "50%"}} mt={2}>
+                                    Rigs is a generative collection built from 1,074 handcrafted works of art for the builders and creatives of cyberspace. Rigs are built on the Tableland protocol, a decentralized read, write, and own database for relational, composable data—powered by smart contracts and SQL on EVM chains like Ethereum. Rigs are your ticket to rewards for builders, creatives, ambassadors, and believers in Tableland.
+                                    </Text>
+                                    <br/>
+                                    <Button variant="ghost" leftIcon={<OpenseaIcon />} rightIcon={<ExternalLinkIcon />} onClick={()=>{
+                                        window.open('https://opensea.io/collection/tableland-rigs', '_blank');
+                                    }}>
+                                        Get on Opensea
+                                    </Button>
+                                </Flex>
                             ) : (
                                 <Flex w="100%" h="100vh" justifyContent='center' alignItems='center'>
                                     <Spinner />
