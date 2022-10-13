@@ -242,6 +242,10 @@ const MenuButtonShell = ({icon, title, ...props}) => {
             alignItems='center'
             justifyContent='space-evenly'
             cursor='pointer'
+            borderRadius={6}
+            _hover={{
+                background: 'hsl(0deg 0% 50% / 20%)'
+            }}
             {...props}
         >
             {icon}

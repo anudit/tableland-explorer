@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useClipboard, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import useSWR from "swr";
@@ -7,7 +7,7 @@ import NavBar from '@/components/NavbarSimple';
 import Meta from '@/components/Meta';
 import { EtherscanIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, TablelandSmallIcon } from '@/public/icons';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { constructTokenURIQuery, getOpenData } from '@/utils/rigs';
+import { constructTokenURIQuery, getOpenData, getRigOwner } from '@/utils/rigs';
 import AddressOrEns from '@/components/AddressOrEns';
 import { CopyIcon } from '@chakra-ui/icons';
 import EnsAvatar from '@/components/EnsAvatar';
@@ -19,11 +19,16 @@ const UserSection = () => {
     const router = useRouter();
     const {colorMode} = useColorMode();
     const imageRef = useRef();
+    const [owner, setOwner] = useState(false);
 
     const { rigId } = router.query;
     const { onCopy } = useClipboard(`https://tablescan.io/rig/${rigId}`);
 
     const { data, error, isValidating, mutate } = useSWR(rigId ? [rigId]: null, getOpenData);
+
+    useEffect(()=>{
+        if (rigId) getRigOwner(rigId).then(setOwner)
+    }, [rigId])
 
     if (error) return (
         <div>failed to load, {error}</div>
@@ -69,21 +74,27 @@ const UserSection = () => {
                                         </Heading>
                                         <Flex direction='row' align="center" my={4}>
                                             <Flex direction='row' mr={4} alignItems="center">
-                                                <EnsAvatar size="sm" address={data?.owner.address} />
-                                                <Flex direction='column'>
-                                                    <Text ml={2} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-                                                        Owner
-                                                    </Text>
-                                                    <AddressOrEns
-                                                        address={data?.owner.address}
-                                                        tooltip={false}
-                                                        cursor="pointer"
-                                                        onClick={()=>{
-                                                            router.push(`/address/${data?.owner.address}`)
-                                                        }}
-                                                        ml={2}
-                                                    />
-                                                </Flex>
+                                                {
+                                                    owner && (
+                                                        <>
+                                                            <EnsAvatar size="sm" address={owner} />
+                                                            <Flex direction='column'>
+                                                                <Text ml={2} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                                                    Owner
+                                                                </Text>
+                                                                <AddressOrEns
+                                                                    address={owner}
+                                                                    tooltip={false}
+                                                                    cursor="pointer"
+                                                                    onClick={()=>{
+                                                                        router.push(`/address/${owner}`)
+                                                                    }}
+                                                                    ml={2}
+                                                                />
+                                                            </Flex>
+                                                        </>
+                                                    )
+                                                }
                                             </Flex>
                                             {
                                                 data?.last_sale && (
