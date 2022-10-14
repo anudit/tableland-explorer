@@ -109,3 +109,18 @@ export const EthIcon = createIcon({
     )
 });
 
+export const StopIcon = createIcon({
+    displayName: 'StopIcon',
+    viewBox: '0 0 24 24',
+    path: (
+        <path fill="currentColor" d="M2 2h20v20h-20z"/>
+    )
+});
+
+export const PlayIcon = createIcon({
+    displayName: 'PlayIcon',
+    viewBox: '0 0 24 24',
+    path: (
+        <path fill="currentColor" d="M3 22v-20l18 10-18 10z"/>
+    )
+});

@@ -22,7 +22,7 @@ const UserSection = () => {
     const [owner, setOwner] = useState(false);
 
     const { rigId } = router.query;
-    const { onCopy } = useClipboard(`https://tablescan.io/rig/${rigId}`);
+    const { onCopy } = useClipboard(`https://tablescan.vercel.app/rig/${rigId}`);
 
     const { data, error, isValidating, mutate } = useSWR(rigId ? [rigId]: null, getOpenData);
 

@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useDisclosure, Button, ButtonGroup, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, useColorMode, IconButton, Tag, Tooltip, Avatar, useClipboard, Text, Alert, AlertIcon, chakra, Flex, Spinner, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Select, useDisclosure, Button, ButtonGroup, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, useColorMode, IconButton, Tag, Tooltip, Avatar, useClipboard, Text, Alert, AlertIcon, chakra, Flex, Spinner, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { Grid } from "@githubocto/flat-ui";
 import useSWR from "swr";
 
 import fetcher from '@/utils/fetcher';
 import { nameToAvatar, nameToSubgraph, nameToTime, parseTableData, toProperCase, freqTable } from '@/utils/stringUtils';
 import Meta from '@/components/Meta';
-import { FilterIcon, SqlIcon, TablelandSmallIcon } from '@/public/icons';
+import { FilterIcon, PlayIcon, SqlIcon, StopIcon, TablelandSmallIcon } from '@/public/icons';
 import Link from 'next/link';
 import { RepeatIcon, InfoOutlineIcon, LinkIcon, HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import HistoryCard from '@/components/HistoryCard';
 import DetailsModal from '@/components/DetailsModal';
+import { Client } from '@livepeer/webrtmp-sdk';
+import LiveVideo from '@/components/LiveVideo';
+import { CheckIcon } from '@chakra-ui/icons';
 
-const IdentitySection = () => {
+const TableSection = () => {
 
     const router = useRouter();
     const { tableName } = router.query;
@@ -26,6 +29,17 @@ const IdentitySection = () => {
     const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard("https://tablescan.vercel.app/"+tableName);
     const { isOpen: isOpenHistory, onOpen: onOpenHistory, onClose: onCloseHistory } = useDisclosure();
     const [disabledFilter, setDisabledFilter] = useState(new Set([]));
+
+    // Livepeer
+    const playbackId = "1f0de1rfhz6avn0g";
+    const client = new Client();
+    const videoDeviceRef = useRef();
+    const audioDeviceRef = useRef();
+    const [videoDevices, setVideoDevices] = useState([]);
+    const [audioDevices, setAudioDevices] = useState([]);
+    const [liveSession, setLiveSession] = useState(false);
+    const { hasCopied: hasCopiedStreamLink, onCopy: onCopyStreamLink } = useClipboard(`https://lvpr.tv?v=${playbackId}`);
+
 
     const { data, error, mutate, isValidating } = useSWR(
         tableName ? [`https://testnet.tableland.network/query?mode=json&s=select%20*%20from%20${tableName}`] : null,
@@ -72,11 +86,55 @@ const IdentitySection = () => {
         run();
     },[tableName])
 
+    useEffect(()=>{
+        navigator.mediaDevices.enumerateDevices().then((dev)=>{
+            setVideoDevices(dev.filter(e=>e?.kind == 'videoinput'));
+            setAudioDevices(dev.filter(e=>e?.kind == 'audioinput'));
+        })
+    },[])
+
     async function refresh(){
         setRefreshing(true);
         let data = await fetcher(`https://testnet.tableland.network/query?mode=json&s=select%20*%20from%20${tableName}`);
         mutate(data);
         setRefreshing(false);
+    }
+
+
+    async function start() {
+
+        const streamKey = '1f0d-a8xa-p6an-vtqz';
+        const deviceConfig = {
+            video: videoDeviceRef.current.value != '' ? {
+              deviceId: videoDeviceRef.current.value
+            } : true,
+            audio: audioDeviceRef.current.value != '' ? {
+              deviceId: audioDeviceRef.current.value
+            } : true
+        };
+        console.log('starting with', deviceConfig)
+
+        const stream = await navigator.mediaDevices.getUserMedia(deviceConfig);
+        const session = client.cast(stream, streamKey);
+
+        session.on('open', () => {
+            setLiveSession(session);
+            console.log('Stream started.');
+        })
+
+        session.on('close', () => {
+          console.log('Stream stopped.');
+          setLiveSession(false);
+        })
+
+        session.on('error', (err) => {
+          console.log('Stream error.', err.message)
+        })
+
+    }
+
+    function stop(){
+        if(liveSession) liveSession.close()
     }
 
     if (error) return <div>failed to load, {error}</div>;
@@ -86,7 +144,7 @@ const IdentitySection = () => {
     const url = `https://render.tableland.xyz/${chainId}/${tableId}`;
 
     return (
-        <>
+        <div>
             <Meta url={url} />
 
             <Drawer
@@ -94,7 +152,7 @@ const IdentitySection = () => {
                 placement='right'
                 onClose={onCloseHistory}
                 size='md'
-                >
+            >
                 <DrawerOverlay />
                 <DrawerContent>
                 <DrawerCloseButton mt="7px"/>
@@ -153,6 +211,8 @@ const IdentitySection = () => {
 
             <DetailsModal tableMetadata={tableMetadata} onClose={onClose} isOpen={isOpen}/>
 
+            {liveSession && (<LiveVideo src={`https://lvpr.tv?v=${playbackId}`} />)}
+
             <Tabs w="100%" h="150px" colorScheme={colorMode === 'dark' ? 'white': 'black'}>
                 <TabList direction='row' justifyContent='space-between' borderBottom='none'>
                     <Flex direction='row' w={{base:"100%", md:"33.33%"}} align='center' justifyContent='flex-start' >
@@ -180,26 +240,59 @@ const IdentitySection = () => {
 
                 <TabPanels>
                     <TabPanel p={2} display='flex' direction="row" w="100%" overflowX='scroll'>
-                        <MenuButtonShell icon={<InfoOutlineIcon boxSize={8}/>} title="Info" onClick={onOpen}/>
-                        <MenuButtonShell icon={<LinkIcon boxSize={8}/>} title={hasCopiedLink ? "Copied" : "Copy Link"} onClick={onCopyLink} />
-                        <MenuButtonShell icon={<HamburgerIcon boxSize={8}/>} title="History" onClick={onOpenHistory}/>
+                        <MenuGroup title="Details">
+                            <MenuButtonShell icon={<InfoOutlineIcon boxSize={6}/>} title="Info" onClick={onOpen}/>
+                            <MenuButtonShell icon={<HamburgerIcon boxSize={6}/>} title="History" onClick={onOpenHistory}/>
+                            <MenuButtonShell icon={hasCopiedLink? <CheckIcon boxSize={6}/> : <LinkIcon boxSize={6}/>} title={hasCopiedLink ? "Copied" : "Copy Link"} onClick={onCopyLink}  mr={0}/>
+                        </MenuGroup>
+                        <MenuGroup title="Collaborate">
+                            <MenuButtonShell
+                                icon={liveSession? <StopIcon color="red.300"  boxSize={6}/> : <PlayIcon color="green.300" boxSize={6}/>}
+                                title={liveSession ? "Stop" : "Start"}
+                                onClick={()=>{
+                                    if (!liveSession) start()
+                                    else stop();
+                                }}
+                                mr={0}
+                            />
+                            <Flex direction="column" h="90%" justifyContent='space-evenly'>
+                                <Select placeholder='Default Video Capture' size="xs" w="180px" ref={videoDeviceRef}>
+                                    {
+                                        videoDevices.map((e)=>
+                                            (<option value={e?.deviceId} key={e?.deviceId}>{e?.label}</option>)
+                                        )
+                                    }
+                                </Select>
+                                <Select placeholder='Default Audio Capture' size="xs" w="180px" ref={audioDeviceRef}>
+                                    {
+                                        audioDevices.map((e)=>
+                                            (<option value={e?.deviceId} key={e?.deviceId}>{e?.label}</option>)
+                                        )
+                                    }
+                                </Select>
+                            </Flex>
+                            <MenuButtonShell icon={hasCopiedStreamLink? <CheckIcon boxSize={6}/> : <LinkIcon boxSize={6}/>} title={hasCopiedStreamLink ? "Copied" : "Copy Link"} onClick={onCopyStreamLink}  mr={0}/>
+                        </MenuGroup>
                     </TabPanel>
                     <TabPanel p={2} display='flex' direction="row">
-                        <MenuButtonShell icon={<SqlIcon boxSize={8} onClick={()=>{
-                            router.push(`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}`)
-                        }}/>} title="SQL Mode"/>
-                        <MenuButtonShell
-                            icon={colorMode== 'light' ? <MoonIcon boxSize={8} /> : <SunIcon boxSize={8} />}
-                            title={colorMode== 'dark' ? "Light Mode" : "Dark Mode"}
-                            onClick={toggleColorMode}
-                        />
-                        <MenuButtonShell
-                            icon={darkGrid == false ? <MoonIcon boxSize={8} /> : <SunIcon boxSize={8} />}
-                            title={darkGrid == true ? "Light Grid" : "Dark Grid"}
-                            onClick={()=>{
-                                setDarkGrid(e=>!e);
-                            }}
-                        />
+                        <MenuGroup title="Mode">
+                            <MenuButtonShell icon={<SqlIcon boxSize={6} onClick={()=>{
+                                router.push(`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}`)
+                            }}/>} title="SQL Mode"/>
+                            <MenuButtonShell
+                                icon={colorMode== 'light' ? <MoonIcon boxSize={6} /> : <SunIcon boxSize={6} />}
+                                title={colorMode== 'dark' ? "Light Mode" : "Dark Mode"}
+                                onClick={toggleColorMode}
+                            />
+                            <MenuButtonShell
+                                icon={darkGrid == false ? <MoonIcon boxSize={6} /> : <SunIcon boxSize={6} />}
+                                title={darkGrid == true ? "Light Grid" : "Dark Grid"}
+                                onClick={()=>{
+                                    setDarkGrid(e=>!e);
+                                }}
+                                mr={0}
+                            />
+                        </MenuGroup>
                     </TabPanel>
                 </TabPanels>
             </Tabs>
@@ -221,22 +314,22 @@ const IdentitySection = () => {
                     )
                 }
             </chakra.div>
-        </>
+        </div>
     )
 
 }
 
-export default IdentitySection;
+export default TableSection;
 
 
 const MenuButtonShell = ({icon, title, ...props}) => {
 
     return (
         <Flex
-            mr={2}
+            my={1}
             direction="column"
             minWidth='70px'
-            height='90px'
+            height='60px'
             alignItems='center'
             justifyContent='space-evenly'
             cursor='pointer'
@@ -247,7 +340,34 @@ const MenuButtonShell = ({icon, title, ...props}) => {
             {...props}
         >
             {icon}
-            <Text fontWeight='light' fontSize='sm'>{title}</Text>
+            <Text fontWeight='light' fontSize='xs'>{title}</Text>
         </Flex>
+    )
+}
+
+
+const MenuGroup = ({title, children, ...props}) => {
+    const { colorMode } = useColorMode();
+    return (
+        <chakra.fieldset
+            borderWidth="1px"
+            borderRadius={6}
+            borderColor="hsl(0deg 0% 50% / 50%)"
+            justifyContent='center'
+            display='flex'
+            mr={2}
+            px={1}
+            {...props}
+        >
+            <chakra.legend
+                ml={2}
+                color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}
+            >
+                {title}
+            </chakra.legend>
+            <Flex direction='row'>
+                {children}
+            </Flex>
+        </chakra.fieldset>
     )
 }

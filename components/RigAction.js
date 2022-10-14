@@ -17,7 +17,7 @@ const RigAction = ({data}) => {
             <Flex
                 borderColor={colorMode === 'light' ? 'gray.200': 'gray.800'}
                 borderWidth='1px'
-                borderRadius={20}
+                borderRadius={10}
                 w="100%"
                 direction="column"
                 p={4}
