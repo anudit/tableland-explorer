@@ -45,10 +45,6 @@ const UserSection = () => {
         if(address) getUserRigs(address).then(setUserRigs);
     },[address])
 
-    useEffect(()=>{
-        console.log('data', data);
-    },[data])
-
     if (error) return (
         <div>failed to load, {error}</div>
     );

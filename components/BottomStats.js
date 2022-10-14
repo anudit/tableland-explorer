@@ -13,7 +13,6 @@ const BottomStats = ({props}) => {
 
     useEffect(()=>{
         getOpenStats().then(e=>{
-            console.log(e);
             setStats(e.collection.stats);
         });
     },[])

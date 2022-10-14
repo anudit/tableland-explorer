@@ -13,12 +13,16 @@ specifiers:
   eslint-config-next: 12.3.1
   ethers: ^5.7.1
   framer-motion: ^7.5.3
+  gradient-avatar: ^1.0.2
+  hsl-rgb: ^1.0.0
+  hsl-triad: ^1.0.0
   next: 12.3.1
   next-pwa: ^5.6.0
   node-sql-parser: ^4.5.1
   react: 18.2.0
   react-dom: 18.2.0
   react-fast-marquee: ^1.3.5
+  string-hash: ^1.1.3
   swiper: ^8.4.4
   swr: ^1.3.0
 
@@ -32,12 +36,16 @@ dependencies:
   critters: 0.0.16
   ethers: 5.7.1
   framer-motion: 7.5.3_biqbaboplfbrettd7655fr4n2y
+  gradient-avatar: 1.0.2
+  hsl-rgb: 1.0.0
+  hsl-triad: 1.0.0
   next: 12.3.1_biqbaboplfbrettd7655fr4n2y
   next-pwa: 5.6.0_next@12.3.1
   node-sql-parser: 4.5.1
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-fast-marquee: 1.3.5_biqbaboplfbrettd7655fr4n2y
+  string-hash: 1.1.3
   swiper: 8.4.4
   swr: 1.3.0_react@18.2.0
 
@@ -5362,6 +5370,15 @@ packages:
     resolution: {integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==}
     dev: false
 
+  /gradient-avatar/1.0.2:
+    resolution: {integrity: sha512-Od9KI2YImV60wnsvU/u6GEyBm2fiHUUHgiLySE243GYl/T/tiJMJ5QYey8o7tepugmlnUGQRaCItHv19UnUjUg==}
+    engines: {node: '>=8'}
+    dependencies:
+      hsl-rgb: 1.0.0
+      hsl-triad: 1.0.0
+      string-hash: 1.1.3
+    dev: false
+
   /grapheme-splitter/1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
     dev: true
@@ -5430,6 +5447,16 @@ packages:
 
   /hsl-regex/1.0.0:
     resolution: {integrity: sha512-M5ezZw4LzXbBKMruP+BNANf0k+19hDQMgpzBIYnya//Al+fjNct9Wf3b1WedLqdEs2hKBvxq/jh+DsHJLj0F9A==}
+    dev: false
+
+  /hsl-rgb/1.0.0:
+    resolution: {integrity: sha512-cNq+7sfwzSDoiG/jiu8wZpOmjScUZrMKiI33tH3aQ1MZsXWQd0yJjMpPwu2OZFYa4D/bOT1aCbB5gS1kOqFx1A==}
+    engines: {node: '>=8'}
+    dev: false
+
+  /hsl-triad/1.0.0:
+    resolution: {integrity: sha512-PKnjrMugS6sHC5dVh4VQZYOHEKG2QILjVwbpEtNjEV19RyswuIxrIiGhumVJjya/FjK/p9gX6+zRMXFGTvaQAA==}
+    engines: {node: '>=8'}
     dev: false
 
   /hsla-regex/1.0.0:
@@ -6954,6 +6981,10 @@ packages:
       error-stack-parser: 2.1.4
       stack-generator: 2.0.10
       stacktrace-gps: 3.1.2
+    dev: false
+
+  /string-hash/1.1.3:
+    resolution: {integrity: sha512-kJUvRUFK49aub+a7T1nNE66EJbZBMnBgoC1UbCZ5n6bsZKBRga4KgBRTMn/pFkeCZSYtNeSyMxPDM0AXWELk2A==}
     dev: false
 
   /string-similarity/4.0.4:

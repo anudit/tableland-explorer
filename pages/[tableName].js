@@ -117,13 +117,11 @@ const IdentitySection = () => {
                                     if (df.has(key)) {
                                         let ndf =  df;
                                         ndf.delete(key)
-                                        console.log('setting', ndf)
                                         return ndf;
                                     }
                                     else {
                                         let ndf = df;
                                         ndf.add(key);
-                                        console.log('setting', ndf)
                                         return ndf;
                                     }
                                     })

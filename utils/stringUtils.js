@@ -1,3 +1,7 @@
+import hslRgb from "hsl-rgb";
+import hslTriad from "hsl-triad";
+import stringHash from "string-hash";
+
 export const fromB64 = (b64) => {
 
     if (Boolean(b64) == false){
@@ -302,3 +306,35 @@ export default function timeAgo(time) {
       }
     return time;
   }
+
+const uniqueID = () => Math.floor(Math.random() * Date.now());
+
+export const avatar = (str, size = undefined) => {
+    const hash = stringHash(str);
+    const colors = hslTriad(hash % 360, 1, 0.5);
+    const color1 = hslRgb(colors[0][0], colors[0][1], colors[0][2]);
+    const color2 = hslRgb(colors[1][0], colors[1][1], colors[1][2]);
+    const color1str = `rgb(${ color1[0] }, ${ color1[1] }, ${ color1[2] })`;
+    const color2str = `rgb(${ color2[0] }, ${ color2[1] }, ${ color2[2] })`;
+    const id = uniqueID();
+
+    return `
+    <svg ${ size != undefined ? `width="${size}px" height="${size}px"` : '' } viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="${id}">
+                <stop stop-color="${color1str}" offset="0%"></stop>
+                <stop stop-color="${color2str}" offset="100%"></stop>
+            </linearGradient>
+        </defs>
+        <path fill="url(#${id})" fill-rule="evenodd" d="M0 0h80v80H0z"/>
+    </svg>`;
+};
+
+// export function getImageDataURL(svgXml) {
+//     console.log(svgXml);
+//     return "data:image/svg+xml;base64," + svgXml.toString('base64');
+// }
+
+export function getImageDataURL(svgXml) {
+    return "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgXml)));
+}
