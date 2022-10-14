@@ -15,7 +15,7 @@
     "@choc-ui/chakra-autocomplete": "^5.1.2",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
-    "@githubocto/flat-ui": "^0.14.1",
+    "@anudit/flat-ui": "^0.14.1",
     "@livepeer/react": "^1.0.6",
     "@livepeer/webrtmp-sdk": "^0.2.3",
     "critters": "^0.0.16",

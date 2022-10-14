@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Alert, AlertIcon, chakra, Flex, Spinner } from "@chakra-ui/react";
-import { Grid } from "@githubocto/flat-ui";
+import { Grid } from "@anudit/flat-ui";
 import useSWR from "swr";
 
 import fetcher from '@/utils/fetcher';
