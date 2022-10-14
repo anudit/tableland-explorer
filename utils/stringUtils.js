@@ -310,6 +310,7 @@ export default function timeAgo(time) {
 const uniqueID = () => Math.floor(Math.random() * Date.now());
 
 export const avatar = (str, size = undefined) => {
+    if(Boolean(str) === false) return ``;
     const hash = stringHash(str);
     const colors = hslTriad(hash % 360, 1, 0.5);
     const color1 = hslRgb(colors[0][0], colors[0][1], colors[0][2]);
