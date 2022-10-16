@@ -58,9 +58,9 @@ const UserSection = () => {
         <>
             <Meta />
             <NavBar address={address} isLoading={isValidating} />
-            <chakra.div position="relative" height="calc(100vh - 50px)" width="100%" mt={16}>
+            <chakra.div position="relative" height="calc(100vh - 50px)" width="100%" mt={12}>
             <Tabs>
-                <TabList>
+                <TabList borderBottom='none'>
                     <Tab>Tables {data && (<Tag ml={2}>{data.map(e=>e?.data?.tables).flat().length}</Tag>)}</Tab>
                     <Tab>Rigs {userRigs && (<Tag ml={2}>{userRigs.length}</Tag>)}</Tab>
                 </TabList>
@@ -74,7 +74,7 @@ const UserSection = () => {
                                         align='center'
                                         justify='center'
                                         m={{base: 0, md:8}}
-                                        mt={{base: 4, md:8}}
+                                        mt={{base: 0, md:8}}
                                     >
                                         {
                                             data
@@ -92,7 +92,7 @@ const UserSection = () => {
                                         }
                                     </Wrap>
                                 ) : (
-                                    <Flex direction='column' alignItems='center' h="100%" w="100%" justifyContent='center'>
+                                    <Flex direction='column' alignItems='center' h="calc(100vh - 160px)" p={2} w="100%" justifyContent='center'>
                                         <Text fontSize='xl' align='center'>
                                             You seem to have found a land with no Tables. <br/>Learn how to Create one on Tableland Docs.
                                         </Text>
@@ -119,12 +119,17 @@ const UserSection = () => {
                                     align='center'
                                     justify='center'
                                     m={{base: 0, md:8}}
-                                    mt={16}
+                                    scrollSnapType='y mandatory'
+                                    style={{
+                                        "&.proximity" : {
+                                            scrollSnapType: "y proximity"
+                                        }
+                                    }}
                                 >
                                     {
                                         userRigs
                                             .map((rig) => (
-                                                <WrapItem key={rig?.name}>
+                                                <WrapItem key={rig?.name} scrollSnapAlign='start'>
                                                     <RigCard id={rig?.token_id} image={rig?.thumb_alpha} w={{base: '100%', md:'500px'}} />
                                                 </WrapItem>
                                             )
@@ -132,7 +137,7 @@ const UserSection = () => {
                                     }
                                 </Wrap>
                             ) : (
-                                <Flex direction='column' alignItems='center' h="100%" w="100%" justifyContent='center'>
+                                <Flex direction='column' alignItems='center' h="calc(100vh - 160px)" p={2} w="100%" justifyContent='center'>
                                     <Text fontSize='xl' align='center' w={{base: '90%', md: "50%"}} mt={2}>
                                     Rigs is a generative collection built from 1,074 handcrafted works of art for the builders and creatives of cyberspace. Rigs are built on the Tableland protocol, a decentralized read, write, and own database for relational, composable data—powered by smart contracts and SQL on EVM chains like Ethereum. Rigs are your ticket to rewards for builders, creatives, ambassadors, and believers in Tableland.
                                     </Text>

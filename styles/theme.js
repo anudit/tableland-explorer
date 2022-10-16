@@ -21,6 +21,15 @@ const theme = extendTheme({
       cssVarPrefix: "c",
       initialColorMode: "dark",
       useSystemColorMode: false
+    },
+    components: {
+      Modal: {
+        baseStyle: (props) => ({
+          dialog: {
+            bg: props.colorMode === "dark" ? "#111" : "white",
+          },
+        }),
+      },
     }
 })
 

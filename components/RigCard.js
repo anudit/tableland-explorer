@@ -16,7 +16,7 @@ const RigCard = ({id, ...props}) => {
                 borderRadius={{base: 0, md: 20}}
                 borderWidth={1}
                 w={{base: '100%', md:'600px'}}
-                h={{base: '90vh', md:'auto'}}
+                h={{base: 'calc(100vh - 50px)', md:'auto'}}
                 mb={{base: 0, md: 4}}
                 borderColor={colorMode === 'light' ? 'gray.200': 'gray.800'}
                 scrollSnapAlign="center"

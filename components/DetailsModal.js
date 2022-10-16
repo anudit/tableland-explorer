@@ -84,7 +84,7 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                 </StatGroup>
                 <br/>
 
-                <Text fontWeight={'medium'} fontSize='sm'>Creation Statement</Text>
+                <Text fontWeight={'medium'} fontSize='sm' mb={1}>Creation Statement</Text>
                 <Textarea
                     value={tableMetadata?.statement}
                     size='sm'

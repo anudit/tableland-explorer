@@ -31,6 +31,7 @@ module.exports = (phase) => {
 
   return withPWA({
       ...baseConfig,
-      poweredByHeader: false
+      poweredByHeader: false,
+      swcMinify: true
    })
 }

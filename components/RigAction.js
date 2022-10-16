@@ -46,14 +46,23 @@ const RigAction = ({data}) => {
                     <Flex direction="row" alignItems='center' justifyContent='space-between'>
                         <Flex w="100%" alignItems='center'>
                             <EnsAvatar address={data?.seller_address} />
-                            <AddressOrEns size={{base: 'xs', md: 'sm'}} ml={2} mr={2} address={data?.seller_address} tooltip={false} onClick={()=>{
-                                router.push(`/address/${data?.seller_address}`)
-                            }}/>
-                            <Text>to</Text>
+                            <Flex direction="column" mx={2}>
+                                <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                    Seller
+                                </Text>
+                                <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={data?.seller_address} tooltip={false} onClick={()=>{
+                                    router.push(`/address/${data?.seller_address}`)
+                                }}/>
+                            </Flex>
                             <EnsAvatar ml={2} address={data?.buyer_address} />
-                            <AddressOrEns size={{base: 'xs', md: 'sm'}} ml={2} mr={2} address={data?.buyer_address} tooltip={false} onClick={()=>{
-                                router.push(`/address/${data?.buyer_address}`)
-                            }}/>
+                            <Flex direction="column" mx={2}>
+                                <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                    Buyer
+                                </Text>
+                                <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={data?.buyer_address} tooltip={false} onClick={()=>{
+                                    router.push(`/address/${data?.buyer_address}`)
+                                }}/>
+                            </Flex>
 
                         </Flex>
                         <IconButton variant='ghost' icon={<ExternalLinkIcon/>} onClick={()=>{

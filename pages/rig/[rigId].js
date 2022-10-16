@@ -13,6 +13,7 @@ import { CopyIcon } from '@chakra-ui/icons';
 import EnsAvatar from '@/components/EnsAvatar';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
+import { CheckIcon } from '@chakra-ui/icons';
 
 const UserSection = () => {
 
@@ -22,7 +23,7 @@ const UserSection = () => {
     const [owner, setOwner] = useState(false);
 
     const { rigId } = router.query;
-    const { onCopy } = useClipboard(`https://tablescan.vercel.app/rig/${rigId}`);
+    const { hasCopied, onCopy } = useClipboard(`https://tablescan.vercel.app/rig/${rigId}`);
 
     const { data, error, isValidating, mutate } = useSWR(rigId ? [rigId]: null, getOpenData);
 
@@ -152,7 +153,9 @@ const UserSection = () => {
                                             <Button variant='ghost' leftIcon={<MetadataIcon />} mb={1} w="fit-content" onClick={()=>{
                                                 window.open(constructTokenURIQuery(rigId), '_target');
                                             }}>View Metadata</Button>
-                                            <Button variant='ghost' leftIcon={<CopyIcon />} mb={1} w="fit-content" onClick={onCopy}>Share Link</Button>
+                                            <Button variant='ghost' leftIcon={hasCopied? <CheckIcon /> : <CopyIcon />} mb={1} w="fit-content" onClick={onCopy}>
+                                                {hasCopied? "Copied" : "Share Link"}
+                                            </Button>
                                         </Flex>
                                         {/* <ProvSection rigId={rigId}/> */}
                                     </Flex>

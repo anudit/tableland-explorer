@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
-import { Skeleton, Heading, Spinner, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip, Alert, AlertIcon, AlertTitle, AlertDescription  } from "@chakra-ui/react";
-import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
+import { useMediaQuery, Button, Skeleton, Heading, Spinner, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip, Alert, AlertIcon, AlertTitle, AlertDescription  } from "@chakra-ui/react";
+import { AppsIcon, SqlIcon, TablelandSmallIcon } from "@/public/icons";
 import {
   AutoComplete,
   AutoCompleteInput,
@@ -31,6 +31,7 @@ export default function Home() {
   const [activeModalData, setActiveModalData] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { ensToAddress } = useContext(EnsCacheContext);
+  const [isLargerThanMd] = useMediaQuery('(min-width: 48em)');
 
   function infoClick(id){
     let selectData = exploreData
@@ -195,7 +196,7 @@ export default function Home() {
                 placement='left'
               >
                 <IconButton
-                  variant='outline'
+                  variant='unstyled'
                   borderRadius='100%'
                   icon={isSqlMode? <SqlIcon boxSize={6}/> : <SearchIcon />}
                   size='lg'
@@ -216,14 +217,38 @@ export default function Home() {
               )
             }
           </Flex>
-          <IconButton
-            variant='outline'
-            borderRadius='100%'
-            size='lg'
-            icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />}
-            onClick={toggleColorMode}
-            mr={2}
-          />
+          <Flex direction="row">
+            <Link href="/explore">
+              {isLargerThanMd ? (
+                <Button
+                  variant='outline'
+                  borderRadius='100px'
+                  size='lg'
+                  leftIcon={<AppsIcon />}
+                  mr={2}
+                  fontWeight="100"
+                >
+                  Discover
+                </Button>
+              ) : (
+                <IconButton
+                  variant='outline'
+                  borderRadius='100%'
+                  size='lg'
+                  icon={<AppsIcon />}
+                  mr={2}
+                />
+              )}
+            </Link>
+            <IconButton
+              variant='outline'
+              borderRadius='100%'
+              size='lg'
+              icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />}
+              onClick={toggleColorMode}
+              mr={2}
+            />
+          </Flex>
         </Flex>
         <Flex direction="row" justifyContent="space-around" mt="70px" w={{base: "100%", md: "80%"}}>
             <Flex direction="column" >
@@ -314,6 +339,7 @@ import RigAction from "@/components/RigAction";
 import { Autoplay } from "swiper";
 import { EnsCacheContext } from "@/contexts/EnsCache";
 import BottomStats from "@/components/BottomStats";
+import Link from "next/link";
 
 const ActionsSection = () => {
 

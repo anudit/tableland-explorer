@@ -38,6 +38,7 @@ const TableSection = () => {
     const [videoDevices, setVideoDevices] = useState([]);
     const [audioDevices, setAudioDevices] = useState([]);
     const [liveSession, setLiveSession] = useState(false);
+    const [showVideo, setShowVideo] = useState(false);
     const { hasCopied: hasCopiedStreamLink, onCopy: onCopyStreamLink } = useClipboard(`https://lvpr.tv?v=${playbackId}`);
 
 
@@ -100,6 +101,14 @@ const TableSection = () => {
         setRefreshing(false);
     }
 
+    function refreshVideo(){
+        if (liveSession){
+            setShowVideo(false);
+            setTimeout(()=>{
+                setShowVideo(true)
+            }, 2000)
+        }
+    }
 
     async function start() {
 
@@ -163,34 +172,34 @@ const TableSection = () => {
                     <FilterIcon mr={2}/>
                     {
                         tableMetadata && tableMetadata?.history && (
-                        <ButtonGroup size='sm' isAttached >
-                            {
-                            Object.entries(freqTable(tableMetadata?.history.map(e=>e.statement?.split(' ')[0].toUpperCase()))).map(([key, val])=>(
-                                <Button
-                                key={key}
-                                colorScheme={disabledFilter.has(key) ? 'gray': null}
-                                variant={disabledFilter.has(key) ? 'ghost': 'solid'}
-                                onClick={()=>{
-                                    setDisabledFilter(df=>{
-                                    if (df.has(key)) {
-                                        let ndf =  df;
-                                        ndf.delete(key)
-                                        return ndf;
-                                    }
-                                    else {
-                                        let ndf = df;
-                                        ndf.add(key);
-                                        return ndf;
-                                    }
-                                    })
-                                }}
-                                >
-                                {key}
-                                <Tag ml={2} size='sm'>{val}</Tag>
-                                </Button>
-                            ))
-                            }
-                        </ButtonGroup>
+                            <ButtonGroup size='sm' isAttached >
+                                {
+                                    Object.entries(freqTable(tableMetadata?.history.map(e=>e.statement?.split(' ')[0].toUpperCase()))).map(([key, val])=>(
+                                        <Button
+                                            key={key}
+                                            colorScheme={disabledFilter.has(key) ? 'gray': null}
+                                            variant={disabledFilter.has(key) ? 'ghost': 'solid'}
+                                            onClick={()=>{
+                                                setDisabledFilter(df=>{
+                                                if (df.has(key)) {
+                                                    let ndf =  df;
+                                                    ndf.delete(key)
+                                                    return ndf;
+                                                }
+                                                else {
+                                                    let ndf = df;
+                                                    ndf.add(key);
+                                                    return ndf;
+                                                }
+                                                })
+                                            }}
+                                        >
+                                            {key}
+                                            <Tag ml={2} size='sm'>{val}</Tag>
+                                        </Button>
+                                    ))
+                                }
+                            </ButtonGroup>
                         )
                     }
                     </Flex>
@@ -211,7 +220,9 @@ const TableSection = () => {
 
             <DetailsModal tableMetadata={tableMetadata} onClose={onClose} isOpen={isOpen}/>
 
-            {liveSession && (<LiveVideo src={`https://lvpr.tv?v=${playbackId}`} />)}
+            {
+                liveSession && showVideo && (<LiveVideo playbackId={playbackId} title={toProperCase(tableName?.split("_").slice(0,-2).join(' '))}/>)
+            }
 
             <Tabs w="100%" h="150px" colorScheme={colorMode === 'dark' ? 'white': 'black'}>
                 <TabList direction='row' justifyContent='space-between' borderBottom='none'>
@@ -223,7 +234,7 @@ const TableSection = () => {
                         <Tab fontSize={{base: 'sm', md: 'md'}} >View</Tab>
                     </Flex>
                     <Flex w={{base:"100%", md:"33.33%"}} align='center' justifyContent='center'>
-                        <Avatar boxSize={5} bg='whiteAlpha.500' src={nameToAvatar(tableName)} />
+                        <Avatar boxSize={5} bg='whiteAlpha.500' src={nameToAvatar(tableName)} display={{base: 'none', md: 'flex'}}/>
                         <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Full Name"} placement='bottom'>
                             <Text  fontSize="sm" ml="4" fontWeight={'medium'} onClick={onCopy} cursor="pointer" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
                                 {tableName? toProperCase(tableName?.split("_").slice(0,-2).join(' ')): ""}
@@ -272,6 +283,7 @@ const TableSection = () => {
                                 </Select>
                             </Flex>
                             <MenuButtonShell icon={hasCopiedStreamLink? <CheckIcon boxSize={6}/> : <LinkIcon boxSize={6}/>} title={hasCopiedStreamLink ? "Copied" : "Copy Link"} onClick={onCopyStreamLink}  mr={0}/>
+                            <MenuButtonShell icon={<RepeatIcon boxSize={6} /> } title="Refresh Video" onClick={refreshVideo} />
                         </MenuGroup>
                     </TabPanel>
                     <TabPanel p={2} display='flex' direction="row">
@@ -304,7 +316,7 @@ const TableSection = () => {
                             {data?.message === "Row not found"? "Row not found, The table is empty." : data?.message}
                         </Alert>
                     ) : (
-                        <chakra.div color="black !important" position="relative" height="calc(100vh - 150px)" width="100%" filter={darkGrid ? 'invert(1)' : 'none'}>
+                        <chakra.div color="black !important" position="relative" height="calc(100vh - 150px)" width="100%" filter={darkGrid ? 'invert(1)' : 'none'} transition="all 0.3s ease-in">
                             <Grid data={data} downloadFilename={tableName} />
                         </chakra.div>
                     ) : (
