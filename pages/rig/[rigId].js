@@ -15,6 +15,25 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { CheckIcon } from '@chakra-ui/icons';
 
+function getHighestOrder(orders){
+    if (orders) {
+        let o =  orders
+            ?.filter(e=>new Date(e?.expiration_time*1000)>new Date())
+            ?.sort((a,b)=>parseInt(b['current_price']) - parseInt(a['current_price']))[0];
+        return o;
+    }
+    else return false;
+}
+
+function getTokenDeets(openData, order){
+    for (let i = 0; i < openData?.collection?.payment_tokens?.length; i++) {
+        const tok = openData?.collection?.payment_tokens[i];
+        if(tok?.address === order?.protocol_data?.parameters?.offer[0]?.token.toLowerCase()){
+            return tok;
+        }
+    }
+}
+
 const UserSection = () => {
 
     const router = useRouter();
@@ -73,8 +92,8 @@ const UserSection = () => {
                                         <Heading mb={{base: 4, md: 4}} size="3xl" mt={{base: 4, md: 0}}>
                                             {data?.name}
                                         </Heading>
-                                        <Flex direction='row' align="center" my={4}>
-                                            <Flex direction='row' mr={4} alignItems="center">
+                                        <Flex direction={{base:'column', lg: 'row'}} align="left" my={4}>
+                                            <Flex direction='row' mr={4} alignItems="center" mb={{base:4, lg:0}}>
                                                 {
                                                     owner && (
                                                         <>
@@ -97,30 +116,48 @@ const UserSection = () => {
                                                     )
                                                 }
                                             </Flex>
-                                            {
-                                                data?.last_sale && (
-                                                    <Flex direction='row' alignItems="center">
-                                                        <Image src={data?.last_sale?.payment_token?.image_url} height={8} width={8} />
-                                                        <Flex direction='column'>
-                                                            <Text ml={2} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-                                                                Last Sale
-                                                            </Text>
-                                                            <Text ml={2} fontWeight={400} size={{base: 'sm', md: 'md'}}>
-                                                                {parseInt(data?.last_sale?.total_price) / (10**data?.last_sale?.payment_token?.decimals)}
-                                                                {" " + data?.last_sale?.payment_token?.symbol}
-                                                                {" "}
-                                                                (${(parseInt(data?.last_sale?.total_price) / (10**data?.last_sale?.payment_token?.decimals) * parseFloat(data?.last_sale?.payment_token?.usd_price)).toFixed(2)})
-                                                            </Text>
+                                            <Flex direction='row' mr={4}>
+                                                {
+                                                    data?.last_sale && (
+                                                        <Flex direction='row' alignItems="center">
+                                                            <Image src={data?.last_sale?.payment_token?.image_url} height={8} width={8} />
+                                                            <Flex direction='column'>
+                                                                <Text ml={2} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                                                    Last Sale
+                                                                </Text>
+                                                                <Text ml={2} fontWeight={400} size={{base: 'sm', md: 'md'}}>
+                                                                    {parseInt(data?.last_sale?.total_price) / (10**data?.last_sale?.payment_token?.decimals)}
+                                                                    {" " + data?.last_sale?.payment_token?.symbol}
+                                                                    {" "}
+                                                                    (${(parseInt(data?.last_sale?.total_price) / (10**data?.last_sale?.payment_token?.decimals) * parseFloat(data?.last_sale?.payment_token?.usd_price)).toFixed(2)})
+                                                                </Text>
+                                                            </Flex>
                                                         </Flex>
-                                                    </Flex>
-                                                )
-                                            }
+                                                    )
+                                                }
+                                                {
+                                                    data?.seaport_sell_orders?.length>0 && (
+                                                        <Flex direction='row' alignItems="center" ml={2}>
+                                                            <Image src={getTokenDeets(data, getHighestOrder(data?.seaport_sell_orders))?.image_url} height={8} width={8} />
+                                                            <Flex direction='column'>
+                                                                <Text ml={2} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                                                    Highest Offer
+                                                                </Text>
+                                                                <Text ml={2} fontWeight={400} size={{base: 'sm', md: 'md'}}>
+                                                                    {parseInt(getHighestOrder(data?.seaport_sell_orders)?.current_price) / (10**getTokenDeets(data, getHighestOrder(data?.seaport_sell_orders))?.decimals)}
+                                                                    {" " + getTokenDeets(data, getHighestOrder(data?.seaport_sell_orders))?.symbol}
+                                                                    {" "}
+                                                                    (${(parseInt(getHighestOrder(data?.seaport_sell_orders)?.current_price) / (10**getTokenDeets(data, getHighestOrder(data?.seaport_sell_orders))?.decimals) * parseFloat(getTokenDeets(data, getHighestOrder(data?.seaport_sell_orders))?.usd_price)).toFixed(2)})
+                                                                </Text>
+                                                            </Flex>
+                                                        </Flex>
+                                                    )
+                                                }
+                                            </Flex>
                                         </Flex>
                                         <Wrap>
                                         {
-                                            data?.traits.sort((a, b)=>{
-                                                return a.value.length < b.value.length
-                                            }).map(e=>(
+                                            data?.traits.sort((a, b)=>String(a.trait_type).toLowerCase().charCodeAt(0) - String(b.trait_type).toLowerCase().charCodeAt(0)).map(e=>(
                                                 <WrapItem key={e?.trait_type}>
                                                     <Flex
                                                         direction="column"

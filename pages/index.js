@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
-import { useMediaQuery, Button, Skeleton, Heading, Spinner, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip, Alert, AlertIcon, AlertTitle, AlertDescription  } from "@chakra-ui/react";
-import { AppsIcon, SqlIcon, TablelandSmallIcon } from "@/public/icons";
+import { Skeleton, Heading, Spinner, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip, Alert, AlertIcon, AlertTitle, AlertDescription  } from "@chakra-ui/react";
+import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
 import {
   AutoComplete,
   AutoCompleteInput,
@@ -31,7 +31,6 @@ export default function Home() {
   const [activeModalData, setActiveModalData] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { ensToAddress } = useContext(EnsCacheContext);
-  const [isLargerThanMd] = useMediaQuery('(min-width: 48em)');
 
   function infoClick(id){
     let selectData = exploreData
@@ -218,7 +217,7 @@ export default function Home() {
             }
           </Flex>
           <Flex direction="row">
-            <Link href="/explore">
+            {/* <Link href="/explore">
               {isLargerThanMd ? (
                 <Button
                   variant='outline'
@@ -239,7 +238,7 @@ export default function Home() {
                   mr={2}
                 />
               )}
-            </Link>
+            </Link> */}
             <IconButton
               variant='outline'
               borderRadius='100%'
@@ -339,7 +338,6 @@ import RigAction from "@/components/RigAction";
 import { Autoplay } from "swiper";
 import { EnsCacheContext } from "@/contexts/EnsCache";
 import BottomStats from "@/components/BottomStats";
-import Link from "next/link";
 
 const ActionsSection = () => {
 

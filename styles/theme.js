@@ -30,6 +30,13 @@ const theme = extendTheme({
           },
         }),
       },
+      Drawer: {
+        baseStyle: (props) => ({
+          dialog: {
+            bg: props.colorMode === "dark" ? "#111" : "white",
+          },
+        }),
+      },
     }
 })
 

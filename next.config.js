@@ -20,6 +20,7 @@ module.exports = (phase) => {
     },
     images: {
       domains: ['render.tableland.xyz', 'res.cloudinary.com', 'ipfs.io', 'seadn.io'],
+      unoptimized: true
     },
   }
 

@@ -30,7 +30,7 @@ const InteractiveView = () => {
     if (error) return <div>failed to load, {error}</div>;
     return (
         <>
-            <Meta />
+            <Meta/>
             <NavBar refresh={refresh} isLoading={refreshing || isValidating} />
             <chakra.div position="relative" height="calc(100vh - 50px)" width="100%">
                     {
