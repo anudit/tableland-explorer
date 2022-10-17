@@ -141,6 +141,14 @@ export const TsIcon = createIcon({
     )
 });
 
+export const ShareIcon = createIcon({
+    displayName: 'ShareIcon',
+    viewBox: '0 0 48 48',
+    path: (
+        <path fill="currentColor" d="M35 16h-4a1 1 0 1 0 0 3h4l2 1v20l-2 1H13l-2-1V20l2-1h4a1 1 0 1 0 0-3h-4c-3 0-5 2-5 4v20c0 2 2 4 5 4h22c3 0 5-2 5-4V20c0-2-2-4-5-4zm-17-3 5-4v19a1 1 0 1 0 3 0V9l4 4a1 1 0 0 0 2 0v-2l-7-7h-2l-7 7a1 1 0 1 0 2 2z"/>
+    )
+});
+
 export const OpenseaIcon2 = createIcon({
     displayName: 'OpenseaIcon2',
     viewBox: '0 0 90 90',

@@ -1,19 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Tooltip, useClipboard, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { Tooltip, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import useSWR from "swr";
 
 import NavBar from '@/components/NavbarSimple';
 import Meta from '@/components/Meta';
-import { EtherscanIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, TablelandSmallIcon, TsIcon } from '@/public/icons';
+import { EtherscanIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, ShareIcon, TablelandSmallIcon, TsIcon } from '@/public/icons';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { constructTokenURIQuery, getOpenData, getRigOwner, getTsRanking } from '@/utils/rigs';
 import AddressOrEns from '@/components/AddressOrEns';
-import { CopyIcon } from '@chakra-ui/icons';
 import EnsAvatar from '@/components/EnsAvatar';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
-import { CheckIcon } from '@chakra-ui/icons';
 
 function getHighestOrder(orders){
     if (orders) {
@@ -43,7 +41,6 @@ const UserSection = () => {
     const [owner, setOwner] = useState(false);
 
     const { rigId } = router.query;
-    const { hasCopied, onCopy } = useClipboard(`https://tablescan.vercel.app/rig/${rigId}`);
 
     const { data, error, isValidating, mutate } = useSWR(rigId ? [rigId]: null, getOpenData);
 
@@ -192,8 +189,15 @@ const UserSection = () => {
                                             <Button variant='ghost' leftIcon={<MetadataIcon />} mb={1} w="fit-content" onClick={()=>{
                                                 window.open(constructTokenURIQuery(rigId), '_target');
                                             }}>View Metadata</Button>
-                                            <Button variant='ghost' leftIcon={hasCopied? <CheckIcon /> : <CopyIcon />} mb={1} w="fit-content" onClick={onCopy}>
-                                                {hasCopied? "Copied" : "Share Link"}
+                                            <Button variant='ghost' leftIcon={<ShareIcon />} mb={1} w="fit-content" onClick={()=>{
+                                                const shareData = {
+                                                    title: `Tableland - Rig #${rigId}`,
+                                                    text: `View Rig #${rigId}`,
+                                                    url: `https://tablescan.vercel.app/rig/${rigId}`
+                                                }
+                                                if (navigator && navigator.share) navigator.share(shareData)
+                                            }}>
+                                                Share Link
                                             </Button>
                                         </Flex>
                                         {/* <ProvSection rigId={rigId}/> */}
@@ -233,7 +237,9 @@ const TsRank = ({rigId, ...props}) => {
     const [tsData, setTsData] = useState(false);
 
     useEffect(()=>{
-        if (rigId) getTsRanking([rigId]).then(setTsData)
+        if (rigId) getTsRanking([rigId]).then(setTsData).catch((e)=>{
+            console.log(e);
+        })
     },[rigId])
 
     if(tsData){
