@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { forwardRef, useEffect } from "react";
 import { Input } from "@chakra-ui/react";
 import init from 'https://cdn.jsdelivr.net/gh/tablelandnetwork/wasm-sqlparser/main.js';
 import { useRouter } from "next/router";
@@ -6,7 +6,8 @@ import { Parser } from 'node-sql-parser';
 import fetcher from "@/utils/fetcher";
 import { nameToSubgraph, parseTableData } from "@/utils/stringUtils";
 
-const SqlInput = ({sqlError, setSqlError, ...props}) => {
+const SqlInput = ({sqlError, setSqlError, ...props}, ref) => {
+
   const router = useRouter();
   const parser = new Parser();
 
@@ -63,6 +64,7 @@ const SqlInput = ({sqlError, setSqlError, ...props}) => {
 
   return (
     <Input
+      ref={ref}
       placeholder='Run SQL'
       size='md'
       w="100%"
@@ -79,6 +81,7 @@ const SqlInput = ({sqlError, setSqlError, ...props}) => {
       {...props}
     />
   );
+
 };
 
-export default SqlInput;
+export default forwardRef(SqlInput);

@@ -6,6 +6,7 @@ import AddressOrEns from "./AddressOrEns";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import EnsAvatar from "./EnsAvatar";
+import { OpenseaIcon2 } from "@/public/icons";
 
 
 const RigAction = ({data}) => {
@@ -36,7 +37,15 @@ const RigAction = ({data}) => {
                             </Text>
                             <Text mr={{base: 1, md: 2}} >on</Text>
                             {data?.marketplace === 'opensea' && (
-                                <Avatar size="xs" src={'https://storage.googleapis.com/opensea-static/Logomark/Logomark-Blue.svg'} title={'Opensea'} />
+                                <Avatar
+                                    size="xs"
+                                    icon={<OpenseaIcon2 boxSize={6}/>}
+                                    title={'Opensea'}
+                                    cursor="pointer"
+                                    onClick={()=>{
+                                        window.open(`https://opensea.io/assets/ethereum/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${data?.nft?.token_id}`, '_blank');
+                                    }}
+                                />
                             )}
                         </Flex>
                         <Flex fontSize={{base:'xs', sm: 'sm'}}>
@@ -108,7 +117,7 @@ const RigAction = ({data}) => {
                                 <Avatar
                                     ml={2}
                                     size="sm"
-                                    src={'https://storage.googleapis.com/opensea-static/Logomark/Logomark-Blue.svg'} title={'Opensea'}
+                                    icon={<OpenseaIcon2 boxSize={6}/>}
                                     cursor="pointer"
                                     onClick={()=>{
                                         window.open(`https://opensea.io/assets/ethereum/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${data?.nft?.token_id}`,'_blank')

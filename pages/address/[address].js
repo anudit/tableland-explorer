@@ -139,7 +139,7 @@ const UserSection = () => {
                             ) : (
                                 <Flex direction='column' alignItems='center' h="calc(100vh - 160px)" p={2} w="100%" justifyContent='center'>
                                     <Text fontSize='xl' align='center' w={{base: '90%', md: "50%"}} mt={2}>
-                                    Rigs is a generative collection built from 1,074 handcrafted works of art for the builders and creatives of cyberspace. Rigs are built on the Tableland protocol, a decentralized read, write, and own database for relational, composable data—powered by smart contracts and SQL on EVM chains like Ethereum. Rigs are your ticket to rewards for builders, creatives, ambassadors, and believers in Tableland.
+                                    Rigs is a generative collection built from 1,074 handcrafted works of art for the builders and creatives of cyberspace. Rigs are built on the Tableland protocol, a decentralized read, write, and own database for relational, composable data — powered by smart contracts and SQL on EVM chains like Ethereum. Rigs are your ticket to rewards for builders, creatives, ambassadors, and believers in Tableland.
                                     </Text>
                                     <br/>
                                     <Button variant="ghost" leftIcon={<OpenseaIcon />} rightIcon={<ExternalLinkIcon />} onClick={()=>{

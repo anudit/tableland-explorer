@@ -140,3 +140,16 @@ export const TsIcon = createIcon({
         <path fill="currentColor" strokeWidth=".5"  d="M216 30H40L10 86l118 136L246 86l-30-56zm-9 15 18 33h-32l14-33zm-15-1-13 30-33-30h46zm-30 34H94l34-31 34 31zm-52-34L77 74 64 44h46zm-61 1 14 33H31l18-33zM34 92h35l36 81-71-81zm51 0h86l-43 99-43-99zm66 81 36-81h35l-71 81z"/>
     )
 });
+
+export const OpenseaIcon2 = createIcon({
+    displayName: 'OpenseaIcon2',
+    viewBox: '0 0 90 90',
+    path: (
+        <g>
+            <path fill="#2081E2" d="M90 45a45 45 0 1 1-90 0 45 45 0 0 1 90 0Z"/>
+            <path fill="#fff" d="M22 47v-1l12-18h1c2 4 3 10 3 13a21 21 0 0 1-3 6H22Z"/>
+            <path fill="#fff" d="M74 50v3l-5 4c-3 4-6 11-12 11H34c-8 0-15-7-15-15v-1h13l1 1v2l4 3h7v-5h-7v-1a47 47 0 0 0 4-7l1-1v-2a13 13 0 0 0 0-4v-4l-1-2-1-3v-2l-1-1a25 25 0 0 1-1-2l-1-2 5 1h2v1-3c0-2 1-3 2-3l2 1 1 2v4h1v1h1a38 38 0 0 1 5 5l1 1 1 1v1a21 21 0 0 1 2 3 12 12 0 0 1 0 2v1a7 7 0 0 1 0 3v1a13 13 0 0 1-2 3 14 14 0 0 1-1 2 30 30 0 0 1-2 2h-1v1l-1 1h-4v5h5l3-1 3-3v-1l14-3c0-1 0 0 0 0Z"/>
+        </g>
+    )
+});
+

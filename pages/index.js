@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
-import { Skeleton, Heading, Spinner, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip, Alert, AlertIcon, AlertTitle, AlertDescription  } from "@chakra-ui/react";
+import { Skeleton, Heading, Spinner, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
 import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
 import {
   AutoComplete,
@@ -30,7 +30,7 @@ export default function Home() {
   const [sqlError, setSqlError] = useState(false);
   const [activeModalData, setActiveModalData] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { ensToAddress } = useContext(EnsCacheContext);
+  const { ensToAddress, lensToAddress } = useContext(EnsCacheContext);
 
   function infoClick(id){
     let selectData = exploreData
@@ -136,6 +136,11 @@ export default function Home() {
                                 if (isAddress(res)) router.push(`/address/${res}`)
                               })
                             }
+                            if (searchValue.endsWith('.lens')) {
+                              lensToAddress(searchValue).then(res=>{
+                                if (isAddress(res)) router.push(`/address/${res}`)
+                              })
+                            }
                           }
                         }}
                         style={{
@@ -173,19 +178,21 @@ export default function Home() {
                     </AutoComplete>
                   </FormControl>
                 ) : (
-                  <SqlInput
-                    sqlError={sqlError}
-                    setSqlError={setSqlError}
-                    defaultValue='SELECT image from rigs_80001_1881'
-                    mt={2}
-                    style={{
-                      borderRadius: '30px',
-                      fontSize: '20px',
-                      padding: '10px',
-                      height: '50px',
-                      paddingLeft: '20px'
-                    }}
-                  />
+                  <Tooltip placement="bottom" hasArrow label={sqlError || 'SQL looks good.' } bg={sqlError? 'red' : 'green.300'}>
+                    <SqlInput
+                      sqlError={sqlError}
+                      setSqlError={setSqlError}
+                      defaultValue='SELECT image from rigs_80001_1881'
+                      mt={2}
+                      style={{
+                        borderRadius: '30px',
+                        fontSize: '20px',
+                        padding: '10px',
+                        height: '50px',
+                        paddingLeft: '20px'
+                      }}
+                    />
+                  </Tooltip>
                 )
               }
               <Tooltip
@@ -206,15 +213,6 @@ export default function Home() {
                 />
               </Tooltip>
             </Flex>
-            {
-              isSqlMode && sqlError && (
-                  <Alert status='error'>
-                      <AlertIcon />
-                      <AlertTitle>Parsing Error</AlertTitle>
-                      <AlertDescription>{sqlError}</AlertDescription>
-                  </Alert>
-              )
-            }
           </Flex>
           <Flex direction="row">
             {/* <Link href="/explore">

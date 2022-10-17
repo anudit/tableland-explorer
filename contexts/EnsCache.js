@@ -55,11 +55,38 @@ export const EnsCacheProvider = ({children}) => {
         }
     }
 
+    async function lensToAddress(lensHandle){
+        let resp = await fetch(`https://api.thegraph.com/subgraphs/name/anudit/lens-protocol`, {
+            method: 'POST',
+            body: JSON.stringify({
+                query: `
+                {
+                    profiles(where: {handle: "${lensHandle}"}) {
+                      id
+                      owner
+                      handle
+                    }
+                  }
+                `,
+                variables: {}
+            })
+        }).then(r=>r.json());
+
+        if (!resp?.data?.profiles?.length){
+            return false;
+        }
+        else {
+            console.log(resp, resp?.data?.profiles[0].owner)
+            return getAddress(resp?.data?.profiles[0].owner);
+        }
+    }
+
     return (
         <EnsCacheContext.Provider value={{
             getEnsData,
             addressToEns,
-            ensToAddress
+            ensToAddress,
+            lensToAddress
           }}>
               {children}
         </EnsCacheContext.Provider>
