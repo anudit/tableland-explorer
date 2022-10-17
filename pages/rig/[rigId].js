@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useClipboard, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { Tooltip, useClipboard, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import useSWR from "swr";
 
 import NavBar from '@/components/NavbarSimple';
 import Meta from '@/components/Meta';
-import { EtherscanIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, TablelandSmallIcon } from '@/public/icons';
+import { EtherscanIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, TablelandSmallIcon, TsIcon } from '@/public/icons';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { constructTokenURIQuery, getOpenData, getRigOwner } from '@/utils/rigs';
+import { constructTokenURIQuery, getOpenData, getRigOwner, getTsRanking } from '@/utils/rigs';
 import AddressOrEns from '@/components/AddressOrEns';
 import { CopyIcon } from '@chakra-ui/icons';
 import EnsAvatar from '@/components/EnsAvatar';
@@ -32,6 +32,7 @@ function getTokenDeets(openData, order){
             return tok;
         }
     }
+    return openData?.collection?.payment_tokens[0];
 }
 
 const UserSection = () => {
@@ -63,7 +64,7 @@ const UserSection = () => {
         <>
             <Meta />
             <NavBar isLoading={isValidating} refresh={refresh} />
-            <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt="50px" width="100%">
+            <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt="50px">
                 {
                     data ? data?.success !== false ? (
                            <>
@@ -84,13 +85,14 @@ const UserSection = () => {
                                         src={data?.image_url}
                                         width="600px"
                                         height="auto"
+                                        shadow='dark-lg'
                                     />
 
                                 </Flex>
                                 <Flex h="100%" direction='column' w={{base: '100%', md: '50%'}} justifyContent="center" alignItems='center'>
                                     <Flex direction='column' p={8} w={{base: '100%', md: '90%'}}>
-                                        <Heading mb={{base: 4, md: 4}} size="3xl" mt={{base: 4, md: 0}}>
-                                            {data?.name}
+                                        <Heading mb={{base: 4, md: 4}} size="3xl" mt={{base: 4, md: 0}} display="flex" alignItems='center'>
+                                            {data?.name} <TsRank rigId={rigId} ml={6} />
                                         </Heading>
                                         <Flex direction={{base:'column', lg: 'row'}} align="left" my={4}>
                                             <Flex direction='row' mr={4} alignItems="center" mb={{base:4, lg:0}}>
@@ -155,7 +157,7 @@ const UserSection = () => {
                                                 }
                                             </Flex>
                                         </Flex>
-                                        <Wrap>
+                                        <Wrap mt={2}>
                                         {
                                             data?.traits.sort((a, b)=>String(a.trait_type).toLowerCase().charCodeAt(0) - String(b.trait_type).toLowerCase().charCodeAt(0)).map(e=>(
                                                 <WrapItem key={e?.trait_type}>
@@ -167,10 +169,10 @@ const UserSection = () => {
                                                         borderRadius="10px"
                                                         p={2}
                                                     >
-                                                        <Text fontSize='xs' letterSpacing='1px'  mb={1} textTransform='uppercase' color="blue.500">
+                                                        <Text fontSize='x-small' letterSpacing='1px'  mb={1} textTransform='uppercase' color="blue.500">
                                                             {e?.trait_type}
                                                         </Text>
-                                                        <Text fontSize='lg' fontWeight={600}>{e?.value}</Text>
+                                                        <Text fontSize='md' fontWeight={600}>{e?.value}</Text>
                                                     </Flex>
                                                 </WrapItem>
                                                 )
@@ -226,6 +228,29 @@ const UserSection = () => {
 
 export default UserSection;
 
+
+const TsRank = ({rigId, ...props}) => {
+    const [tsData, setTsData] = useState(false);
+
+    useEffect(()=>{
+        if (rigId) getTsRanking([rigId]).then(setTsData)
+    },[rigId])
+
+    if(tsData){
+        return (
+            <Tooltip label="Trait Sniper Ranking" placement='top' hasArrow>
+                <Button leftIcon={<TsIcon/>} colorScheme='purple' size="xs" variant='solid' onClick={()=>{
+                    window.open(`https://app.traitsniper.com/tableland-rigs?view=${rigId}`, '_blank')
+                }} {...props}>
+                    #{tsData?.ranks[0]?.rarity_rank}
+                </Button>
+            </Tooltip>
+        )
+    }
+    else {
+        return (<></>)
+    }
+}
 
 // const ProvSection = ({rigId}) => {
 //     const [prov, setProv] = useState(false);

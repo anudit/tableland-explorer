@@ -67,3 +67,14 @@ export async function getLatestRigActions(){
     return data?.transactions;
 }
 
+export async function getTsRanking(tokenIds = []){
+    let data = await fetch(`https://proxy.cors.sh/https://api.traitsniper.com/v1/collections/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/ranks?page=1&limit=200&token_ids=${tokenIds.toString()}`, {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          'x-ts-api-key': '60a2e208-6adf-4a75-b213-f6a2ec447fba'
+        }
+    }).then(e=>e.json());
+    return data;
+}
+
