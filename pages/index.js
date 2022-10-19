@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
-import { Skeleton, Heading, Spinner, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
+import { Stack, Skeleton, Heading, Spinner, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
 import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
 import {
   AutoComplete,
@@ -10,7 +10,7 @@ import {
 } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
 import {multifetch} from "../utils/fetcher";
-import {nameToAvatar, nameToChainName, toProperCase} from "../utils/stringUtils";
+import {nameToAvatar, nameToChainName, networkDeets, toProperCase} from "../utils/stringUtils";
 import { SearchIcon } from "@chakra-ui/icons";
 import SqlInput from "@/components/RunSql";
 import Meta from "@/components/Meta";
@@ -306,10 +306,9 @@ const ChainsSection = () => {
       <br/><br/>
       <Heading>Chains</Heading>
       <br/>
-      <Skeleton isLoaded={data}>
-        <Flex position="sticky" top="0px" direction="column">
+      <Flex top="0px" direction="column">
         {
-          data && data.map(e=>e?.data?.tables).flat().map(e=>(
+          data ? data.map(e=>e?.data?.tables).flat().map(e=>(
             <Flex direction='row' align="center" key={e.name} mb={2}>
               <Avatar size="sm" src={nameToAvatar(e.name)} title={nameToChainName(e.name)} />
               <Flex direction='column' ml={4}>
@@ -319,10 +318,21 @@ const ChainsSection = () => {
                   <Text>{e.tableId} Tables</Text>
               </Flex>
             </Flex>
+          )) : Object.keys(networkDeets).map(n=>(
+            <Flex direction='row' align="center" key={n} mb={2}>
+              <Avatar size="sm" src={nameToAvatar(networkDeets[n]?.name)} title={nameToChainName(networkDeets[n]?.name)} />
+              <Flex direction='column' ml={4}>
+                <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                  {networkDeets[n]?.name}
+                </Text>
+                <Skeleton>
+                  <Text>0 Tables</Text>
+                </Skeleton>
+              </Flex>
+            </Flex>
           ))
         }
-        </Flex>
-      </Skeleton>
+      </Flex>
     </Flex>
   )
 }
@@ -331,15 +341,14 @@ import { getLatestRigActions } from "@/utils/rigs";
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
-import 'swiper/css/scrollbar';
 import RigAction from "@/components/RigAction";
-import { Autoplay } from "swiper";
 import { EnsCacheContext } from "@/contexts/EnsCache";
 import BottomStats from "@/components/BottomStats";
 
 const ActionsSection = () => {
 
   let [actions, setActions] = useState(null);
+  const { colorMode } = useColorMode();
 
   useEffect(()=>{
     getLatestRigActions().then(e=>setActions(e));
@@ -353,18 +362,26 @@ const ActionsSection = () => {
     >
       <Swiper
         slidesPerView={1}
-        modules={[Autoplay]}
-
-        autoplay={{
-          delay: 2000,
-          pauseOnMouseEnter: true
-        }}
       >
-        {actions && actions?.map && actions.map((slide, sid) => (
+        {actions && actions?.map ? actions.map((slide, sid) => (
           <SwiperSlide key={`slide-${sid}`}>
             <RigAction data={slide} />
           </SwiperSlide>
-        ))}
+        )) : (
+          <Flex
+              borderColor={colorMode === 'light' ? 'gray.200': 'gray.800'}
+              borderWidth='1px'
+              borderRadius={10}
+              direction="column"
+              p={4}
+              mb={4}
+          >
+              <Stack w={{base: '300px', md: '500px'}}>
+                  <Skeleton height='40px' />
+                  <Skeleton height='20px' />
+              </Stack>
+          </Flex>
+      )}
       </Swiper>
     </Flex>
   );

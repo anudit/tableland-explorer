@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Tag, Button, Text, useDisclosure, chakra, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { Heading, Tag, Button, Text, useDisclosure, chakra, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import useSWR from "swr";
 
 import { multifetch } from '@/utils/fetcher';
@@ -11,8 +11,9 @@ import DetailsModal from '@/components/DetailsModal';
 import { OpenseaIcon, TablelandSmallIcon } from '@/public/icons';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
-import { getUserRigs } from '@/utils/rigs';
+import { getFeed, getUserRigs } from '@/utils/rigs';
 import RigCard from '@/components/RigCard';
+import RigAction from '@/components/RigAction';
 
 const UserSection = () => {
 
@@ -20,6 +21,7 @@ const UserSection = () => {
     const { address } = router.query;
     const [activeModalData, setActiveModalData] = useState({});
     const [userRigs, setUserRigs] = useState(false);
+    const [feed, setFeed] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const { data, error, isValidating } = useSWR(address ? `{
@@ -42,7 +44,18 @@ const UserSection = () => {
     }`: null, multifetch);
 
     useEffect(()=>{
-        if(address) getUserRigs(address).then(setUserRigs);
+        if(address) {
+            getUserRigs(address).then(setUserRigs);
+            getFeed(address).then((f)=>{
+                if (f && f?.filter){
+                    let needed = f.filter(d=>{
+                        return d?.contract_address?.toLowerCase() == '0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d' || d?.nft?.contract_address?.toLowerCase() == '0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d'
+                    });
+                    console.log('feed', needed);
+                    setFeed(needed)
+                }
+            });
+        }
     },[address])
 
     if (error) return (
@@ -61,11 +74,30 @@ const UserSection = () => {
             <chakra.div position="relative" height="calc(100vh - 50px)" width="100%" mt={12}>
             <Tabs>
                 <TabList borderBottom='none'>
+                    <Tab>Feed</Tab>
                     <Tab>Tables {data && (<Tag ml={2}>{data.map(e=>e?.data?.tables).flat().length}</Tag>)}</Tab>
                     <Tab>Rigs {userRigs && (<Tag ml={2}>{userRigs.length}</Tag>)}</Tab>
                 </TabList>
 
                 <TabPanels>
+                    <TabPanel p={0}>
+                        <Flex direction={{base: 'column', md: "row"}} alignItems='start' justifyContent='center' minH="calc(100vh - 50px)" p={2} w={{base: "100%", md:"80%"}}>
+                            <Flex direction="column" position='sticky' alignItems={{base: 'flex-start', md:'flex-end'}} width={{base: "100%", md: "30%", lg: "40%"}}>
+                                <Heading m={4} size='2xl'>
+                                    Feed
+                                </Heading>
+                            </Flex>
+                            <Flex direction="column" width={{base: "100%", md: "70%", lg: "50%"}} align="center">
+                                {
+                                    Boolean(feed) && feed.length > 0 ? feed.map((item, oid)=>(
+                                        <RigAction data={item} key={oid} mb={2} position="relative"/>
+                                    )) : (
+                                        <Text m={6} fontSize="2xl">Crickets 🦗</Text>
+                                    )
+                                }
+                            </Flex>
+                        </Flex>
+                    </TabPanel>
                     <TabPanel p={0}>
                         {
                             data ? data.map(e=>e?.data?.tables).flat().length != 0 ? (
@@ -155,6 +187,7 @@ const UserSection = () => {
                             )
                         }
                     </TabPanel>
+
                 </TabPanels>
                 </Tabs>
                 <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>

@@ -9,7 +9,7 @@ import EnsAvatar from "./EnsAvatar";
 import { OpenseaIcon2 } from "@/public/icons";
 
 
-const RigAction = ({data}) => {
+const RigAction = ({data, ...props}) => {
     const { colorMode } = useColorMode();
     const router = useRouter();
 
@@ -22,6 +22,7 @@ const RigAction = ({data}) => {
                 w="100%"
                 direction="column"
                 p={4}
+                {...props}
             >
                 <Flex direction="column" justifyContent='space-between'>
                     <Flex direction="row" textAlign='left' alignItems='center' mb={2} justifyContent="space-between">
@@ -87,10 +88,11 @@ const RigAction = ({data}) => {
             <Flex
                 borderColor={colorMode === 'light' ? 'gray.200': 'gray.800'}
                 borderWidth='1px'
-                borderRadius={20}
+                borderRadius={10}
                 w="100%"
                 direction="column"
                 p={4}
+                {...props}
             >
                 <Flex direction="column" justifyContent='space-between'>
                     <Flex direction="row" textAlign='left' alignItems='center' mb={2} justifyContent="space-between">
@@ -133,12 +135,52 @@ const RigAction = ({data}) => {
             </Flex>
         )
     }
+    else if (data?.type == 'mint'){
+        return (
+            <Flex
+                borderColor={colorMode === 'light' ? 'gray.200': 'gray.800'}
+                borderWidth='1px'
+                borderRadius={10}
+                w="100%"
+                direction="column"
+                p={4}
+                mb={2}
+            >
+                <Flex direction="column" justifyContent='space-between'>
+                    <Flex direction="row" textAlign='left' alignItems='center' mb={2} justifyContent="space-between">
+                        <Flex fontSize={{base:'sm', sm: 'lg', md:'2xl'}}>
+                            <Text mr={2}>
+                                Minted
+                            </Text>
+                            <Link href={`/rig/${data?.token_id}`} >
+                                <Text mr={2} fontWeight='bold' cursor="pointer">Rig #{data?.token_id}</Text>
+                            </Link>
+                        </Flex>
+                        <Flex fontSize={{base:'xs', sm: 'sm'}}>
+                            {prettyTime(new Date(data?.transaction_date).getTime())}
+                        </Flex>
+                    </Flex>
+                    <Flex direction="row" alignItems='center' justifyContent='space-between'>
+                        <Flex w="100%" alignItems='center'>
+                            <EnsAvatar address={data?.owner_address} />
+                            <AddressOrEns ml={2} mr={2} address={data?.owner_address} tooltip={false} onClick={()=>{
+                                router.push(`/address/${data?.owner_address}`)
+                            }}/>
+                        </Flex>
+                        <IconButton variant='ghost' icon={<ExternalLinkIcon/>} onClick={()=>{
+                            window.open(`https://etherscan.io/tx/${data?.transaction_hash}`, '_blank')
+                        }}/>
+                    </Flex>
+                </Flex>
+            </Flex>
+        )
+    }
     else {
         return (
             <Flex
                 borderColor={colorMode === 'light' ? 'gray.200': 'gray.800'}
                 borderWidth='1px'
-                borderRadius={20}
+                borderRadius={10}
                 w="100%"
                 direction="column"
                 p={4}

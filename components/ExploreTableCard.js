@@ -71,7 +71,7 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                 </Flex>
                 <Flex direction='row' m={4} alignItems='center' justifyContent='space-between'>
                     <Flex direction='row' alignItems='center'>
-                        <Text fontSize='lg' fontWeight={600}>{toProperCase(tableName.split("_").slice(0,-2).join(' '))}</Text>
+                        <Text fontSize='lg' fontWeight={600} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">{toProperCase(tableName.split("_").slice(0,-2).join(' '))}</Text>
                         <Text size='sm'  ml={2} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>#{tableId}</Text>
                     </Flex>
                     <Link href={`/${tableName}`}>

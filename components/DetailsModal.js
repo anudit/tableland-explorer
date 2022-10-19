@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, chakra, Flex, Textarea, Text } from "@chakra-ui/react";
+import { useColorMode, Avatar, chakra, Flex, Textarea, Text } from "@chakra-ui/react";
 import { ArrowUpIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { nameToAvatar, nameToChainName, nameToExplorer, parseTableData } from "@/utils/stringUtils";
@@ -18,8 +18,12 @@ import {
 } from '@chakra-ui/react';
 import AddressOrEns from './AddressOrEns';
 import EnsAvatar from './EnsAvatar';
+import { useRouter } from 'next/router';
 
 const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
+    const { colorMode } = useColorMode();
+    const router = useRouter();
+
     return(
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -58,10 +62,16 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                             <StatNumber>
                                 <Flex direction="row" py={2} alignItems="center">
                                     <EnsAvatar address={tableMetadata?.owner?.id}/>
-                                    <AddressOrEns address={tableMetadata?.owner?.id} tooltip={false} fontSize={{base: 'sm', md:'lg'}} ml={2}/>
+                                    <Flex direction="column" mx={2}>
+                                        <Text fontSize='xs' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                            View tables by Controller
+                                        </Text>
+                                        <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={tableMetadata?.owner?.id} tooltip={false} onClick={()=>{
+                                            router.push(`/address/${tableMetadata?.owner?.id}`)
+                                        }}/>
+                                    </Flex>
                                 </Flex>
                             </StatNumber>
-                            <StatHelpText>View tables by Owner</StatHelpText>
                         </chakra.div>
                     </Link>
                     </Stat>
@@ -73,10 +83,16 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                             <StatNumber>
                                 <Flex direction="row" py={2} alignItems="center">
                                     <EnsAvatar address={tableMetadata?.controller?.id}/>
-                                    <AddressOrEns address={tableMetadata?.controller?.id} tooltip={false} fontSize={{base: 'sm', md:'lg'}} ml={2}/>
+                                    <Flex direction="column" mx={2}>
+                                        <Text fontSize='xs' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                            View tables by Controller
+                                        </Text>
+                                        <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={tableMetadata?.controller?.id} tooltip={false} onClick={()=>{
+                                            router.push(`/address/${tableMetadata?.controller?.id}`)
+                                        }}/>
+                                    </Flex>
                                 </Flex>
                             </StatNumber>
-                            <StatHelpText>View tables by Controller</StatHelpText>
                         </chakra.div>
                     </Link>
                     </Stat>

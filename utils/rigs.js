@@ -67,6 +67,14 @@ export async function getLatestRigActions(){
     return data?.transactions;
 }
 
+export async function getFeed(address){
+    let data = await fetch(`https://api.nftport.xyz/v0/transactions/accounts/${address}?chain=ethereum&type=mint&type=buy&type=sell`, {
+        method: 'GET',
+        headers: {'Authorization' : 'ad985098-7dbb-4bee-9f7d-ffa06d5a44d9'}
+    }).then(e=>e.json());
+    return data?.transactions;
+}
+
 export async function getTsRanking(tokenIds = []){
     let data = await fetch(`https://proxy.cors.sh/https://api.traitsniper.com/v1/collections/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/ranks?page=1&limit=200&token_ids=${tokenIds.toString()}`, {
         method: 'GET',
