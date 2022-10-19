@@ -175,6 +175,61 @@ const RigAction = ({data, ...props}) => {
             </Flex>
         )
     }
+    else if (data?.type == 'transfer'){
+        return (
+            <Flex
+                borderColor={colorMode === 'light' ? 'gray.200': 'gray.800'}
+                borderWidth='1px'
+                borderRadius={10}
+                w="100%"
+                direction="column"
+                p={4}
+                {...props}
+            >
+                <Flex direction="column" justifyContent='space-between'>
+                    <Flex direction="row" textAlign='left' alignItems='center' mb={2} justifyContent="space-between">
+                        <Flex fontSize={{base:'sm', sm: 'lg', md:'2xl'}} alignItems='center'>
+                            <Link href={`/rig/${data?.token_id}`} >
+                                <Text mr={{base: 1, md: 2}} fontWeight={700} cursor="pointer">Rig #{data?.token_id}</Text>
+                            </Link>
+                            <Text mr={{base: 1, md: 2}}>
+                                Transferred
+                            </Text>
+                        </Flex>
+                        <Flex fontSize={{base:'xs', sm: 'sm'}}>
+                            {prettyTime(new Date(data?.transaction_date).getTime())}
+                        </Flex>
+                    </Flex>
+                    <Flex direction="row" alignItems='center' justifyContent='space-between'>
+                        <Flex w="100%" alignItems='center'>
+                            <EnsAvatar address={data?.transfer_from} />
+                            <Flex direction="column" mx={2}>
+                                <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                    Sender
+                                </Text>
+                                <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={data?.transfer_from} tooltip={false} onClick={()=>{
+                                    router.push(`/address/${data?.transfer_from}`)
+                                }}/>
+                            </Flex>
+                            <EnsAvatar ml={2} address={data?.transfer_to} />
+                            <Flex direction="column" mx={2}>
+                                <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                    Receiver
+                                </Text>
+                                <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={data?.transfer_to} tooltip={false} onClick={()=>{
+                                    router.push(`/address/${data?.transfer_to}`)
+                                }}/>
+                            </Flex>
+
+                        </Flex>
+                        <IconButton variant='ghost' icon={<ExternalLinkIcon/>} onClick={()=>{
+                            window.open(`https://etherscan.io/tx/${data?.transaction_hash}`, '_target')
+                        }}/>
+                    </Flex>
+                </Flex>
+            </Flex>
+        )
+    }
     else {
         return (
             <Flex

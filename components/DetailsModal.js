@@ -64,7 +64,7 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                                     <EnsAvatar address={tableMetadata?.owner?.id}/>
                                     <Flex direction="column" mx={2}>
                                         <Text fontSize='xs' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-                                            View tables by Controller
+                                            View tables by Owner
                                         </Text>
                                         <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={tableMetadata?.owner?.id} tooltip={false} onClick={()=>{
                                             router.push(`/address/${tableMetadata?.owner?.id}`)

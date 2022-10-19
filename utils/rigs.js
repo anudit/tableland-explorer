@@ -68,7 +68,7 @@ export async function getLatestRigActions(){
 }
 
 export async function getFeed(address){
-    let data = await fetch(`https://api.nftport.xyz/v0/transactions/accounts/${address}?chain=ethereum&type=mint&type=buy&type=sell`, {
+    let data = await fetch(`https://api.nftport.xyz/v0/transactions/accounts/${address}?chain=ethereum&type=mint&type=buy&type=sell&type=transfer_to`, {
         method: 'GET',
         headers: {'Authorization' : 'ad985098-7dbb-4bee-9f7d-ffa06d5a44d9'}
     }).then(e=>e.json());

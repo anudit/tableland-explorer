@@ -274,7 +274,7 @@ export default function Home() {
                             />
                           )
                       }) : (
-                        <Spinner />
+                        <TableCardSkeleton />
                       )
                   }
                 </Flex>
@@ -320,7 +320,7 @@ const ChainsSection = () => {
             </Flex>
           )) : Object.keys(networkDeets).map(n=>(
             <Flex direction='row' align="center" key={n} mb={2}>
-              <Avatar size="sm" src={nameToAvatar(networkDeets[n]?.name)} title={nameToChainName(networkDeets[n]?.name)} />
+              <Avatar size="sm" src={networkDeets[n]?.avatar} title={networkDeets[n]?.name} />
               <Flex direction='column' ml={4}>
                 <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                   {networkDeets[n]?.name}
@@ -344,6 +344,7 @@ import 'swiper/css';
 import RigAction from "@/components/RigAction";
 import { EnsCacheContext } from "@/contexts/EnsCache";
 import BottomStats from "@/components/BottomStats";
+import TableCardSkeleton from "@/components/ExploreTableCardShell";
 
 const ActionsSection = () => {
 
@@ -376,9 +377,9 @@ const ActionsSection = () => {
               p={4}
               mb={4}
           >
-              <Stack w={{base: '300px', md: '500px'}}>
+              <Stack w={{base: '300px', md: '550px'}}>
+                  <Skeleton height='30px' />
                   <Skeleton height='40px' />
-                  <Skeleton height='20px' />
               </Stack>
           </Flex>
       )}
