@@ -59,7 +59,7 @@ const UserSection = () => {
 
     return (
         <>
-            <Meta />
+            <Meta url={ rigId ? `https://bafybeib3bbctx2gpuzicibprsa3h3zbusogxplccnlgbtmargfnh7bcria.ipfs.dweb.link/${rigId}/thumb.png` : false}/>
             <NavBar isLoading={isValidating} refresh={refresh} />
             <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt="50px">
                 {
@@ -192,7 +192,7 @@ const UserSection = () => {
                                             <Button variant='ghost' leftIcon={<ShareIcon />} mb={1} w="fit-content" onClick={()=>{
                                                 const shareData = {
                                                     title: `Tableland - Rig #${rigId}`,
-                                                    text: `View Rig #${rigId}`,
+                                                    text: `Checkout Rig #${rigId} on Tablescan`,
                                                     url: `https://tablescan.vercel.app/rig/${rigId}`
                                                 }
                                                 if (navigator && navigator.share) navigator.share(shareData)
