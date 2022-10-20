@@ -49,8 +49,10 @@ const RigAction = ({data, ...props}) => {
                                 />
                             )}
                         </Flex>
-                        <Flex fontSize={{base:'xs', sm: 'sm'}}>
-                            {prettyTime(new Date(data?.transaction_date).getTime())}
+                        <Flex fontSize={{base:'xs', sm: 'sm'}} >
+                            <Text whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
+                                {prettyTime(new Date(data?.transaction_date).getTime())}
+                            </Text>
                         </Flex>
                     </Flex>
                     <Flex direction="row" alignItems='center' justifyContent='space-between'>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Heading, Tag, Button, Text, useDisclosure, chakra, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { useColorMode, Heading, Tag, Button, Text, useDisclosure, chakra, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import useSWR from "swr";
 
 import { multifetch } from '@/utils/fetcher';
@@ -23,6 +23,7 @@ const UserSection = () => {
     const [userRigs, setUserRigs] = useState(false);
     const [feed, setFeed] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { colorMode } = useColorMode();
 
     const { data, error, isValidating } = useSWR(address ? `{
         tables(where: {owner: "${address.toLowerCase()}"}, orderBy: created, orderDirection: desc) {
@@ -84,15 +85,22 @@ const UserSection = () => {
                 <TabPanels>
                     <TabPanel p={0}>
                         <Flex direction={{base: 'column', md: "row"}} alignItems='start' justifyContent='center' minH="calc(100vh - 50px)" p={2} w={{base: "100%", md:"80%"}}>
-                            <Flex direction="column" position='sticky' alignItems={{base: 'flex-start', md:'flex-end'}} width={{base: "100%", md: "30%", lg: "40%"}}>
-                                <Heading m={4} size='2xl'>
+                            <Flex direction="column" position='relative' alignItems={{base: 'flex-start', md:'flex-end'}} width={{base: "100%", md: "30%", lg: "40%"}}>
+                                <Heading m={8} size='2xl' position="sticky" top="20px">
                                     Feed
                                 </Heading>
                             </Flex>
                             <Flex direction="column" width={{base: "100%", md: "70%", lg: "50%"}} align="center">
                                 {
                                     Boolean(feed) && feed.length > 0 ? feed.map((item, oid)=>(
-                                        <RigAction data={item} key={oid} mb={2} position="relative"/>
+                                        <RigAction
+                                            data={item}
+                                            key={oid}
+                                            mb={2}
+                                            position="relative"
+                                            backgroundColor={colorMode === 'light' ? 'gray.200' : 'hsl(218deg 23% 23% / 31%)' }
+                                            whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis"
+                                        />
                                     )) : (
                                         <Text m={6} fontSize="2xl">Crickets 🦗</Text>
                                     )
@@ -164,7 +172,11 @@ const UserSection = () => {
                                         userRigs
                                             .map((rig) => (
                                                 <WrapItem key={rig?.name} scrollSnapAlign='start'>
-                                                    <RigCard id={rig?.token_id} image={rig?.thumb_alpha} w={{base: '100%', md:'500px'}} />
+                                                    <RigCard
+                                                        id={rig?.token_id}
+                                                        image={rig?.thumb_alpha}
+                                                        w={{base: '100%', md:'500px'}}
+                                                    />
                                                 </WrapItem>
                                             )
                                         )

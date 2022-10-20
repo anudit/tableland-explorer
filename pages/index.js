@@ -279,7 +279,7 @@ export default function Home() {
                   }
                 </Flex>
             </Flex>
-            <Flex direction="column" display={{base: 'none', lg: 'flex'}}>
+            <Flex direction="column" display={{base: 'none', lg: 'flex'}} position="relative">
               <ChainsSection />
             </Flex>
         </Flex>
@@ -302,7 +302,7 @@ const ChainsSection = () => {
   }`, multifetch);
 
   return (
-    <Flex direction="column" width={{base: '100%', md: '200px'}} position="relative">
+    <Flex direction="column" width={{base: '100%', md: '200px'}} position="sticky" top="50px">
       <br/><br/>
       <Heading>Chains</Heading>
       <br/>

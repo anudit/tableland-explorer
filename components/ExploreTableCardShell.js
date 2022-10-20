@@ -31,9 +31,7 @@ const TableCardSkeleton = (props) => {
                             <Text>0x00</Text>
                         </Skeleton>
                         <Skeleton>
-                            <Text ml={4}  fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-                                Created
-                            </Text>
+                            <Text ml={4} fontSize='sm'>Created</Text>
                         </Skeleton>
                     </Flex>
                 </Flex>
@@ -46,12 +44,16 @@ const TableCardSkeleton = (props) => {
                 </Box>
             </Flex>
             <Flex direction='row' m={4} alignItems='center' justifyContent='space-between'>
-                <Skeleton>
                     <Flex direction='row' alignItems='center'>
-                        <Text fontSize='lg' fontWeight={600} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">Skeleton</Text>
-                        <Text size='sm'  ml={2} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>#</Text>
+                        <Skeleton>
+                            <Text fontSize='lg' fontWeight={600} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
+                                Skeleton Skeleton
+                            </Text>
+                        </Skeleton>
+                        <Skeleton>
+                            <Text size='sm' ml={4}>#Skeleton</Text>
+                        </Skeleton>
                     </Flex>
-                </Skeleton>
                 <Skeleton>
                     <Button size='sm' borderRadius="100px" colorScheme='blue'>Explore Table</Button>
                 </Skeleton>
