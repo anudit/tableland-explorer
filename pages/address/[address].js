@@ -51,7 +51,7 @@ const UserSection = () => {
                     let needed = f.filter(d=>{
                         return d?.contract_address?.toLowerCase() == '0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d' || d?.nft?.contract_address?.toLowerCase() == '0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d'
                     }).sort((a, b)=>{
-                        return new Date(a?.transaction_date) - new Date(b?.transaction_date)
+                        return new Date(b?.transaction_date) - new Date(a?.transaction_date)
                     });
                     console.log('feed', needed);
                     setFeed(needed)
