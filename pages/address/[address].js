@@ -19,7 +19,7 @@ import { ArrowUpIcon } from '@chakra-ui/icons';
 import { MoonIcon } from '@chakra-ui/icons';
 import { RepeatIcon } from '@chakra-ui/icons';
 import { SunIcon } from '@chakra-ui/icons';
-import { TablelandIcon } from 'out/icons';
+import { TablelandIcon } from '@/public/icons';
 import { CloseIcon } from '@chakra-ui/icons';
 import { EnsCacheContext } from '@/contexts/EnsCache';
 import { isAddress } from "ethers/lib/utils";
