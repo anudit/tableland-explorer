@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { InputRightElement, InputGroup, Input, ButtonGroup, Tooltip, IconButton, Link, useColorMode, Box, Tag, Button, Text, useDisclosure, chakra, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Input, ButtonGroup, Tooltip, IconButton, Link, useColorMode, Box, Tag, Button, Text, useDisclosure, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import useSWR from "swr";
 
 import { multifetch } from '@/utils/fetcher';
@@ -8,19 +8,13 @@ import TableCard from '@/components/ExploreTableCard';
 import Meta from '@/components/Meta';
 import DetailsModal from '@/components/DetailsModal';
 import { FeedIcon, OpenseaIcon, TableIcon, TablelandSmallIcon } from '@/public/icons';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
+import { ExternalLinkIcon, ArrowUpIcon, MoonIcon, RepeatIcon, SunIcon } from '@chakra-ui/icons';
 import { getFeed, getUserRigs } from '@/utils/rigs';
 import RigCard from '@/components/RigCard';
 import RigAction from '@/components/RigAction';
 import EnsAvatar from '@/components/EnsAvatar';
 import AddressOrEns from '@/components/AddressOrEns';
-import { ArrowUpIcon } from '@chakra-ui/icons';
-import { MoonIcon } from '@chakra-ui/icons';
-import { RepeatIcon } from '@chakra-ui/icons';
-import { SunIcon } from '@chakra-ui/icons';
 import { TablelandIcon } from '@/public/icons';
-import { CloseIcon } from '@chakra-ui/icons';
 import { EnsCacheContext } from '@/contexts/EnsCache';
 import { isAddress } from "ethers/lib/utils";
 
@@ -36,6 +30,7 @@ const UserSection = () => {
     const { colorMode, toggleColorMode } = useColorMode();
     const inpRef = useRef(null);
     const { ensToAddress, lensToAddress } = useContext(EnsCacheContext);
+    const [localEns, setLocalEns] = useState(false);
 
     const { data, error, isValidating } = useSWR(address ? `{
         tables(where: {owner: "${address.toLowerCase()}"}, orderBy: created, orderDirection: desc) {
@@ -70,7 +65,9 @@ const UserSection = () => {
                     setFeed(needed)
                 }
             });
+            ensToAddress(address).then(add=>setLocalEns(add));
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[address])
 
     if (error) return (
@@ -84,7 +81,7 @@ const UserSection = () => {
 
     return (
         <>
-            <Meta />
+            <Meta title={localEns ? `${localEns} - Tablescan` : false} />
             <Flex
                 as="nav"
                 justify="space-between"
@@ -94,6 +91,9 @@ const UserSection = () => {
                 px={4}
                 height="100px"
                 top="0"
+                position="sticky"
+                zIndex={2}
+                backgroundColor={colorMode === 'dark' ? 'black' : 'white'}
             >
                 <Flex direction="row" justify="center" w={{base: "100%", md:"9%"}} display={{base: "none", md: "flex"}} alignItems="center">
                     <Link href="/">
@@ -101,43 +101,39 @@ const UserSection = () => {
                     </Link>
                 </Flex>
                 <Flex direction="row" justify="left" w={{base: "100%", md:"80%"}}>
-                    <InputGroup size='sm' alignItems="center" w={{base: "100%", md:"60%"}}>
-                        <InputRightElement width='4.5rem'>
-                            <IconButton size="md" mt={3} variant='unstyled' icon={<CloseIcon />} h='1.75rem' onClick={()=>{
-                                inpRef.current.value = ""
-                            }} />
-                        </InputRightElement>
-                        <Input
-                            size="lg"
-                            shadow='lg'
-                            defaultValue={address}
-                            ref={inpRef}
-                            disabled={loading}
-                            placeholder="Search for an Address or Ens Name"
-                            onKeyDown={(e)=>{
-                                let searchValue = e.currentTarget.value;
-                                if(e.code == 'Enter'){
-                                  if (isAddress(searchValue)) router.push(`/address/${searchValue}`);
-                                  if (searchValue.endsWith('.eth')) {
+                    <Input
+                        w={{base: "100%", md:"40%"}}
+                        height="60px"
+                        shadow='lg'
+                        defaultValue={localEns || address}
+                        ref={inpRef}
+                        disabled={loading}
+                        borderRadius={10}
+                        fontSize="lg"
+                        placeholder="Search for an Address or Ens Name"
+                        onKeyDown={(e)=>{
+                            let searchValue = e.currentTarget.value;
+                            if(e.code == 'Enter'){
+                                if (isAddress(searchValue)) router.push(`/address/${searchValue}`);
+                                if (searchValue.endsWith('.eth')) {
                                     setLoading(true);
                                     ensToAddress(searchValue).then(res=>{
-                                      if (isAddress(res)) router.push(`/address/${res}`)
+                                        if (isAddress(res)) router.push(`/address/${res}`)
                                     }).finally(()=>{
                                         setLoading(false);
                                     })
-                                  }
-                                  if (searchValue.endsWith('.lens')) {
+                                }
+                                if (searchValue.endsWith('.lens')) {
                                     setLoading(true);
                                     lensToAddress(searchValue).then(res=>{
-                                      if (isAddress(res)) router.push(`/address/${res}`)
+                                        if (isAddress(res)) router.push(`/address/${res}`)
                                     }).finally(()=>{
                                         setLoading(false);
                                     })
-                                  }
                                 }
-                            }}
-                        />
-                    </InputGroup>
+                            }
+                        }}
+                    />
                 </Flex>
                 <Flex direction="row" justify="right" alignItems='center' w={{base: "fit-content", md:"10%"}} align='right'>
                     <ButtonGroup size='sm' isAttached variant='ghost'>
@@ -148,8 +144,8 @@ const UserSection = () => {
                     </ButtonGroup>
                 </Flex>
             </Flex>
-            <chakra.div position="relative" height="calc(100vh - 50px)" width="100%">
-                <Tabs colorScheme='messenger'>
+            <Flex position="relative" height="calc(100vh - 50px)" width="100%">
+                <Tabs colorScheme='messenger' width="100%">
                     <TabList display='flex' justifyContent='center' borderBottomWidth='0.5px'>
                         <Flex w={{base: "100%", md:"80%"}}>
                             <Tab>
@@ -192,13 +188,25 @@ const UserSection = () => {
                                         )
                                     }
                                 </Flex>
-                                <Flex direction="column" width={{base: "100%", md: "30%"}} align="center" borderWidth="1px" mt={4}>
+                                <Flex
+                                    direction="column"
+                                    width={{base: "100%", md: "20%"}}
+                                    align="center"
+                                    borderWidth="1px"
+                                    mt={4}
+                                    p={4}
+                                    borderRadius={10}
+                                    top="120px"
+                                    position={{base: "relative", md:"sticky"}}
+                                >
                                     <EnsAvatar size="lg" address={address} />
-                                    <AddressOrEns address={address} tooltip={false}/>
+                                    <AddressOrEns address={address} tooltip={false} m={2} />
                                     <Tooltip hasArrow label='View on Etherscan' placement='left'>
-                                        <IconButton onClick={()=>{
+                                        <Button variant="ghost" onClick={()=>{
                                             window.open(`https://blockscan.com/address/${address}`, "_blank");
-                                        }} icon={<ArrowUpIcon style={{'transform':'rotate(45deg)'}}/>} />
+                                        }} leftIcon={<ArrowUpIcon style={{'transform':'rotate(45deg)'}}/>} >
+                                            View on Etherscan
+                                        </Button>
                                     </Tooltip>
                                 </Flex>
                             </Flex>
@@ -252,7 +260,7 @@ const UserSection = () => {
                             {
                                 Boolean(userRigs) === true ? userRigs.length>0 ? (
                                     <Wrap
-                                        spacing={{base: 0, md:3}}
+                                        spacing={{base: 0}}
                                         align='center'
                                         justify='center'
                                         m={{base: 0, md:8}}
@@ -271,6 +279,8 @@ const UserSection = () => {
                                                             id={rig?.token_id}
                                                             image={rig?.thumb_alpha}
                                                             w={{base: '100%', md:'500px'}}
+                                                            mb={0}
+                                                            borderRadius={0}
                                                         />
                                                     </WrapItem>
                                                 )
@@ -300,7 +310,7 @@ const UserSection = () => {
                     </TabPanels>
                 </Tabs>
                 <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
-            </chakra.div>
+            </Flex>
         </>
     )
 
