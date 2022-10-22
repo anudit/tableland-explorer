@@ -131,6 +131,10 @@ const UserSection = () => {
                                         setLoading(false);
                                     })
                                 }
+                                if (searchValue.startsWith('#')) {
+                                    let rid = parseInt(searchValue.slice(1));
+                                    if (rid>0 && rid<=3000) router.push(`/rig/${rid}`)
+                                }
                             }
                         }}
                     />
@@ -157,7 +161,13 @@ const UserSection = () => {
                                 Tables {data && (<Tag ml={2}>{data.map(e=>e?.data?.tables).flat().length}</Tag>)}
                             </Tab>
                             <Tab>
-                                <Box as='span' mr='2'> <TablelandSmallIcon /> </Box>
+                                <Box as='span' mr='2'>
+                                    <TablelandSmallIcon
+                                        color="transparent"
+                                        strokeWidth='4px'
+                                        stroke={colorMode == 'light' ? 'black' : 'white'}
+                                    />
+                                </Box>
                                 Rigs {userRigs && (<Tag ml={2}>{userRigs.length}</Tag>)}
                             </Tab>
                         </Flex>
@@ -191,23 +201,21 @@ const UserSection = () => {
                                 <Flex
                                     direction="column"
                                     width={{base: "100%", md: "20%"}}
-                                    align="center"
+                                    align="start"
                                     borderWidth="1px"
                                     mt={4}
                                     p={4}
                                     borderRadius={10}
                                     top="120px"
-                                    position={{base: "relative", md:"sticky"}}
+                                    position={{base: "inherit", md:"sticky"}}
                                 >
-                                    <EnsAvatar size="lg" address={address} />
-                                    <AddressOrEns address={address} tooltip={false} m={2} />
-                                    <Tooltip hasArrow label='View on Etherscan' placement='left'>
-                                        <Button variant="ghost" onClick={()=>{
-                                            window.open(`https://blockscan.com/address/${address}`, "_blank");
-                                        }} leftIcon={<ArrowUpIcon style={{'transform':'rotate(45deg)'}}/>} >
-                                            View on Etherscan
-                                        </Button>
-                                    </Tooltip>
+                                    <EnsAvatar size="lg" address={address}  mb={2}/>
+                                    <AddressOrEns address={address} tooltip={false} m={0} mb={2}/>
+                                    <Text cursor="pointer" onClick={()=>{
+                                        window.open(`https://blockscan.com/address/${address}`, "_blank");
+                                    }}>
+                                        View on Etherscan <ArrowUpIcon ml={2} style={{'transform':'rotate(45deg)'}}/>
+                                    </Text>
                                 </Flex>
                             </Flex>
                         </TabPanel>
@@ -281,6 +289,7 @@ const UserSection = () => {
                                                             w={{base: '100%', md:'500px'}}
                                                             mb={0}
                                                             borderRadius={0}
+                                                            h={{base: 'calc(100vh - 100px)', md:'auto'}}
                                                         />
                                                     </WrapItem>
                                                 )

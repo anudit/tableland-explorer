@@ -141,6 +141,10 @@ export default function Home() {
                                 if (isAddress(res)) router.push(`/address/${res}`)
                               })
                             }
+                            if (searchValue.startsWith('#')) {
+                              let rid = parseInt(searchValue.slice(1));
+                              if (rid>0 && rid<=3000) router.push(`/rig/${rid}`)
+                            }
                           }
                         }}
                         style={{
