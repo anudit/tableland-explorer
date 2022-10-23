@@ -11,7 +11,6 @@ const EnsAvatar = ({address, ...props}) => {
 
     useEffect(()=>{
         if (isAddress(address)) getEnsData(address).then(res=>{
-            console.log('updating avatar', res);
             if(res && Boolean(res?.avatar)) {
                 if (res.avatar.includes('ipfs://')) setLink('https://ipfs.io/ipfs/' + res.avatar.replace('ipfs://',''));
                 else setLink(res?.avatar)
