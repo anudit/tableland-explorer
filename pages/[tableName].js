@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Select, useDisclosure, Button, ButtonGroup, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, useColorMode, IconButton, Tag, Tooltip, Avatar, useClipboard, Text, Alert, AlertIcon, chakra, Flex, Spinner, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
-import { Grid } from "@anudit/flat-ui";
+import { Grid } from "../../flat-ui/dist/index";
 import useSWR from "swr";
 
 import fetcher from '@/utils/fetcher';
@@ -205,14 +205,14 @@ const TableSection = () => {
                     </Flex>
                     <br/>
                     {
-                    tableMetadata && tableMetadata?.history?.sort(function(a, b){return parseInt(b.time) - parseInt(a.time)}).map(hist=>(
-                        <HistoryCard
-                            tableName={tableName}
-                            hist={hist}
-                            display={disabledFilter.has(hist?.statement?.split(' ')[0].toUpperCase()) ? 'none' : 'flex'}
-                            key={hist.id}
-                        />
-                    ))
+                        tableMetadata && tableMetadata?.history?.sort(function(a, b){return parseInt(b.time) - parseInt(a.time)}).map(hist=>(
+                            <HistoryCard
+                                tableName={tableName}
+                                hist={hist}
+                                display={disabledFilter.has(hist?.statement?.split(' ')[0].toUpperCase()) ? 'none' : 'flex'}
+                                key={hist.id}
+                            />
+                        ))
                     }
                 </DrawerBody>
                 </DrawerContent>
@@ -228,12 +228,12 @@ const TableSection = () => {
                 <TabList direction='row' justifyContent='space-between' borderBottom='none'>
                     <Flex direction='row' w={{base:"100%", md:"33.33%"}} align='center' justifyContent='flex-start' >
                         <Link href="/">
-                            <TablelandSmallIcon cursor="pointer" boxSize={6} mx={2} display={{base: 'none', md: 'flex'}}/>
+                            <TablelandSmallIcon cursor="pointer" boxSize={6} mx={2} display='flex' />
                         </Link>
                         <Tab fontSize={{base: 'sm', md: 'md'}} >Table</Tab>
                         <Tab fontSize={{base: 'sm', md: 'md'}} >View</Tab>
                     </Flex>
-                    <Flex w={{base:"100%", md:"33.33%"}} align='center' justifyContent='center'>
+                    <Flex w={{base:"100%", md:"33.33%"}} align='center' justifyContent={{base:'flex-end' ,md:'center'}}>
                         <Avatar boxSize={5} bg='whiteAlpha.500' src={nameToAvatar(tableName)} display={{base: 'none', md: 'flex'}}/>
                         <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Full Name"} placement='bottom'>
                             <Text  fontSize="sm" ml="4" fontWeight={'medium'} onClick={onCopy} cursor="pointer" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
@@ -242,7 +242,7 @@ const TableSection = () => {
                         </Tooltip>
                         <Tag size='sm' mt="3px" ml={2}>#{tableId}</Tag>
                     </Flex>
-                    <Flex w={{base:"100%", md:"33.33%"}} align='center' justifyContent='flex-end'>
+                    <Flex w={{base:"fit-content", md:"33.33%"}} align='center' justifyContent='flex-end'>
                         <Tooltip hasArrow label={isValidating || refreshing ? "Refreshing Data" : "Refresh Data"} placement='left'>
                             <IconButton variant='ghost' onClick={refresh} icon={isValidating || refreshing ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isValidating || refreshing}/>
                         </Tooltip>

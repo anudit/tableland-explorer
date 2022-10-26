@@ -95,9 +95,10 @@ const UserSection = () => {
                 zIndex={2}
                 backgroundColor={colorMode === 'dark' ? 'black' : 'white'}
             >
-                <Flex direction="row" justify="center" w={{base: "100%", md:"9%"}} display={{base: "none", md: "flex"}} alignItems="center">
+                <Flex direction="row" justify="center" w={{base: "48px", md:"9%"}} alignItems="center">
                     <Link href="/">
-                        <TablelandIcon cursor="pointer" width="120px" _hover={{color: '#326cfc'}}/>
+                        <TablelandIcon cursor="pointer" display={{base: 'none', lg: 'flex'}} width="120px" _hover={{color: '#326cfc'}}/>
+                        <TablelandSmallIcon cursor="pointer" display={{base: 'flex', lg: 'none'}} width="64px" _hover={{color: '#326cfc'}}/>
                     </Link>
                 </Flex>
                 <Flex direction="row" justify="left" w={{base: "100%", md:"80%"}}>
