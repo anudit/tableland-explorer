@@ -5,7 +5,7 @@ import { Grid } from "@anudit/flat-ui";
 import useSWR from "swr";
 
 import fetcher from '@/utils/fetcher';
-import { nameToAvatar, nameToSubgraph, nameToTime, parseTableData, toProperCase, freqTable } from '@/utils/stringUtils';
+import { nameToAvatar, nameToSubgraph, nameToTime, parseTableData, toProperCase, freqTable, networkDeets } from '@/utils/stringUtils';
 import Meta from '@/components/Meta';
 import { FilterIcon, PlayIcon, SqlIcon, StopIcon, TablelandSmallIcon } from '@/public/icons';
 import Link from 'next/link';
@@ -286,7 +286,7 @@ const TableSection = () => {
                             <MenuButtonShell icon={<RepeatIcon boxSize={6} /> } title="Refresh Video" onClick={refreshVideo} />
                         </MenuGroup>
                     </TabPanel>
-                    <TabPanel p={2} display='flex' direction="row">
+                    <TabPanel p={2} display='flex' direction="row" w="100%" overflowX='scroll'>
                         <MenuGroup title="Mode">
                             <MenuButtonShell icon={<SqlIcon boxSize={6} onClick={()=>{
                                 router.push(`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}`)
@@ -304,6 +304,34 @@ const TableSection = () => {
                                 }}
                                 mr={0}
                             />
+                        </MenuGroup>
+                        <MenuGroup title="Chain">
+                            <Flex direction="column" h="90%" justifyContent='space-evenly'>
+                                <Flex direction="row" justifyContent='space-between'>
+                                    <Text mr={2} ml={2}>Explorer</Text>
+                                    <Select size="xs" w="180px" onChange={e=>{
+                                        window.open(e.currentTarget.value, '_blank')
+                                    }}>
+                                        {
+                                            Object.entries(networkDeets).map(([chainId, deets])=>
+                                                (<option value={deets.explorer} key={chainId}>{deets.name} ({chainId})</option>)
+                                            )
+                                        }
+                                    </Select>
+                                </Flex>
+                                <Flex direction="row" justifyContent='space-between'>
+                                    <Text mr={2} ml={2}>Faucet</Text>
+                                    <Select size="xs" w="180px" onChange={e=>{
+                                        window.open(e.currentTarget.value, '_blank')
+                                    }}>
+                                        {
+                                            Object.entries(networkDeets).filter(e=>Boolean(e[1]?.faucet)).map(([chainId, deets])=>
+                                                (<option value={deets.faucet} key={chainId}>{deets.name} ({chainId})</option>)
+                                            )
+                                        }
+                                    </Select>
+                                </Flex>
+                            </Flex>
                         </MenuGroup>
                     </TabPanel>
                 </TabPanels>

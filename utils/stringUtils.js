@@ -107,6 +107,7 @@ export const networkDeets = {
         subgraph: "https://api.studio.thegraph.com/query/1649/tableland-ethereum/v1.8",
         explorer: "https://etherscan.io",
         contractAddress: "0x012969f7e3439a9B04025b5a049EB9BAD82A8C12",
+        faucet: false,
         blocktime: 12,
     },
     137: {
@@ -115,14 +116,16 @@ export const networkDeets = {
         subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-polygon",
         explorer: "https://polygonscan.com",
         contractAddress: "0x5c4e6A9e5C1e1BF445A062006faF19EA6c49aFeA",
+        faucet: false,
         blocktime: 5,
     },
     10: {
         name: "Optimism",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1663573617/convo/optimism.svg",
         subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-optimism",
-        explorer: "https://optimism.etherscan.io",
+        explorer: "https://optimistic.etherscan.io",
         contractAddress: "0xfad44BF5B843dE943a09D4f3E84949A11d3aa3e6",
+        faucet: false,
         blocktime: 10,
     },
     80001: {
@@ -131,6 +134,7 @@ export const networkDeets = {
         subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland",
         explorer: "https://mumbai.polygonscan.com",
         contractAddress: "0x4b48841d4b32C4650E4ABc117A03FE8B51f38F68",
+        faucet: "https://faucet.polygon.technology",
         blocktime: 5,
     },
     420: {
@@ -139,6 +143,7 @@ export const networkDeets = {
         subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-optimism-goerli",
         explorer: "https://goerli-optimism.etherscan.io",
         contractAddress: "0xC72E8a7Be04f2469f8C2dB3F1BdF69A7D516aBbA",
+        faucet: "https://app.optimism.io/bridge",
         blocktime: 10,
     },
     421613: {
@@ -147,6 +152,7 @@ export const networkDeets = {
         subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-arbitrum-goerli",
         explorer: "https://testnet.arbiscan.io",
         contractAddress: "0x033f69e8d119205089Ab15D340F5b797732f646b",
+        faucet: "https://bridge.arbitrum.io",
         blocktime: 5,
     },
     5: {
@@ -155,6 +161,7 @@ export const networkDeets = {
         subgraph: "https://api.studio.thegraph.com/query/1649/tableland-ethereum-goerli/v1.8",
         explorer: "https://goerli.etherscan.io",
         contractAddress: "0xDA8EA22d092307874f30A1F277D1388dca0BA97a",
+        faucet: "https://goerlifaucet.com/",
         blocktime: 12,
     }
 }
