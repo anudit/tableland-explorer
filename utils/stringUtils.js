@@ -339,3 +339,7 @@ export const avatar = (str, size = undefined) => {
 export function getImageDataURL(svgXml) {
     return "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgXml)));
 }
+
+export function encodeSqlForUrl(sql){
+    return encodeURIComponent(sql.replaceAll('%', '%25').replaceAll('*', '%2A'))
+}

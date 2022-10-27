@@ -4,7 +4,7 @@ import init from 'https://cdn.jsdelivr.net/gh/tablelandnetwork/wasm-sqlparser/ma
 import { useRouter } from "next/router";
 import { Parser } from 'node-sql-parser';
 import fetcher from "@/utils/fetcher";
-import { nameToSubgraph, parseTableData } from "@/utils/stringUtils";
+import { encodeSqlForUrl, nameToSubgraph, parseTableData } from "@/utils/stringUtils";
 
 const SqlInput = ({sqlError, setSqlError, ...props}, ref) => {
 
@@ -75,7 +75,7 @@ const SqlInput = ({sqlError, setSqlError, ...props}, ref) => {
       focusBorderColor={sqlError ? 'red' : 'green.300'}
       onKeyUp={(event)=>{
         if (event.key == 'Enter' && !sqlError){
-          router.push(`/interactive?query=${encodeURIComponent(event.currentTarget.value.replaceAll('%', '%25').replaceAll('*', '%2A'))}`);
+          router.push(`/interactive?query=${encodeSqlForUrl(event.currentTarget.value)}`);
         }
       }}
       {...props}

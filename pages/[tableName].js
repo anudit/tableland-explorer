@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Select, useDisclosure, Button, ButtonGroup, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, useColorMode, IconButton, Tag, Tooltip, Avatar, useClipboard, Text, Alert, AlertIcon, chakra, Flex, Spinner, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
-import { Grid } from "../../flat-ui/dist/index";
+import { Grid } from "@anudit/flat-ui";
 import useSWR from "swr";
 
 import fetcher from '@/utils/fetcher';

@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useColorModeValue, Tooltip, Flex, IconButton, Spinner, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import { TablelandSmallIcon } from "@/public/icons";
+import { CodeIcon, TablelandSmallIcon } from "@/public/icons";
 import { CheckIcon } from "@chakra-ui/icons";
 import { LinkIcon } from "@chakra-ui/icons";
 import { CopyIcon } from "@chakra-ui/icons";
 import SqlInput from "./RunSql";
 
-const NavBar = ({refresh, isLoading}) => {
+const NavBar = ({refresh, isLoading, onOpen}) => {
 
   const { hasCopied, onCopy } = useClipboard(global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query : "");
   const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard(global?.window? window.location.href : '');
@@ -43,6 +43,9 @@ const NavBar = ({refresh, isLoading}) => {
           </Tooltip>
           <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Query"} placement='left'>
             <IconButton onClick={onCopy} icon={hasCopied ? <CheckIcon /> : <CopyIcon />} />
+          </Tooltip>
+          <Tooltip hasArrow label={"Copy Code"} placement='left'>
+            <IconButton onClick={onOpen} icon={<CodeIcon />} />
           </Tooltip>
           <Tooltip hasArrow label={hasCopiedLink ? "Copied" : "Copy Share Link"} placement='left'>
             <IconButton onClick={onCopyLink} icon={hasCopiedLink ? <CheckIcon /> : <LinkIcon />} />

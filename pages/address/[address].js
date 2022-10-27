@@ -97,20 +97,21 @@ const UserSection = () => {
             >
                 <Flex direction="row" justify="center" w={{base: "48px", md:"9%"}} alignItems="center">
                     <Link href="/">
-                        <TablelandIcon cursor="pointer" display={{base: 'none', lg: 'flex'}} width="120px" _hover={{color: '#326cfc'}}/>
-                        <TablelandSmallIcon cursor="pointer" display={{base: 'flex', lg: 'none'}} width="64px" _hover={{color: '#326cfc'}}/>
+                        <TablelandIcon cursor="pointer" display={{base: 'none', xl: 'flex'}} width="120px" _hover={{color: '#326cfc'}}/>
+                        <TablelandSmallIcon cursor="pointer" display={{base: 'flex', xl: 'none'}} width="64px" _hover={{color: '#326cfc'}}/>
                     </Link>
                 </Flex>
                 <Flex direction="row" justify="left" w={{base: "100%", md:"80%"}}>
                     <Input
                         w={{base: "100%", md:"40%"}}
                         height="60px"
-                        shadow='lg'
+                        shadow='md'
                         defaultValue={localEns || address}
                         ref={inpRef}
                         disabled={loading}
                         borderRadius={10}
                         fontSize="lg"
+                        borderColor={colorMode === 'light' ? '#dfdfdf' : '#343333'}
                         placeholder="Search for an Address or Ens Name"
                         onKeyDown={(e)=>{
                             let searchValue = e.currentTarget.value;
@@ -151,7 +152,7 @@ const UserSection = () => {
             </Flex>
             <Flex position="relative" height="calc(100vh - 50px)" width="100%">
                 <Tabs colorScheme='messenger' width="100%">
-                    <TabList display='flex' justifyContent='center' borderBottomWidth='0.5px'>
+                    <TabList display='flex' justifyContent='center' borderBottomWidth='0.5px' borderBottomColor={colorMode === 'light' ? '#dfdfdf' : '#343333'}>
                         <Flex w={{base: "100%", md:"80%"}}>
                             <Tab>
                                 <Box as='span' mr='2'> <FeedIcon /> </Box>
@@ -298,7 +299,7 @@ const UserSection = () => {
                                         }
                                     </Wrap>
                                 ) : (
-                                    <Flex direction='column' alignItems='center' h="calc(100vh - 160px)" p={2} w="100%" justifyContent='center'>
+                                    <Flex direction='column' alignItems='center' h="calc(100vh - 160px)" p={2} w="100%" justifyContent='center' borderColor={colorMode === 'light' ? '#dfdfdf' : '#343333'}>
                                         <Text fontSize='xl' align='center' w={{base: '90%', md: "50%"}} mt={2}>
                                         Rigs is a generative collection built from 1,074 handcrafted works of art for the builders and creatives of cyberspace. Rigs are built on the Tableland protocol, a decentralized read, write, and own database for relational, composable data — powered by smart contracts and SQL on EVM chains like Ethereum. Rigs are your ticket to rewards for builders, creatives, ambassadors, and believers in Tableland.
                                         </Text>
