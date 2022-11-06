@@ -130,7 +130,7 @@ export const networkDeets = {
     },
     80001: {
         name: "Polygon Mumbai",
-        avatar: "https://res.cloudinary.com/anudit/image/upload/v1663573250/convo/polygon-token.svg",
+        avatar: "https://res.cloudinary.com/anudit/image/upload/v1667715597/convo/polygon-mumbai.svg",
         subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland",
         explorer: "https://mumbai.polygonscan.com",
         contractAddress: "0x4b48841d4b32C4650E4ABc117A03FE8B51f38F68",
@@ -138,8 +138,8 @@ export const networkDeets = {
         blocktime: 5,
     },
     420: {
-        name: "Optimism Goerli",
-        avatar: "https://res.cloudinary.com/anudit/image/upload/v1663573617/convo/optimism.svg",
+        name: "Optimism Görli",
+        avatar: "https://res.cloudinary.com/anudit/image/upload/v1667715370/convo/optimism-goerli.svg",
         subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-optimism-goerli",
         explorer: "https://goerli-optimism.etherscan.io",
         contractAddress: "0xC72E8a7Be04f2469f8C2dB3F1BdF69A7D516aBbA",
@@ -147,7 +147,7 @@ export const networkDeets = {
         blocktime: 10,
     },
     421613: {
-        name: "Arbitrum Goerli",
+        name: "Arbitrum Görli",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1663577114/convo/Arbitrum.svg",
         subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-arbitrum-goerli",
         explorer: "https://testnet.arbiscan.io",
@@ -156,8 +156,8 @@ export const networkDeets = {
         blocktime: 5,
     },
     5: {
-        name: "Ethereum Goerli",
-        avatar: "https://res.cloudinary.com/anudit/image/upload/v1664030600/convo/ethereum.svg",
+        name: "Ethereum Görli",
+        avatar: "https://res.cloudinary.com/anudit/image/upload/v1667714513/convo/go.svg",
         subgraph: "https://api.studio.thegraph.com/query/1649/tableland-ethereum-goerli/v1.8",
         explorer: "https://goerli.etherscan.io",
         contractAddress: "0xDA8EA22d092307874f30A1F277D1388dca0BA97a",
