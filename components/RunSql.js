@@ -6,7 +6,7 @@ import { Parser } from 'node-sql-parser';
 import fetcher from "@/utils/fetcher";
 import { encodeSqlForUrl, nameToSubgraph, parseTableData } from "@/utils/stringUtils";
 
-const SqlInput = ({sqlError, setSqlError, ...props}, ref) => {
+const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, ref) => {
 
   const router = useRouter();
   const parser = new Parser();
@@ -15,52 +15,58 @@ const SqlInput = ({sqlError, setSqlError, ...props}, ref) => {
     init();
   },[])
 
-  const onChangeSql = async (event) => {
-    try {
-        if (window.sqlparser.parse){
-          if (event.target.value.trim() != ""){
-            await window.sqlparser.parse(event.target.value);
-            const ast = parser.astify(event.target.value);
-            const reqTable = ast.from.length;
-            let vCount = 0;
 
-            for (let i = 0; i < ast.from.length; i++) {
-              const tn = ast.from[i].table;
-              let { valid } = parseTableData(tn);
-              if (valid === true){
-                const resp = await fetcher(nameToSubgraph(tn), "POST", {
-                  query: `{
-                    tables(where: {name: "${tn}"}) {
-                      tableId
-                    }
-                  }`
-                })
-                if (resp?.data?.tables.length>0){
-                  vCount+=1;
+  useEffect(()=>{
+    async function test(){
+      try {
+          if (window.sqlparser.parse){
+            if (inputValue.trim() != ""){
+              await window.sqlparser.parse(inputValue);
+              const ast = parser.astify(inputValue);
+              const reqTable = ast.from.length;
+              let vCount = 0;
+
+              for (let i = 0; i < ast.from.length; i++) {
+                const tn = ast.from[i].table;
+                let { valid } = parseTableData(tn);
+                if (valid === true){
+                  const resp = await fetcher(nameToSubgraph(tn), "POST", {
+                    query: `{
+                      tables(where: {name: "${tn}"}) {
+                        tableId
+                      }
+                    }`
+                  })
+                  if (resp?.data?.tables.length>0){
+                    vCount+=1;
+                  }
+                  else {
+                    setSqlError(`Table not Found : ${tn}`);
+                  }
                 }
                 else {
-                  setSqlError(`Table not Found : ${tn}`);
+                  setSqlError(`Invalid Table Name : ${tn}`);
                 }
               }
-              else {
-                setSqlError(`Invalid Table Name : ${tn}`);
+              if (reqTable == vCount){
+                setSqlError(false);
               }
             }
-            if (reqTable == vCount){
+            else {
               setSqlError(false);
             }
           }
           else {
-            setSqlError(false);
+            setSqlError('Parser not Loaded.');
           }
-        }
-        else {
-          setSqlError('Parser not Loaded.');
-        }
-    } catch (error) {
-      setSqlError(error.message);
+      } catch (error) {
+        setSqlError(error.message);
+      }
+
     }
-  }
+    test();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[inputValue])
 
   return (
     <Input
@@ -68,8 +74,11 @@ const SqlInput = ({sqlError, setSqlError, ...props}, ref) => {
       placeholder='Run SQL'
       size='md'
       w="100%"
-      onChange={onChangeSql}
-      defaultValue={global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query?.replaceAll('%25', '%').replaceAll('%2A', '*') : ""}
+      onChange={(e)=>{
+        setInputValue(e.target.value.trim())
+      }}
+      value={inputValue}
+      // defaultValue={global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query?.replaceAll('%25', '%').replaceAll('%2A', '*') : ""}
       mb={2}
       isInvalid={sqlError}
       focusBorderColor={sqlError ? 'red' : 'green.300'}

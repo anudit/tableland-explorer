@@ -289,7 +289,7 @@ const TableSection = () => {
                     <TabPanel p={2} display='flex' direction="row" w="100%" overflowX='scroll'>
                         <MenuGroup title="Mode">
                             <MenuButtonShell icon={<SqlIcon boxSize={6} onClick={()=>{
-                                router.push(`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}`)
+                                router.push(`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}&name=${tableName}`)
                             }}/>} title="SQL Mode"/>
                             <MenuButtonShell
                                 icon={colorMode== 'light' ? <MoonIcon boxSize={6} /> : <SunIcon boxSize={6} />}

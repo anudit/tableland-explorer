@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDisclosure, Alert, AlertIcon, chakra, Flex, Spinner } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { Grid } from "@anudit/flat-ui";
 import useSWR from "swr";
 
@@ -15,17 +16,104 @@ import {
     AccordionPanel,
     AccordionIcon,
   } from '@chakra-ui/react'
-import { Textarea , Box, Text, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton } from '@chakra-ui/react'
+import { useColorMode, Textarea , Box, Text, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton } from '@chakra-ui/react'
 import sdk from 'postman-collection';
+import { CloseIcon } from '@chakra-ui/icons';
+import { TablelandSmallIcon } from 'out/icons';
+import Link from 'next/link';
+import { SmallAddIcon } from '@chakra-ui/icons';
+import { TerminalIcon } from '@/public/icons';
 const codegen = require('postman-code-generators')
 
 const InteractiveView = () => {
 
     const router = useRouter();
-    const { query } = router.query;
+    const { query, name } = router.query;
+    const [tabsData, setTabsData] = useState([{name: name || 'New Query', id: 0}]);
+    const { colorMode } = useColorMode();
+
+    useEffect(()=>{
+        console.log('tabs now', tabsData)
+    },[tabsData])
+
+
+    function closeTab(tabId){
+        setTabsData((oldData)=>{
+            return oldData.filter(e=>e['id']!=tabId);
+        })
+    }
+
+    function newTab(){
+        setTabsData((oldData)=>{
+            let newData = [].concat(oldData);
+            let newId = Math.max(...oldData.map(e=>e.id))+1;
+            newData.push({name: `Query ${newId}`, id: newId});
+            return newData;
+        })
+    }
+
+    function updateTabName(tabId, newName){
+        setTabsData((oldData)=>{
+
+            if (oldData.filter(e=>e.id == tabId).length >0){
+                let newData = [].concat(oldData);
+                newData[tabId] = {...newData[tabId], name: newName};
+                return newData;
+            }
+            else {
+                return oldData;
+            }
+        })
+    }
+
+    return (
+        <>
+            <Meta/>
+            <Tabs defaultIndex={0} variant='enclosed' w="100%" colorScheme={colorMode === 'dark' ? 'white': 'black'}>
+                <TabList display='flex' alignItems='center' direction="row" w="100%" overflowX='auto' h="50px" borderBottom='none'>
+                    <Link href="/">
+                        <TablelandSmallIcon cursor="pointer" boxSize={6} mx={3}/>
+                    </Link>
+                    {
+                        tabsData.map((val)=>
+                        <Tab key={val.id} borderBottom="none" borderRadius={0}>
+                            <TerminalIcon boxSize={4} mr={2}/>
+                            <Text noOfLines={1}  suppressContentEditableWarning={true} contentEditable="true" onKeyDown={(e)=>{
+                                updateTabName(val.id, e.currentTarget.innerText);
+                            }}>{val.name}</Text>
+                            <Box as='span' ml='2'>
+                            <CloseIcon boxSize={2} _hover={{color: "red"}} onClick={()=>{
+                                closeTab(val.id)
+                            }}/>
+                            </Box>
+                        </Tab>
+                        )
+                    }
+                    <SmallAddIcon boxSize={6} mx={2} cursor="pointer" onClick={newTab} />
+                </TabList>
+                <TabPanels>
+                    {
+                        tabsData.map((val)=>(
+                            <TabPanel key={val.id} p={0}>
+                                <TabView query={query} name={val.name} />
+                            </TabPanel>
+                        ))
+                    }
+                </TabPanels>
+            </Tabs>
+        </>
+    )
+
+}
+
+export default InteractiveView;
+
+
+const TabView = ({query}) => {
     const [refreshing, setRefreshing] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [snippets, setSnippets] = useState(false);
+
 
     const { data, error, mutate, isValidating } = useSWR(
         query ? [`https://testnet.tableland.network/query?mode=json&s=${query}`] : null,
@@ -91,8 +179,7 @@ const InteractiveView = () => {
 
     if (error) return <div>failed to load, {error}</div>;
     return (
-        <>
-            <Meta/>
+        <chakra.div>
             <NavBar refresh={refresh} isLoading={refreshing || isValidating} onOpen={onOpen}/>
             <Drawer
                 isOpen={isOpen}
@@ -139,7 +226,7 @@ const InteractiveView = () => {
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
-            <chakra.div position="relative" height="calc(100vh - 50px)" width="100%">
+            <chakra.div position="relative" height="calc(100vh - 100px)" width="100%">
                     {
                     data ? data?.message ? (
                         <Alert status='error'>
@@ -147,19 +234,16 @@ const InteractiveView = () => {
                             {data?.message === "Row not found"? "Row not found, The table is empty." : data?.message}
                         </Alert>
                     ) : (
-                        <chakra.div color="black !important" position="relative" height="calc(100vh - 50px)" width="100%">
+                        <chakra.div color="black !important" position="relative" height="calc(100vh - 100px)" width="100%">
                             <Grid data={data} downloadFilename='custom' />
                         </chakra.div>
                     ) : (
-                        <Flex w="100%" h="calc(100vh - 50px)" justifyContent='center' alignItems='center'>
+                        <Flex w="100%" h="calc(100vh - 100px)" justifyContent='center' alignItems='center'>
                             <Spinner />
                         </Flex>
                     )
                 }
             </chakra.div>
-        </>
+        </chakra.div>
     )
-
 }
-
-export default InteractiveView;
