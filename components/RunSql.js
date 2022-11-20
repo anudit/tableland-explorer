@@ -1,14 +1,12 @@
 import React, { forwardRef, useEffect } from "react";
 import { Input } from "@chakra-ui/react";
 import init from 'https://cdn.jsdelivr.net/gh/tablelandnetwork/wasm-sqlparser/main.js';
-import { useRouter } from "next/router";
 import { Parser } from 'node-sql-parser';
 import fetcher from "@/utils/fetcher";
-import { encodeSqlForUrl, nameToSubgraph, parseTableData } from "@/utils/stringUtils";
+import { nameToSubgraph, parseTableData } from "@/utils/stringUtils";
 
 const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, ref) => {
 
-  const router = useRouter();
   const parser = new Parser();
 
   useEffect(()=>{
@@ -82,11 +80,6 @@ const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, 
       mb={2}
       isInvalid={sqlError}
       focusBorderColor={sqlError ? 'red' : 'green.300'}
-      onKeyUp={(event)=>{
-        if (event.key == 'Enter' && !sqlError){
-          router.push(`/interactive?query=${encodeSqlForUrl(event.currentTarget.value)}`);
-        }
-      }}
       {...props}
     />
   );

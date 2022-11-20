@@ -10,7 +10,7 @@ import {
 } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
 import {multifetch} from "../utils/fetcher";
-import {nameToAvatar, nameToChainName, networkDeets, toProperCase} from "../utils/stringUtils";
+import {encodeSqlForUrl, nameToAvatar, nameToChainName, networkDeets, toProperCase} from "../utils/stringUtils";
 import { SearchIcon } from "@chakra-ui/icons";
 import SqlInput from "@/components/RunSql";
 import Meta from "@/components/Meta";
@@ -196,6 +196,11 @@ export default function Home() {
                         padding: '10px',
                         height: '50px',
                         paddingLeft: '20px'
+                      }}
+                      onKeyUp={(event)=>{
+                        if (event.key == 'Enter' && !sqlError){
+                          router.push(`/interactive?query=${encodeSqlForUrl(event.currentTarget.value)}`);
+                        }
                       }}
                     />
                   </Tooltip>

@@ -7,12 +7,12 @@ import { LinkIcon } from "@chakra-ui/icons";
 import { CopyIcon } from "@chakra-ui/icons";
 import SqlInput from "./RunSql";
 
-const NavBar = ({refresh, isLoading, onOpen}) => {
+const NavBar = ({refresh, isLoading, onOpen, inputValue, setInputValue}) => {
 
   const { hasCopied, onCopy } = useClipboard(global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query : "");
   const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard(global?.window? window.location.href : '');
   const [sqlError, setSqlError] = useState(false);
-  const [sqlValue, setSqlValue] = useState("SELECT * from cue_notify_80001_2604");
+
 
   return (
     <Flex
@@ -28,7 +28,11 @@ const NavBar = ({refresh, isLoading, onOpen}) => {
     >
       <Tooltip placement="bottom" hasArrow label={sqlError || 'SQL looks good.' } bg={sqlError? 'red' : 'green.300'}>
         <Flex w="100%">
-          <SqlInput inputValue={sqlValue} setInputValue={setSqlValue} sqlError={sqlError} setSqlError={setSqlError} size="sm" mt={2}/>
+          <SqlInput
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            sqlError={sqlError} setSqlError={setSqlError} size="sm" mt={2}
+          />
         </Flex>
       </Tooltip>
       <Flex direction="row" justify="right" alignItems='center' w="fit-content" align='right'>

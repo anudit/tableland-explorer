@@ -22,14 +22,14 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { TablelandSmallIcon } from 'out/icons';
 import Link from 'next/link';
 import { SmallAddIcon } from '@chakra-ui/icons';
-import { TerminalIcon } from '@/public/icons';
+// import { TerminalIcon } from '@/public/icons';
 const codegen = require('postman-code-generators')
 
 const InteractiveView = () => {
 
     const router = useRouter();
     const { query, name } = router.query;
-    const [tabsData, setTabsData] = useState([{name: name || 'New Query', id: 0}]);
+    const [tabsData, setTabsData] = useState([{name: 'New Query', id: 0}]);
     const { colorMode } = useColorMode();
 
     useEffect(()=>{
@@ -77,7 +77,7 @@ const InteractiveView = () => {
                     {
                         tabsData.map((val)=>
                         <Tab key={val.id} borderBottom="none" borderRadius={0}>
-                            <TerminalIcon boxSize={4} mr={2}/>
+                            {/* <TerminalIcon boxSize={4} mr={2}/> */}
                             <Text noOfLines={1}  suppressContentEditableWarning={true} contentEditable="true" onKeyDown={(e)=>{
                                 updateTabName(val.id, e.currentTarget.innerText);
                             }}>{val.name}</Text>
@@ -95,7 +95,10 @@ const InteractiveView = () => {
                     {
                         tabsData.map((val)=>(
                             <TabPanel key={val.id} p={0}>
-                                <TabView query={query} name={val.name} />
+                                <TabView
+                                    defaultQuery={query || "Select * from table_nft_attributes_80001_4047"}
+                                    name={name || val.name}
+                                />
                             </TabPanel>
                         ))
                     }
@@ -109,21 +112,22 @@ const InteractiveView = () => {
 export default InteractiveView;
 
 
-const TabView = ({query}) => {
+const TabView = ({defaultQuery}) => {
     const [refreshing, setRefreshing] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [snippets, setSnippets] = useState(false);
+    const [sqlValue, setSqlValue] = useState(defaultQuery);
 
 
     const { data, error, mutate, isValidating } = useSWR(
-        query ? [`https://testnet.tableland.network/query?mode=json&s=${query}`] : null,
+        sqlValue ? [`https://testnet.tableland.network/query?mode=json&s=${sqlValue}`] : null,
         fetcher,
         { refreshInterval: 10000, revalidateOnFocus: true }
     );
 
     async function refresh(){
         setRefreshing(true);
-        let data = await fetcher(`https://testnet.tableland.network/query?mode=json&s=${query}`);
+        let data = await fetcher(`https://testnet.tableland.network/query?mode=json&s=${sqlValue}`);
         mutate(data);
         setRefreshing(false);
     }
@@ -134,7 +138,7 @@ const TabView = ({query}) => {
             codegen.convert(
                 lang,
                 variant,
-                new sdk.Request(`https://testnet.tableland.network/query?mode=json&s=${encodeURIComponent(query)}`),
+                new sdk.Request(`https://testnet.tableland.network/query?mode=json&s=${encodeURIComponent(sqlValue)}`),
                 {
                     indentCount: 3,
                     indentType: 'Space',
@@ -158,7 +162,7 @@ const TabView = ({query}) => {
 
     useEffect(()=>{
         async function getData(){
-            if (query){
+            if (sqlValue){
                 let snips = {};
                 let langs = codegen.getLanguageList();
                 for (let index = 0; index < langs.length; index++) {
@@ -175,12 +179,18 @@ const TabView = ({query}) => {
         }
         getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[query])
+    },[defaultQuery, sqlValue])
 
     if (error) return <div>failed to load, {error}</div>;
     return (
         <chakra.div>
-            <NavBar refresh={refresh} isLoading={refreshing || isValidating} onOpen={onOpen}/>
+            <NavBar
+                inputValue={sqlValue}
+                setInputValue={setSqlValue}
+                refresh={refresh}
+                isLoading={refreshing || isValidating}
+                onOpen={onOpen}
+            />
             <Drawer
                 isOpen={isOpen}
                 placement='right'
