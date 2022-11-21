@@ -19,7 +19,7 @@ import {
 import { useColorMode, Textarea , Box, Text, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton } from '@chakra-ui/react'
 import sdk from 'postman-collection';
 import { CloseIcon } from '@chakra-ui/icons';
-import { TablelandSmallIcon } from 'out/icons';
+import { TablelandSmallIcon } from '@/public/icons';
 import Link from 'next/link';
 import { SmallAddIcon } from '@chakra-ui/icons';
 // import { TerminalIcon } from '@/public/icons';
