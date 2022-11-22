@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import sdk from 'postman-collection';
-// import { TerminalIcon } from '@/public/icons';
+import { TerminalIcon } from '@/public/icons';
 const codegen = require('postman-code-generators')
 
 const InteractiveView = () => {
@@ -70,7 +70,7 @@ const InteractiveView = () => {
                     {
                         tabsData.map((val)=>
                         <Tab key={val.id} borderBottom="none" borderRadius={0}>
-                            {/* <TerminalIcon boxSize={4} mr={2}/> */}
+                            <TerminalIcon boxSize={4} mr={2}/>
                             <Text noOfLines={1}  suppressContentEditableWarning={true} contentEditable="true" onKeyDown={(e)=>{
                                 updateTabName(val.id, e.currentTarget.innerText);
                             }}>{val.name}</Text>

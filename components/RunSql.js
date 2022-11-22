@@ -19,7 +19,7 @@ const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, 
   useEffect(()=>{
     async function test(){
       try {
-          if (Boolean(window?.sqlparser) && window?.sqlparser?.parse){
+          if (Boolean(window?.sqlparser) === true && Boolean(window?.sqlparser?.parse) === true){
             if (inputValue.trim() != ""){
               await window.sqlparser.parse(inputValue);
               const ast = parser.astify(inputValue);
@@ -66,7 +66,7 @@ const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, 
     }
     test();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[inputValue, window?.sqlparser?.parse])
+  },[inputValue])
 
   return (
     <Input

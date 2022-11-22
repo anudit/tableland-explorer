@@ -26,7 +26,7 @@ const RigAction = ({data, ...props}) => {
                             sold for
                         </Text>
                         <Text fontWeight='medium' mr={{base: 1, md: 2}}>
-                            {data?.price_details?.price} ETH
+                            {parseFloat(data?.price_details?.price).toFixed(3)} ETH
                         </Text>
                         <Text mr={{base: 1, md: 2}} >on</Text>
                         {data?.marketplace === 'opensea' && (
