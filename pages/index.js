@@ -31,7 +31,7 @@ export default function Home() {
   const [activeModalData, setActiveModalData] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { ensToAddress, lensToAddress } = useContext(EnsCacheContext);
-  const [sqlValue, setSqlValue] = useState("SELECT * from cue_notify_80001_2604");
+  const [sqlValue, setSqlValue] = useState("SELECT image from rigs_80001_1881");
 
   function infoClick(id){
     let selectData = exploreData
@@ -188,7 +188,6 @@ export default function Home() {
                       inputValue={sqlValue} setInputValue={setSqlValue}
                       sqlError={sqlError}
                       setSqlError={setSqlError}
-                      // defaultValue='SELECT image from rigs_80001_1881'
                       mt={2}
                       style={{
                         borderRadius: '30px',

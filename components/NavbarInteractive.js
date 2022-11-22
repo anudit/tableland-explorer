@@ -6,11 +6,12 @@ import { CheckIcon } from "@chakra-ui/icons";
 import { LinkIcon } from "@chakra-ui/icons";
 import { CopyIcon } from "@chakra-ui/icons";
 import SqlInput from "./RunSql";
+import { encodeSqlForUrl } from "@/utils/stringUtils";
 
-const NavBar = ({refresh, isLoading, onOpen, inputValue, setInputValue}) => {
+const NavBar = ({refresh, isLoading, onOpen, inputValue, setInputValue, name=false}) => {
 
-  const { hasCopied, onCopy } = useClipboard(global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query : "");
-  const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard(global?.window? window.location.href : '');
+  const { hasCopied, onCopy } = useClipboard(inputValue);
+  const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard(`https://tablescan.io/interactive?query=${encodeSqlForUrl(inputValue)}&name=${name || 'New Query'}`);
   const [sqlError, setSqlError] = useState(false);
 
 
@@ -21,7 +22,7 @@ const NavBar = ({refresh, isLoading, onOpen, inputValue, setInputValue}) => {
       alignItems='center'
       w="100%"
       py={2}
-      px={4}
+      px={2}
       // background={useColorModeValue('#fcfcfcdb', '#0000005e')}
       // backdropFilter='blur(20px)'
       height="50px"

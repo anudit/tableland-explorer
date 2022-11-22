@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import EnsAvatar from "./EnsAvatar";
 import { OpenseaIcon2 } from "@/public/icons";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
 
 
 const RigAction = ({data, ...props}) => {
@@ -57,6 +58,7 @@ const RigAction = ({data, ...props}) => {
                                 router.push(`/address/${data?.seller_address}`)
                             }}/>
                         </Flex>
+                        <ArrowForwardIcon />
                         <EnsAvatar ml={2} address={data?.buyer_address} />
                         <Flex direction="column" mx={2}>
                             <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
@@ -174,6 +176,7 @@ const RigAction = ({data, ...props}) => {
                                 router.push(`/address/${data?.transfer_from}`)
                             }}/>
                         </Flex>
+                        <ArrowForwardIcon />
                         <EnsAvatar ml={2} address={data?.transfer_to} />
                         <Flex direction="column" mx={2}>
                             <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
@@ -195,7 +198,7 @@ const RigAction = ({data, ...props}) => {
     else {
         return (
             <RigActionShell {...props}>
-                <Stack>
+                <Stack w="100%">
                     <Skeleton height='40px' />
                     <Skeleton height='20px' />
                 </Stack>

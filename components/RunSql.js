@@ -11,13 +11,15 @@ const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, 
 
   useEffect(()=>{
     init();
+    // setInputValue(ref.current.value);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
 
   useEffect(()=>{
     async function test(){
       try {
-          if (window.sqlparser.parse){
+          if (Boolean(window?.sqlparser) && window?.sqlparser?.parse){
             if (inputValue.trim() != ""){
               await window.sqlparser.parse(inputValue);
               const ast = parser.astify(inputValue);
@@ -55,7 +57,7 @@ const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, 
             }
           }
           else {
-            setSqlError('Parser not Loaded.');
+            setSqlError('Loading SQL Parser, Just a sec.');
           }
       } catch (error) {
         setSqlError(error.message);
@@ -64,7 +66,7 @@ const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, 
     }
     test();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[inputValue])
+  },[inputValue, window?.sqlparser?.parse])
 
   return (
     <Input
@@ -80,6 +82,7 @@ const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, 
       mb={2}
       isInvalid={sqlError}
       focusBorderColor={sqlError ? 'red' : 'green.300'}
+      defaultValue='SELECT image from rigs_80001_1881'
       {...props}
     />
   );

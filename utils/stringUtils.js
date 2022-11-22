@@ -71,7 +71,7 @@ export const prettyTime = (timestamp) => {
     const d = dt.getDate();
     const month = monthNames[dt.getMonth()];
     const y = dt.getFullYear();
-    return `${h}:${m} ${ampm} • ${d} ${month}, '${String(y).slice(2,String(y).length)}`;
+    return `${h}:${m} ${ampm} • ${d} ${month} '${String(y).slice(2,String(y).length)}`;
 
 }
 

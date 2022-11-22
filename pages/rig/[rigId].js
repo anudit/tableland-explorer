@@ -193,7 +193,7 @@ const UserSection = () => {
                                                 const shareData = {
                                                     title: `Tableland - Rig #${rigId}`,
                                                     text: `Checkout Rig #${rigId} on Tablescan`,
-                                                    url: `https://tablescan.vercel.app/rig/${rigId}`
+                                                    url: `https://tablescan.io/rig/${rigId}`
                                                 }
                                                 if (navigator && navigator.share) navigator.share(shareData)
                                             }}>

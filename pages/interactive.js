@@ -1,27 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useDisclosure, Alert, AlertIcon, chakra, Flex, Spinner } from "@chakra-ui/react";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { Grid } from "@anudit/flat-ui";
+import { Alert, AlertIcon, chakra, Flex, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, useDisclosure } from "@chakra-ui/react";
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import useSWR from "swr";
 
+import Meta from '@/components/Meta';
 import fetcher from '@/utils/fetcher';
 import NavBar from '../components/NavbarInteractive';
-import Meta from '@/components/Meta';
 
-import {
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
-  } from '@chakra-ui/react'
-import { useColorMode, Textarea , Box, Text, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton } from '@chakra-ui/react'
-import sdk from 'postman-collection';
-import { CloseIcon } from '@chakra-ui/icons';
 import { TablelandSmallIcon } from '@/public/icons';
+import { CloseIcon, SmallAddIcon } from '@chakra-ui/icons';
+import {
+    Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Text, Textarea, useColorMode
+} from '@chakra-ui/react';
 import Link from 'next/link';
-import { SmallAddIcon } from '@chakra-ui/icons';
+import sdk from 'postman-collection';
 // import { TerminalIcon } from '@/public/icons';
 const codegen = require('postman-code-generators')
 
@@ -112,7 +105,7 @@ const InteractiveView = () => {
 export default InteractiveView;
 
 
-const TabView = ({defaultQuery}) => {
+const TabView = ({defaultQuery, name}) => {
     const [refreshing, setRefreshing] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [snippets, setSnippets] = useState(false);
@@ -190,6 +183,7 @@ const TabView = ({defaultQuery}) => {
                 refresh={refresh}
                 isLoading={refreshing || isValidating}
                 onOpen={onOpen}
+                name={name}
             />
             <Drawer
                 isOpen={isOpen}

@@ -26,7 +26,7 @@ const TableSection = () => {
     const [darkGrid, setDarkGrid] = useState(false);
     const { colorMode, toggleColorMode } = useColorMode();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard("https://tablescan.vercel.app/"+tableName);
+    const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard("https://tablescan.io/"+tableName);
     const { isOpen: isOpenHistory, onOpen: onOpenHistory, onClose: onCloseHistory } = useDisclosure();
     const [disabledFilter, setDisabledFilter] = useState(new Set([]));
 
