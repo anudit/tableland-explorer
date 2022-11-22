@@ -10,61 +10,62 @@ const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, 
   const parser = new Parser();
 
   useEffect(()=>{
-    init();
-    // setInputValue(ref.current.value);
+    init().then(function () {
+      console.log('SQL parser loaded');
+      test();
+    });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
+  async function test(){
+    try {
+        if (Boolean(window?.sqlparser) === true && Boolean(window?.sqlparser?.parse) === true){
+          if (inputValue.trim() != ""){
+            await window.sqlparser.parse(inputValue);
+            const ast = parser.astify(inputValue);
+            const reqTable = ast.from.length;
+            let vCount = 0;
 
-  useEffect(()=>{
-    async function test(){
-      try {
-          if (Boolean(window?.sqlparser) === true && Boolean(window?.sqlparser?.parse) === true){
-            if (inputValue.trim() != ""){
-              await window.sqlparser.parse(inputValue);
-              const ast = parser.astify(inputValue);
-              const reqTable = ast.from.length;
-              let vCount = 0;
-
-              for (let i = 0; i < ast.from.length; i++) {
-                const tn = ast.from[i].table;
-                let { valid } = parseTableData(tn);
-                if (valid === true){
-                  const resp = await fetcher(nameToSubgraph(tn), "POST", {
-                    query: `{
-                      tables(where: {name: "${tn}"}) {
-                        tableId
-                      }
-                    }`
-                  })
-                  if (resp?.data?.tables.length>0){
-                    vCount+=1;
-                  }
-                  else {
-                    setSqlError(`Table not Found : ${tn}`);
-                  }
+            for (let i = 0; i < ast.from.length; i++) {
+              const tn = ast.from[i].table;
+              let { valid } = parseTableData(tn);
+              if (valid === true){
+                const resp = await fetcher(nameToSubgraph(tn), "POST", {
+                  query: `{
+                    tables(where: {name: "${tn}"}) {
+                      tableId
+                    }
+                  }`
+                })
+                if (resp?.data?.tables.length>0){
+                  vCount+=1;
                 }
                 else {
-                  setSqlError(`Invalid Table Name : ${tn}`);
+                  setSqlError(`Table not Found : ${tn}`);
                 }
               }
-              if (reqTable == vCount){
-                setSqlError(false);
+              else {
+                setSqlError(`Invalid Table Name : ${tn}`);
               }
             }
-            else {
+            if (reqTable == vCount){
               setSqlError(false);
             }
           }
           else {
-            setSqlError('Loading SQL Parser, Just a sec.');
+            setSqlError(false);
           }
-      } catch (error) {
-        setSqlError(error.message);
-      }
-
+        }
+        else {
+          setSqlError('Loading SQL Parser, Just a sec.');
+        }
+    } catch (error) {
+      setSqlError(error.message);
     }
-    test();
+  }
+
+  useEffect(()=>{
+    test()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[inputValue])
 
@@ -78,11 +79,10 @@ const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, 
         setInputValue(e.target.value.trim())
       }}
       value={inputValue}
-      // defaultValue={global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query?.replaceAll('%25', '%').replaceAll('%2A', '*') : ""}
       mb={2}
       isInvalid={sqlError}
       focusBorderColor={sqlError ? 'red' : 'green.300'}
-      defaultValue='SELECT image from rigs_80001_1881'
+      // defaultValue={global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query?.replaceAll('%25', '%').replaceAll('%2A', '*') : ""}
       {...props}
     />
   );

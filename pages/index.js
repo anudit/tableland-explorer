@@ -198,6 +198,7 @@ export default function Home() {
                       }}
                       onKeyUp={(event)=>{
                         if (event.key == 'Enter' && !sqlError){
+                          event.currentTarget.disabled = true;
                           router.push(`/interactive?query=${encodeSqlForUrl(event.currentTarget.value)}`);
                         }
                       }}

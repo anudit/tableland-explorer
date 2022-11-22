@@ -89,7 +89,7 @@ const InteractiveView = () => {
                         tabsData.map((val)=>(
                             <TabPanel key={val.id} p={0}>
                                 <TabView
-                                    defaultQuery={query || "Select * from table_nft_attributes_80001_4047"}
+                                    defaultQuery={query || "SELECT image from rigs_80001_1881"}
                                     name={name || val.name}
                                 />
                             </TabPanel>
