@@ -1,5 +1,49 @@
+import { mergeKeyValue } from "./stringUtils";
+
 export function constructTokenURIQuery(tokenIds = []){
-    return "https://testnet.tableland.network/query?mode=list&s="+encodeURIComponent(`select json_object('name','Rig #'||id,'external_url','https://tableland.xyz/rigs/'||id,'image',image,'image_alpha',image_alpha,'thumb',thumb,'thumb_alpha',thumb_alpha,'attributes',json_group_array(json_object('display_type',display_type,'trait_type',trait_type,'value',value))) from rigs_5_28 join rig_attributes_5_27 on rigs_5_28.id=rig_attributes_5_27.rig_id where id in (${tokenIds.toString()}) group by id;`)
+    return `https://tableland.network/query?extract=true&unwrap=true&s=${encodeURIComponent(`select json_object('name','Rig #'||rig_id,'external_url','https://garage.tableland.xyz/rigs/'||rig_id,'image','ipfs://'||renders_cid||'/'||rig_id||'/'||image_full_name,'image_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_full_alpha_name,'image_medium','ipfs://'||renders_cid||'/'||rig_id||'/'||image_medium_name,'image_medium_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_medium_alpha_name,'thumb','ipfs://'||renders_cid||'/'||rig_id||'/'||image_thumb_name,'thumb_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_thumb_alpha_name,'animation_url',animation_base_url||rig_id||'.html','attributes',json_insert((select json_group_array(json_object('display_type',display_type,'trait_type',trait_type,'value',value))from rig_attributes_42161_15 where rig_id=348 group by rig_id),'$[#]',json_object('display_type','string','trait_type','Garage Status','value',coalesce((select coalesce(end_time, 'In-Flight') from pilot_sessions_1_7 where rig_id=348 and end_time is null),'Parked')))) from rig_attributes_42161_15 join lookups_42161_10 where rig_id in (${tokenIds.toString()}) group by rig_id;`)}`
+}
+
+export async function garageStatsQuery(){
+    let blkNumber = await fetch("https://rpc.ankr.com/eth", {
+        "headers": {
+          "accept": "*/*",
+          "content-type": "application/json",
+        },
+        "body": "{\"method\":\"eth_blockNumber\",\"params\":[],\"id\":42,\"jsonrpc\":\"2.0\"}",
+        "method": "POST",
+    }).then(r=>r.json());
+    blkNumber = parseInt(blkNumber['result']);
+
+    let data = await fetch("https://tableland.network/rpc", {
+        "headers": {
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.6",
+            "content-type": "application/json",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "sec-gpc": "1"
+        },
+        "referrer": "https://garage.tableland.xyz/",
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "body": JSON.stringify({
+            id: 1,
+            jsonrpc: "2.0",
+            method:  "tableland_runReadQuery",
+            params: [{
+                output: "table",
+                extract: true,
+                unwrap: true,
+                statement: `\n  SELECT\n  (\n    SELECT count(distinct(rig_id)) FROM\n    rig_attributes_42161_9\n  ) AS num_rigs,\n  (\n    SELECT count(*) FROM (\n      SELECT DISTINCT(rig_id)\n      FROM pilot_sessions_1_7\n      WHERE end_time IS NULL\n    )\n  ) AS num_rigs_in_flight,\n  (\n    SELECT count(*) FROM (\n      SELECT DISTINCT pilot_contract, pilot_id\n      FROM pilot_sessions_1_7\n    )\n  ) AS num_pilots,\n  (\n    SELECT coalesce(sum(coalesce(end_time, ${blkNumber}) - start_time), 0)\n    FROM pilot_sessions_1_7\n  ) AS total_flight_time,\n  (\n    SELECT coalesce(avg(coalesce(end_time, ${blkNumber}) - start_time), 0)\n    FROM pilot_sessions_1_7\n  ) AS avg_flight_time\n  FROM rig_attributes_42161_9\n  LIMIT 1;`
+            }]
+        }),
+        "method": "POST",
+        "mode": "cors",
+        "credentials": "omit"
+    });
+    let json = await data.json();
+    return mergeKeyValue(json['result']['data']['columns'].map(e=>e['name']), json['result']['data']['rows'][0]);
 }
 
 export async function getMetadata(tokenIds = []){
@@ -82,7 +126,9 @@ export async function getTsRanking(tokenIds = []){
           accept: 'application/json',
           'x-ts-api-key': '60a2e208-6adf-4a75-b213-f6a2ec447fba'
         }
-    }).then(e=>e.json());
+    }).then(e=>e.json()).catch(e=>{
+        return false;
+    });
     return data;
 }
 

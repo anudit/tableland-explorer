@@ -1,7 +1,7 @@
 import React from 'react';
 import { useColorMode, Text, Flex, Spinner, Button } from "@chakra-ui/react";
 import Link from 'next/link';
-import Image from 'next/future/image';
+import Image from 'next/image';
 
 const loaderProp = ({ src }) => { return src }
 

@@ -350,3 +350,11 @@ export function getImageDataURL(svgXml) {
 export function encodeSqlForUrl(sql){
     return encodeURIComponent(sql.replaceAll('%', '%25').replaceAll('*', '%2A'))
 }
+
+export function mergeKeyValue(keys, values){
+    let dict = {};
+    for (let index = 0; index < keys.length; index++) {
+        dict[keys[index]] = values[index];
+    }
+    return dict;
+}

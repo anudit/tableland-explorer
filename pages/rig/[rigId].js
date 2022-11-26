@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Tooltip, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { chakra, Box, Tooltip, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import useSWR from "swr";
 
 import NavBar from '@/components/NavbarSimple';
@@ -63,7 +63,13 @@ const UserSection = () => {
             <NavBar isLoading={isValidating} refresh={refresh} />
             <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt="50px">
                 {
-                    data ? data?.success !== false ? (
+                    data ? data?.detail ? (
+                        <Flex direction='column' alignItems='center' h="100%" w="100%" justifyContent='center'>
+                                <Text fontSize='xl' align='center'>
+                                    {data?.detail}
+                                </Text>
+                            </Flex>
+                    ) :  data?.success !== false ? (
                            <>
                                 <Flex position='relative' ref={imageRef} h="100%" w={{base: '100%', md: '50%'}} alignItems="center" justifyContent='center' background='#80808014'>
                                     <Flex direction="row" position='absolute' bottom='20px' right='20px' >
@@ -78,12 +84,29 @@ const UserSection = () => {
                                         }}/>
                                     </Flex>
 
-                                    <Image
-                                        src={data?.image_url}
-                                        width="600px"
-                                        height="auto"
-                                        shadow='dark-lg'
-                                    />
+                                    {
+                                        data?.animation_url ? (
+                                            <Box 
+                                                width={{base: "300px", sm: "400px", lg:"500px"}}
+                                                height={{base: "300px", sm: "400px", lg:"500px"}}
+                                                shadow='dark-lg'    
+                                            >
+                                                <chakra.iframe 
+                                                    src={data?.animation_url} 
+                                                    width="100%"
+                                                    height="100%"
+                                                    
+                                                />
+                                            </Box>
+                                        ) : (
+                                            <Image
+                                                src={data?.image_url}
+                                                width="600px"
+                                                height="auto"
+                                                shadow='dark-lg'
+                                            />
+                                        )
+                                    }
 
                                 </Flex>
                                 <Flex h="100%" direction='column' w={{base: '100%', md: '50%'}} justifyContent="center" alignItems='center'>
@@ -242,7 +265,7 @@ const TsRank = ({rigId, ...props}) => {
         })
     },[rigId])
 
-    if(tsData){
+    if(tsData && Boolean(tsData?.ranks) === true){
         return (
             <Tooltip label="Trait Sniper Ranking" placement='top' hasArrow>
                 <Button leftIcon={<TsIcon/>} colorScheme='purple' size="xs" variant='solid' onClick={()=>{

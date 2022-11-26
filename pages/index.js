@@ -344,11 +344,57 @@ const ChainsSection = () => {
           ))
         }
       </Flex>
+      <GarageStatsSection/>
     </Flex>
   )
 }
 
-import { getLatestRigActions } from "@/utils/rigs";
+const GarageStatsSection = () => {
+
+  const { colorMode } = useColorMode();
+  const [data, setData] = useState(false);
+
+  useEffect(()=>{
+    garageStatsQuery().then(setData);
+  }, [])
+
+  return (
+    <>
+      <br/><br/>
+      <Heading>Garage</Heading>
+      <br/>
+      <Flex top="0px" direction="column">
+        {
+          data ? Object.keys(data).map((val, ind)=>(
+            <Flex direction='column' align="left" key={ind} mb={2}>
+              <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                {toProperCase(val.replaceAll('_', " "))}
+              </Text>
+              <Text>
+                {data[val]}
+              </Text>
+            </Flex>
+          )) : [0, 1, 2, 3, 4].map(n=>(
+            <Flex direction='row' align="left" key={n} mb={2}>
+              <Flex direction='column' ml={4}>
+                <Skeleton>
+                  <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                    Name
+                  </Text>
+                </Skeleton>
+                <Skeleton>
+                  <Text>value</Text>
+                </Skeleton>
+              </Flex>
+            </Flex>
+          ))
+        }
+      </Flex>
+    </>
+  )
+}
+
+import { garageStatsQuery, getLatestRigActions } from "@/utils/rigs";
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
