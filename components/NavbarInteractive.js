@@ -11,10 +11,8 @@ import { encodeSqlForUrl } from "@/utils/stringUtils";
 const NavBar = ({refresh, isLoading, onOpen, inputValue, setInputValue, name=false}) => {
 
   const { hasCopied, onCopy } = useClipboard(inputValue);
-  const [ shareLink ] = useState(`https://tablescan.io/interactive?query=${encodeSqlForUrl(inputValue)}&name=${name || 'New Query'}`)
-  const { hasCopied: hasCopiedLink, onCopy: onCopyLink } = useClipboard(shareLink);
+  const { hasCopied: hasCopiedLink, onCopy: onCopyLink, setValue: setShareLink } = useClipboard("");
   const [sqlError, setSqlError] = useState(false);
-
 
   return (
     <Flex
@@ -49,7 +47,11 @@ const NavBar = ({refresh, isLoading, onOpen, inputValue, setInputValue, name=fal
             <IconButton onClick={onOpen} icon={<CodeIcon />} />
           </Tooltip>
           <Tooltip hasArrow label={hasCopiedLink ? "Copied" : "Copy Share Link"} placement='left'>
-            <IconButton onClick={onCopyLink} icon={hasCopiedLink ? <CheckIcon /> : <LinkIcon />} />
+            <IconButton onClick={()=>{
+              const li = `https://tablescan.io/interactive?query=${encodeSqlForUrl(inputValue)}&name=${name || 'New Query'}`;
+              setShareLink(li);
+              onCopyLink();
+            }} icon={hasCopiedLink ? <CheckIcon /> : <LinkIcon />} />
           </Tooltip>
         </ButtonGroup>
       </Flex>

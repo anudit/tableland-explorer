@@ -2,6 +2,7 @@ import React from "react";
 import { Code, Flex, Text, useClipboard } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { nameToExplorer, prettyTime, stringSize } from "@/utils/stringUtils";
+import AddressOrEns from "./AddressOrEns";
 
 const HistoryCard = ({tableName, hist, ...props}) => {
     const { hasCopied, onCopy } = useClipboard(hist?.statement);
@@ -21,8 +22,9 @@ const HistoryCard = ({tableName, hist, ...props}) => {
             <Flex direction='row' justifyContent='space-between' mb={2}>
             <Flex direction='row'>
                 <Text fontWeight='bold' fontSize='small'>
-                {hist.statement.split(' ')[0].toUpperCase()}
+                    {hist.statement.split(' ')[0].toUpperCase()} by
                 </Text>
+                <AddressOrEns address={hist.actionBy.id} ml={1} fontSize="small"/>
                 <Text fontWeight='light' fontSize='xs' >
                 &nbsp;({stringSize(hist.statement)})
                 </Text>

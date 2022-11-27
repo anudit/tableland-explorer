@@ -75,6 +75,9 @@ const TableSection = () => {
                                         id
                                         statement
                                         time
+                                        actionBy {
+                                            id
+                                        }
                                     }
                                 }
                             }
@@ -288,9 +291,11 @@ const TableSection = () => {
                     </TabPanel>
                     <TabPanel p={2} display='flex' direction="row" w="100%" overflowX='scroll'>
                         <MenuGroup title="Mode">
-                            <MenuButtonShell icon={<SqlIcon boxSize={6} onClick={()=>{
-                                router.push(`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}&name=${tableName}`)
-                            }}/>} title="SQL Mode"/>
+                            <MenuButtonShell icon={
+                                <Link href={`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}&name=${tableName}`}>
+                                    <SqlIcon boxSize={6} />
+                                </Link>
+                            } title="SQL Mode"/>
                             <MenuButtonShell
                                 icon={colorMode== 'light' ? <MoonIcon boxSize={6} /> : <SunIcon boxSize={6} />}
                                 title={colorMode== 'dark' ? "Light Mode" : "Dark Mode"}

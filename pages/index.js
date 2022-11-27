@@ -315,7 +315,7 @@ const ChainsSection = () => {
   return (
     <Flex direction="column" width={{base: '100%', md: '200px'}} position="sticky" top="50px">
       <br/><br/>
-      <Heading>Chains</Heading>
+      <Heading>Networks</Heading>
       <br/>
       <Flex top="0px" direction="column">
         {
@@ -360,35 +360,60 @@ const GarageStatsSection = () => {
 
   return (
     <>
-      <br/><br/>
+      <br/>
       <Heading>Garage</Heading>
       <br/>
       <Flex top="0px" direction="column">
-        {
-          data ? Object.keys(data).map((val, ind)=>(
-            <Flex direction='column' align="left" key={ind} mb={2}>
-              <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-                {toProperCase(val.replaceAll('_', " "))}
-              </Text>
-              <Text>
-                {data[val]}
-              </Text>
-            </Flex>
-          )) : [0, 1, 2, 3, 4].map(n=>(
-            <Flex direction='row' align="left" key={n} mb={2}>
-              <Flex direction='column' ml={4}>
-                <Skeleton>
-                  <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-                    Name
-                  </Text>
-                </Skeleton>
-                <Skeleton>
-                  <Text>value</Text>
-                </Skeleton>
-              </Flex>
-            </Flex>
-          ))
-        }
+        <Flex direction='column' align="left" key='num_rigs_in_flight' mb={2}>
+          <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+            Rigs In-flight
+          </Text>
+          <Skeleton isLoaded={Boolean(data)}>
+            <Text>
+              {parseInt(data['num_rigs_in_flight'])}
+            </Text>
+          </Skeleton>
+        </Flex>
+        <Flex direction='column' align="left" key='num_rigs_parked' mb={2}>
+          <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+            Rigs Parked
+          </Text>
+          <Skeleton isLoaded={Boolean(data)}>
+            <Text>
+              {3000-parseInt(data['num_rigs_in_flight'])}
+            </Text>
+          </Skeleton>
+        </Flex>
+        <Flex direction='column' align="left" key='num_pilots' mb={2}>
+          <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+            Number of Pilots
+          </Text>
+          <Skeleton isLoaded={Boolean(data)}>
+            <Text>
+              {parseInt(data['num_pilots'])}
+            </Text>
+          </Skeleton>
+        </Flex>
+        <Flex direction='column' align="left" key='total_flight_time' mb={2}>
+          <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+            Total Flight Time
+          </Text>
+          <Skeleton isLoaded={Boolean(data)}>
+            <Text>
+              {(parseInt(data['total_flight_time'])/(60*60*24*365)).toPrecision(2)} years
+            </Text>
+          </Skeleton>
+        </Flex>
+        <Flex direction='column' align="left" key='total_flight_time' mb={2}>
+          <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+            Avg. Flight Time
+          </Text>
+          <Skeleton isLoaded={Boolean(data)}>
+            <Text>
+              {(parseInt(data['total_flight_time'])/(60*60*parseInt(data['num_rigs_in_flight']))).toPrecision(2)} hours
+            </Text>
+          </Skeleton>
+        </Flex>
       </Flex>
     </>
   )
