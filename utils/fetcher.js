@@ -41,6 +41,7 @@ export const multifetch = async (query) => {
         fetch(networkDeets['80001'].subgraph, options),
         fetch(networkDeets['10'].subgraph, options),
         fetch(networkDeets['420'].subgraph, options),
+        fetch(networkDeets['42161'].subgraph, options),
         fetch(networkDeets['421613'].subgraph, options),
     ];
     let res = await Promise.allSettled(promiseArray);
