@@ -320,7 +320,7 @@ const ChainsSection = () => {
       <Flex top="0px" direction="column">
         {
           data ? data.map(e=>e?.data?.tables).flat().map(e=>(
-            <Flex direction='row' align="center" key={e.name} mb={2}>
+            <Flex direction='row' align="center" key={e.name} mb={1}>
               <Avatar size="sm" src={nameToAvatar(e.name)} title={nameToChainName(e.name)} />
               <Flex direction='column' ml={4}>
                   <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
@@ -330,7 +330,7 @@ const ChainsSection = () => {
               </Flex>
             </Flex>
           )) : Object.keys(networkDeets).map(n=>(
-            <Flex direction='row' align="center" key={n} mb={2}>
+            <Flex direction='row' align="center" key={n} mb={1}>
               <Avatar size="sm" src={networkDeets[n]?.avatar} title={networkDeets[n]?.name} />
               <Flex direction='column' ml={4}>
                 <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
