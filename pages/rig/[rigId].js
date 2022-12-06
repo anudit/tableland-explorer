@@ -97,7 +97,7 @@ const UserSection = ({pageData, rigId}) => {
                             </Flex>
                             <Flex direction='row' mr={4}>
                                 {
-                                    Boolean(pageData.token.lastBuy) && (
+                                    Boolean(pageData.token.lastBuy.value) && (
                                         <Flex direction='row' alignItems="center">
                                             <EthIcon boxSize={8} />
                                             <Flex direction='column'>

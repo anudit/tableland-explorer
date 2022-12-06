@@ -1,4 +1,4 @@
-import { mergeKeyValue } from "./stringUtils";
+import { mergeKeyValue, sleep } from "./stringUtils";
 
 export function constructTokenURIQuery(tokenIds = []){
     return `https://tableland.network/query?extract=true&unwrap=true&s=${encodeURIComponent(`select json_object('name','Rig #'||rig_id,'external_url','https://garage.tableland.xyz/rigs/'||rig_id,'image','ipfs://'||renders_cid||'/'||rig_id||'/'||image_full_name,'image_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_full_alpha_name,'image_medium','ipfs://'||renders_cid||'/'||rig_id||'/'||image_medium_name,'image_medium_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_medium_alpha_name,'thumb','ipfs://'||renders_cid||'/'||rig_id||'/'||image_thumb_name,'thumb_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_thumb_alpha_name,'animation_url',animation_base_url||rig_id||'.html','attributes',json_insert((select json_group_array(json_object('display_type',display_type,'trait_type',trait_type,'value',value))from rig_attributes_42161_15 where rig_id=348 group by rig_id),'$[#]',json_object('display_type','string','trait_type','Garage Status','value',coalesce((select coalesce(end_time, 'In-Flight') from pilot_sessions_1_7 where rig_id=348 and end_time is null),'Parked')))) from rig_attributes_42161_15 join lookups_42161_10 where rig_id in (${tokenIds.toString()}) group by rig_id;`)}`
@@ -64,8 +64,21 @@ export async function getOpenData(tokenId){
 }
 
 export async function getReservoirData(tokenId){
-    let res = await fetch(`https://www.reservoir.market/api/reservoir/tokens/v5?tokens=0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d%3A${tokenId}&includeTopBid=true&includeAttributes=true&normalizeRoyalties=true`).then(response => response.json());
-    return res['tokens'][0];
+    let res = await fetch(`https://api.reservoir.tools/tokens/v5?tokens=0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d:${tokenId}&sortBy=floorAskPrice&limit=20&includeTopBid=true&includeAttributes=true&includeQuantity=true&includeDynamicPricing=true&normalizeRoyalties=true`, {
+        method: "GET",
+        headers: {
+            "x-api-key": Buffer.from('ZDk3YjU4NGUtMjNlYS01ZjQ1LWFiMDEtNzdmM2UwMGQ3YTUw', 'base64')
+        }
+    });
+    
+    if (res.status === 200) {
+        res = await res.json()
+        return res['tokens'][0];
+    }
+    else {
+        await sleep(5000);
+        return await getReservoirData(tokenId);
+    }
 }
 
 export async function getOpenStats(){

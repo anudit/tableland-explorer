@@ -60,6 +60,8 @@ export const randomId = (length = 20) => {
     return result;
 }
 
+export const sleep = ms => new Promise(r => setTimeout(r, ms));
+
 export const prettyTime = (timestamp) => {
 
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
