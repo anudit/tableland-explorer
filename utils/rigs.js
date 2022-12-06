@@ -63,6 +63,11 @@ export async function getOpenData(tokenId){
     return res;
 }
 
+export async function getReservoirData(tokenId){
+    let res = await fetch(`https://www.reservoir.market/api/reservoir/tokens/v5?tokens=0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d%3A${tokenId}&includeTopBid=true&includeAttributes=true&normalizeRoyalties=true`).then(response => response.json());
+    return res['tokens'][0];
+}
+
 export async function getOpenStats(){
 
     const options = {method: 'GET', headers: {'X-API-KEY': Buffer.from('OTYwNDFlMWQxZDRiNGYyZmJlMjZiZDdkZTFiZjcxODU=', 'base64')}};
