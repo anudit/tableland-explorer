@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { chakra, Box, Tooltip, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Wrap, WrapItem } from "@chakra-ui/react";
 
 import NavBar from '@/components/NavbarSimple';
 import Meta from '@/components/Meta';
-import { EtherscanIcon, EthIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, ShareIcon, TsIcon } from '@/public/icons';
-import { constructTokenURIQuery, getReservoirData, getTsRanking } from '@/utils/rigs';
+import { EtherscanIcon, EthIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, ShareIcon } from '@/public/icons';
+import { constructTokenURIQuery, getReservoirData } from '@/utils/rigs';
 import AddressOrEns from '@/components/AddressOrEns';
 import EnsAvatar from '@/components/EnsAvatar';
-import { ArrowBackIcon } from '@chakra-ui/icons';
-import { ArrowForwardIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, ArrowForwardIcon, WarningIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
+import { cleanDecimals } from '@/utils/stringUtils';
 
 export async function getStaticPaths() {
 
@@ -44,7 +44,7 @@ const UserSection = ({pageData, rigId}) => {
 
     return (
         <>
-            <Meta title={`Rig ${rigId} - Tablescan`} url={`https://bafybeib3bbctx2gpuzicibprsa3h3zbusogxplccnlgbtmargfnh7bcria.ipfs.dweb.link/${rigId}/thumb.png`}/>
+            <Meta title={`Rig #${rigId} - Tablescan`} url={`https://bafybeib3bbctx2gpuzicibprsa3h3zbusogxplccnlgbtmargfnh7bcria.ipfs.dweb.link/${rigId}/thumb.png`}/>
             <NavBar />
             <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt="50px">
                 <Flex position='relative' ref={imageRef} h="100%" w={{base: '100%', md: '50%'}} alignItems="center" justifyContent='center' background='#80808014'>
@@ -67,15 +67,19 @@ const UserSection = ({pageData, rigId}) => {
                         <chakra.iframe 
                             src={`https://rigs.tableland.xyz/${rigId}.html`} 
                             width="100%"
-                            height="100%" 
+                            height="100%"
                         />
                     </Box>
 
                 </Flex>
                 <Flex h="100%" direction='column' w={{base: '100%', md: '50%'}} justifyContent="center" alignItems='center'>
                     <Flex direction='column' p={8} w={{base: '100%', md: '90%'}}>
+                        <Flex border="1px" borderRadius='5px' width="fit-content" px="8px" py="4px" borderColor={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'} mb={1}>
+                            <Text fontSize="xs" mr={1} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>Rarity Rank</Text>
+                            <Text fontSize="xs"> {pageData.token.rarityRank} / 3000 ({cleanDecimals(pageData.token.rarityRank/ 30)}%)</Text>
+                        </Flex>
                         <Heading mb={{base: 4, md: 4}} size="3xl" mt={{base: 4, md: 0}} display="flex" alignItems='center'>
-                            Rig #{rigId} <TsRank rigId={rigId} ml={6} />
+                            Rig #{rigId} {pageData.token.isFlagged && <Tooltip label="This Item is reported suspicious and not tradable on OpenSea" placement='top-start' hasArrow backgroundColor='red.500'><WarningIcon color="red.500" boxSize={8} ml={4}/></Tooltip>}
                         </Heading>
                         <Flex direction={{base:'column', lg: 'row'}} align="left" my={4}>
                             <Flex direction='row' mr={4} alignItems="center" mb={{base:4, lg:0}}>
@@ -92,13 +96,12 @@ const UserSection = ({pageData, rigId}) => {
                                             ml={2}
                                         />
                                     </Link>
-
                                 </Flex>
                             </Flex>
                             <Flex direction='row' mr={4}>
                                 {
                                     Boolean(pageData.token.lastBuy.value) && (
-                                        <Flex direction='row' alignItems="center">
+                                        <Flex direction='row' alignItems="center" mr={{base: 8, md: 4}}>
                                             <EthIcon boxSize={8} />
                                             <Flex direction='column'>
                                                 <Text ml={2} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
@@ -113,20 +116,22 @@ const UserSection = ({pageData, rigId}) => {
                                 }
                                 {
                                     Boolean(pageData.market.topBid?.id) && (
-                                        <Flex direction='row' alignItems="center" ml={{base: 8, md: 4}}>
-                                            <Image src={pageData.market.topBid.source.icon} height={8} width={8} title={pageData.market.topBid.source.name} />
-                                            <Flex direction='column'>
-                                                <Text ml={2} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-                                                    Highest Offer
-                                                </Text>
-                                                <Text ml={2} fontWeight={400} size={{base: 'sm', md: 'md'}}>
-                                                    {pageData.market.topBid.price.amount.native}
-                                                    {" " + pageData.market.topBid.price.currency.symbol}
-                                                    {" "}
-                                                    (${parseFloat(pageData.market.topBid.price.amount.usd).toFixed(2)})
-                                                </Text>
+                                        <Link href={pageData.market.topBid.source.url} target="_blank">
+                                            <Flex direction='row' alignItems="center">
+                                                <Image src={pageData.market.topBid.source.icon} height={8} width={8} title={pageData.market.topBid.source.name} />
+                                                <Flex direction='column'>
+                                                    <Text ml={2} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                                        Highest Offer
+                                                    </Text>
+                                                    <Text ml={2} fontWeight={400} size={{base: 'sm', md: 'md'}}>
+                                                        {pageData.market.topBid.price.amount.native}
+                                                        {" " + pageData.market.topBid.price.currency.symbol}
+                                                        {" "}
+                                                        (${cleanDecimals(pageData.market.topBid.price.amount.usd)})
+                                                    </Text>
+                                                </Flex>
                                             </Flex>
-                                        </Flex>
+                                        </Link>
                                     )
                                 }
                             </Flex>
@@ -147,7 +152,7 @@ const UserSection = ({pageData, rigId}) => {
                                             {e?.key}
                                         </Text>
                                         <Text fontSize='sm' fontWeight={600}>{e?.value}</Text>
-                                        <Text fontSize='x-small' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>{e?.tokenCount} ({(e?.tokenCount/3000).toFixed(2)}%)</Text>
+                                        <Text title="Other rigs also have this trait." fontSize='x-small' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>{e?.tokenCount} ({cleanDecimals(e?.tokenCount/30)}%)</Text>
                                     </Flex>
                                 </WrapItem>
                                 )
@@ -190,30 +195,30 @@ const UserSection = ({pageData, rigId}) => {
 export default UserSection;
 
 
-const TsRank = ({rigId, ...props}) => {
-    const [tsData, setTsData] = useState(false);
+// const TsRank = ({rigId, ...props}) => {
+//     const [tsData, setTsData] = useState(false);
 
-    useEffect(()=>{
-        if (rigId) getTsRanking([rigId]).then(setTsData).catch((e)=>{
-            console.log(e);
-        })
-    },[rigId])
+//     useEffect(()=>{
+//         if (rigId) getTsRanking([rigId]).then(setTsData).catch((e)=>{
+//             console.log(e);
+//         })
+//     },[rigId])
 
-    if(tsData && Boolean(tsData?.ranks) === true){
-        return (
-            <Tooltip label="Trait Sniper Ranking" placement='top' hasArrow>
-                <Button leftIcon={<TsIcon/>} colorScheme='purple' size="xs" variant='solid' onClick={()=>{
-                    window.open(`https://app.traitsniper.com/tableland-rigs?view=${rigId}`, '_blank')
-                }} {...props}>
-                    #{tsData?.ranks[0]?.rarity_rank}
-                </Button>
-            </Tooltip>
-        )
-    }
-    else {
-        return (<></>)
-    }
-}
+//     if(tsData && Boolean(tsData?.ranks) === true){
+//         return (
+//             <Tooltip label="Trait Sniper Ranking" placement='top' hasArrow>
+//                 <Button leftIcon={<TsIcon/>} colorScheme='purple' size="xs" variant='solid' onClick={()=>{
+//                     window.open(`https://app.traitsniper.com/tableland-rigs?view=${rigId}`, '_blank')
+//                 }} {...props}>
+//                     #{tsData?.ranks[0]?.rarity_rank}
+//                 </Button>
+//             </Tooltip>
+//         )
+//     }
+//     else {
+//         return (<></>)
+//     }
+// }
 
 // const ProvSection = ({rigId}) => {
 //     const [prov, setProv] = useState(false);

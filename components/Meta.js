@@ -4,7 +4,7 @@ import Head from 'next/head';
 const Meta = ({url, title}) => {
     return(
         <Head>
-            <title>Tablescan</title>
+            <title>{title || "Tablescan"}</title>
             <meta name="title" content={title || "Tablescan"} />
             <meta name="description" content="An explorer for Tableland Network." />
             <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

@@ -97,6 +97,7 @@ export const prettifyNumber = (num, digits=2) => {
     return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
 }
 
+export const cleanDecimals = (num) => new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(num);
 
 export const toProperCase = (inp) => {
     return inp.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
