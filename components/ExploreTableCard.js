@@ -4,7 +4,6 @@ import timeAgo, { nameToAvatar, nameToChainName, parseTableData, toProperCase } 
 import Link from 'next/link';
 import AddressOrEns from './AddressOrEns';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
-import { useRouter } from 'next/router';
 import Image from 'next/image';
 import EnsAvatar from './EnsAvatar';
 
@@ -13,7 +12,6 @@ const loaderProp = ({ src }) => { return src }
 const TableCard = ({tableName, infoClick, table, ...props}) => {
 
     const { colorMode } = useColorMode()
-    const router = useRouter();
 
     if (tableName){
         let {chainId, tableId} = parseTableData(tableName);
@@ -40,16 +38,13 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                                 tooltip={false}
                                 cursor="pointer"
                                 mb='-1'
-                                onClick={()=>{
-                                    router.push(`/address/${table.owner.id}`)
-                                }}
                             />
                             <Text ml={4}  fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                 Created {timeAgo(table.created)}
                             </Text>
                         </Flex>
                     </Flex>
-                    <IconButton icon={<InfoOutlineIcon />} onClick={infoClick} variant='ghost' borderRadius='100%'/>
+                    <IconButton icon={<InfoOutlineIcon />} onClick={infoClick} variant='solid' borderRadius='100%'/>
                 </Flex>
                 <Flex alignItems='center' h="100%">
                     <Image
@@ -75,7 +70,17 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                         <Text size='sm'  ml={2} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>#{tableId}</Text>
                     </Flex>
                     <Link href={`/${tableName}`}>
-                        <Button size='sm' borderRadius="100px" colorScheme='blue'>Explore Table</Button>
+                        <Button 
+                            size='sm' 
+                            borderRadius="100px" 
+                            color={colorMode === 'light' ? 'white' : 'black'}
+                            backgroundColor={colorMode === 'light' ? 'black' : 'white'}
+                            _hover={{
+                                backgroundColor: colorMode === 'light' ? 'black' : 'white'
+                            }}
+                        >
+                                Explore Table
+                        </Button>
                     </Link>
                 </Flex>
             </Flex>

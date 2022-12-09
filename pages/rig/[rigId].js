@@ -60,14 +60,16 @@ const UserSection = ({pageData, rigId}) => {
                         }}/>
                     </Flex>
                     <Box 
-                        width={{base: "300px", sm: "400px", lg:"500px"}}
-                        height={{base: "300px", sm: "400px", lg:"500px"}}
+                        width={{base: "300px", sm: "400px", md: "500px", lg:"600px"}}
+                        height={{base: "300px", sm: "400px", md: "500px", lg:"600px"}}
                         shadow='dark-lg'    
                     >
                         <chakra.iframe 
                             src={`https://rigs.tableland.xyz/${rigId}.html`} 
                             width="100%"
                             height="100%"
+                            scrolling="no"
+                            allowtransparency="true"
                         />
                     </Box>
 
@@ -88,14 +90,12 @@ const UserSection = ({pageData, rigId}) => {
                                     <Text ml={2} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                         Owner
                                     </Text>
-                                    <Link href={`/address/${pageData.token.owner}`}>
-                                        <AddressOrEns
-                                            address={pageData.token.owner}
-                                            tooltip={false}
-                                            cursor="pointer"
-                                            ml={2}
-                                        />
-                                    </Link>
+                                    <AddressOrEns
+                                        address={pageData.token.owner}
+                                        tooltip={false}
+                                        cursor="pointer"
+                                        ml={2}
+                                    />
                                 </Flex>
                             </Flex>
                             <Flex direction='row' mr={4}>
@@ -152,7 +152,7 @@ const UserSection = ({pageData, rigId}) => {
                                             {e?.key}
                                         </Text>
                                         <Text fontSize='sm' fontWeight={600}>{e?.value}</Text>
-                                        <Text title="Other rigs also have this trait." fontSize='x-small' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>{e?.tokenCount} ({cleanDecimals(e?.tokenCount/30)}%)</Text>
+                                        <Text title={`${e?.tokenCount} Other rigs also have this trait`} fontSize='x-small' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>{e?.tokenCount} ({cleanDecimals(e?.tokenCount/30)}%)</Text>
                                     </Flex>
                                 </WrapItem>
                                 )

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
-import { Stack, Skeleton, Heading, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
+import { SimpleGrid, Stack, Skeleton, Heading, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
 import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
 import {
   AutoComplete,
@@ -363,8 +363,8 @@ const GarageStatsSection = () => {
       <br/>
       <Heading>Garage</Heading>
       <br/>
-      <Flex top="0px" direction="column">
-        <Flex direction='column' align="left" key='num_rigs_in_flight' mb={2}>
+      <SimpleGrid columns={2} spacingX='40px' spacingY='10px' top="0px" direction="column">
+        <Flex direction='column' align="left" key='num_rigs_in_flight' mb={2} w="120px">
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Rigs In-flight
           </Text>
@@ -374,7 +374,7 @@ const GarageStatsSection = () => {
             </Text>
           </Skeleton>
         </Flex>
-        <Flex direction='column' align="left" key='num_rigs_parked' mb={2}>
+        <Flex direction='column' align="left" key='num_rigs_parked' mb={2} w="120px">
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Rigs Parked
           </Text>
@@ -384,17 +384,7 @@ const GarageStatsSection = () => {
             </Text>
           </Skeleton>
         </Flex>
-        <Flex direction='column' align="left" key='num_pilots' mb={2}>
-          <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-            Number of Pilots
-          </Text>
-          <Skeleton isLoaded={Boolean(data)}>
-            <Text>
-              {parseInt(data['num_pilots'])}
-            </Text>
-          </Skeleton>
-        </Flex>
-        <Flex direction='column' align="left" key='total_flight_time' mb={2}>
+        <Flex direction='column' align="left" key='total_flight_time' mb={2} w="120px">
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Total Flight Time
           </Text>
@@ -404,17 +394,27 @@ const GarageStatsSection = () => {
             </Text>
           </Skeleton>
         </Flex>
-        <Flex direction='column' align="left" key='total_flight_time' mb={2}>
+        <Flex direction='column' align="left" key='total_flight_time' mb={2} w="120px">
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Avg. Flight Time
           </Text>
           <Skeleton isLoaded={Boolean(data)}>
             <Text>
-              {(parseInt(data['total_flight_time'])/(60*60*parseInt(data['num_rigs_in_flight']))).toPrecision(2)} hours
+              {(parseInt(data['total_flight_time'])/(60*60*24*parseInt(data['num_rigs_in_flight']))).toPrecision(2)} days
             </Text>
           </Skeleton>
         </Flex>
-      </Flex>
+        <Flex direction='column' align="left" key='num_pilots' mb={2} w="120px">
+          <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+            Number of Pilots
+          </Text>
+          <Skeleton isLoaded={Boolean(data)}>
+            <Text>
+              {parseInt(data['num_pilots'])}
+            </Text>
+          </Skeleton>
+        </Flex>
+      </SimpleGrid>
     </>
   )
 }

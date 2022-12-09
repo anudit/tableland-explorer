@@ -3,6 +3,7 @@ import { truncateAddress } from '@/utils/stringUtils';
 import { useClipboard, Tooltip, Text } from '@chakra-ui/react';
 import { EnsCacheContext } from '@/contexts/EnsCache';
 import { isAddress } from 'ethers/lib/utils';
+import Link from 'next/link';
 
 const AddressOrEns = ({address, tooltip, ...props}) => {
 
@@ -20,16 +21,22 @@ const AddressOrEns = ({address, tooltip, ...props}) => {
     if(tooltip){
         return(
             <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Address"} placement='bottom'>
-                <Text fontFamily='monospace' fontSize='md' fontWeight={100} title={address} onClick={onCopy} cursor="pointer" ml="4" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
-                    { ens || truncateAddress(address) }
-                </Text>
+                <Link href={`/address/${address}`}>
+                    <Text fontFamily='monospace' fontSize='md' fontWeight={100} title={address} onClick={onCopy} cursor="pointer" ml="4" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
+                        { ens || truncateAddress(address) }
+                    </Text>
+                </Link>
             </Tooltip>
         )
     }
     else {
-        return (<Text fontFamily='monospace' fontSize='md' fontWeight={100} title={address} cursor="pointer" ml="4" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
-            { ens || truncateAddress(address) }
-        </Text>)
+        return (
+            <Link href={`/address/${address}`}>
+                <Text fontFamily='monospace' fontSize='md' fontWeight={100} title={address} cursor="pointer" ml="4" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
+                    { ens || truncateAddress(address) }
+                </Text>
+            </Link>
+        )
     }
 }
 

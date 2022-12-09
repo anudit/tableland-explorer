@@ -3,16 +3,13 @@ import { Stack, Skeleton, useColorMode, Avatar, Flex, Text, IconButton } from "@
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { prettyTime } from "@/utils/stringUtils";
 import AddressOrEns from "./AddressOrEns";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import EnsAvatar from "./EnsAvatar";
 import { OpenseaIcon2 } from "@/public/icons";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 
-
 const RigAction = ({data, ...props}) => {
     const { colorMode } = useColorMode();
-    const router = useRouter();
 
     if (data?.type == 'sale'){
         return (
@@ -54,9 +51,7 @@ const RigAction = ({data, ...props}) => {
                             <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                 Seller
                             </Text>
-                            <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={data?.seller_address} tooltip={false} onClick={()=>{
-                                router.push(`/address/${data?.seller_address}`)
-                            }}/>
+                            <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={data?.seller_address} tooltip={false}/>
                         </Flex>
                         <ArrowForwardIcon />
                         <EnsAvatar ml={2} address={data?.buyer_address} />
@@ -64,9 +59,7 @@ const RigAction = ({data, ...props}) => {
                             <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                 Buyer
                             </Text>
-                            <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={data?.buyer_address} tooltip={false} onClick={()=>{
-                                router.push(`/address/${data?.buyer_address}`)
-                            }}/>
+                            <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={data?.buyer_address} tooltip={false}/>
                         </Flex>
 
                     </Flex>
@@ -96,9 +89,7 @@ const RigAction = ({data, ...props}) => {
                 <Flex direction="row" alignItems='center' justifyContent='space-between'>
                     <Flex w="100%" alignItems='center'>
                         <EnsAvatar address={data?.lister_address} />
-                        <AddressOrEns ml={2} mr={2} address={data?.lister_address} tooltip={false} onClick={()=>{
-                            router.push(`/address/${data?.lister_address}`)
-                        }}/>
+                        <AddressOrEns ml={2} mr={2} address={data?.lister_address} tooltip={false}/>
                         <Text>on</Text>
                         {data?.marketplace === 'opensea' && (
                             <Avatar
@@ -138,9 +129,7 @@ const RigAction = ({data, ...props}) => {
                 <Flex direction="row" alignItems='center' justifyContent='space-between'>
                     <Flex w="100%" alignItems='center'>
                         <EnsAvatar address={data?.owner_address} />
-                        <AddressOrEns ml={2} mr={2} address={data?.owner_address} tooltip={false} onClick={()=>{
-                            router.push(`/address/${data?.owner_address}`)
-                        }}/>
+                        <AddressOrEns ml={2} mr={2} address={data?.owner_address} tooltip={false}/>
                     </Flex>
                     <IconButton variant='ghost' icon={<ExternalLinkIcon/>} onClick={()=>{
                         window.open(`https://etherscan.io/tx/${data?.transaction_hash}`, '_blank')
@@ -172,9 +161,7 @@ const RigAction = ({data, ...props}) => {
                             <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                 Sender
                             </Text>
-                            <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={data?.transfer_from} tooltip={false} onClick={()=>{
-                                router.push(`/address/${data?.transfer_from}`)
-                            }}/>
+                            <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={data?.transfer_from} tooltip={false}/>
                         </Flex>
                         <ArrowForwardIcon />
                         <EnsAvatar ml={2} address={data?.transfer_to} />
@@ -182,9 +169,7 @@ const RigAction = ({data, ...props}) => {
                             <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                 Receiver
                             </Text>
-                            <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={data?.transfer_to} tooltip={false} onClick={()=>{
-                                router.push(`/address/${data?.transfer_to}`)
-                            }}/>
+                            <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={data?.transfer_to} tooltip={false}/>
                         </Flex>
 
                     </Flex>

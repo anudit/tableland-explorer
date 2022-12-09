@@ -18,11 +18,9 @@ import {
 } from '@chakra-ui/react';
 import AddressOrEns from './AddressOrEns';
 import EnsAvatar from './EnsAvatar';
-import { useRouter } from 'next/router';
 
 const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
     const { colorMode } = useColorMode();
-    const router = useRouter();
 
     return(
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -66,9 +64,7 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                                         <Text fontSize='xs' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                             View tables by Owner
                                         </Text>
-                                        <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={tableMetadata?.owner?.id} tooltip={false} onClick={()=>{
-                                            router.push(`/address/${tableMetadata?.owner?.id}`)
-                                        }}/>
+                                        <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={tableMetadata?.owner?.id} tooltip={false}/>
                                     </Flex>
                                 </Flex>
                             </StatNumber>
@@ -87,9 +83,7 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                                         <Text fontSize='xs' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                                             View tables by Controller
                                         </Text>
-                                        <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={tableMetadata?.controller?.id} tooltip={false} onClick={()=>{
-                                            router.push(`/address/${tableMetadata?.controller?.id}`)
-                                        }}/>
+                                        <AddressOrEns ml={0} mt="-4px" size={{base: 'xs', md: 'sm'}} address={tableMetadata?.controller?.id} tooltip={false}/>
                                     </Flex>
                                 </Flex>
                             </StatNumber>
@@ -109,29 +103,29 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                 <br/><br/>
 
                 <Flex direction='row' justifyContent='space-between'>
-                    <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' onClick={()=>{
-                        window.open(tableMetadata?.tokenURI, '_blank')
-                    }} _hover={{'textDecoration': 'underline'}}>
-                        Token URI <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
-                    </Text>
+                    <Link href={tableMetadata?.tokenURI} target="_blank">
+                        <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' _hover={{'textDecoration': 'underline'}}>
+                            Token URI <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
+                        </Text>
+                    </Link>
 
-                    <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' onClick={()=>{
-                        window.open(`https://render.tableland.xyz/${parseTableData(tableMetadata?.name).chainId}/${parseTableData(tableMetadata?.name)?.tableId}`, '_blank')
-                    }} _hover={{'textDecoration': 'underline'}}>
-                        Image Link <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
-                    </Text>
+                    <Link href={`https://render.tableland.xyz/${parseTableData(tableMetadata?.name).chainId}/${parseTableData(tableMetadata?.name)?.tableId}`} target="_blank">
+                        <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' _hover={{'textDecoration': 'underline'}}>
+                            Image Link <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
+                        </Text>
+                    </Link>
 
-                    <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' onClick={()=>{
-                        window.open(`${nameToExplorer(tableMetadata?.name)}/tx/`+tableMetadata?.txnHash, '_blank')
-                    }} _hover={{'textDecoration': 'underline'}}>
-                        Creation Txn <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
-                    </Text>
+                    <Link href={`${nameToExplorer(tableMetadata?.name)}/tx/`+tableMetadata?.txnHash} target="_blank">
+                        <Text cursor="pointer" fontWeight={'medium'} fontSize='sm'_hover={{'textDecoration': 'underline'}}>
+                            Creation Txn <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
+                        </Text>
+                    </Link>
 
-                    <Text cursor="pointer" fontWeight={'medium'} fontSize='sm' onClick={()=>{
-                        window.open(`https://testnet.tableland.network/query?mode=json&s=select%20*%20from%20${tableMetadata?.name}`, '_blank')
-                    }} _hover={{'textDecoration': 'underline'}}>
-                        Raw <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
-                    </Text>
+                    <Link href={`https://testnet.tableland.network/query?mode=json&s=select%20*%20from%20${tableMetadata?.name}`} target="_blank">
+                        <Text cursor="pointer" fontWeight={'medium'} fontSize='sm'_hover={{'textDecoration': 'underline'}}>
+                            Raw <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
+                        </Text>
+                    </Link>
                 </Flex>
 
                 <br/>
