@@ -1,11 +1,11 @@
 import React from "react";
-import { useColorModeValue, useColorMode, Flex, IconButton, ButtonGroup } from "@chakra-ui/react";
+import { Tooltip, Spinner, useColorModeValue, useColorMode, Flex, IconButton, ButtonGroup } from "@chakra-ui/react";
 import Link from "next/link";
 import { TablelandSmallIcon } from "@/public/icons";
-import { MoonIcon } from "@chakra-ui/icons";
+import { RepeatIcon, MoonIcon } from "@chakra-ui/icons";
 import { SunIcon } from "@chakra-ui/icons";
 
-const NavBar = () => {
+const NavBar = ({refresh, isLoading}) => {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
     <Flex
@@ -28,6 +28,9 @@ const NavBar = () => {
         </Link>
       </Flex>
       <Flex direction="row" justify="right" alignItems='center' w={{base: "fit-content", md:"33.33%"}} align='right'>
+        <Tooltip hasArrow label={isLoading ? "Refreshing Data" : "Refresh Data"} placement='left'>
+          <IconButton variant="ghost" onClick={refresh} icon={isLoading ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isLoading}/>
+        </Tooltip>
         <ButtonGroup size='sm' isAttached variant='ghost'>
           <IconButton onClick={toggleColorMode}  icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} />
         </ButtonGroup>

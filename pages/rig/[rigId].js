@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { chakra, Box, Tooltip, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Wrap, WrapItem } from "@chakra-ui/react";
 
 import NavBar from '@/components/NavbarSimple';
@@ -10,6 +10,7 @@ import EnsAvatar from '@/components/EnsAvatar';
 import { ArrowBackIcon, ArrowForwardIcon, WarningIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { cleanDecimals } from '@/utils/stringUtils';
+import useSWR from 'swr';
 
 export async function getStaticPaths() {
 
@@ -37,15 +38,26 @@ export async function getStaticProps(context) {
     }
 }
 
-const UserSection = ({pageData, rigId}) => {
+const UserSection = ({pageData: propsData, rigId}) => {
 
     const {colorMode} = useColorMode();
     const imageRef = useRef();
+    const { data: pageData, mutate, isValidating } = useSWR(rigId, getReservoirData, {
+        fallbackData: propsData,
+    });
+    const [refreshing, setRefreshing] = useState(false);
+
+    async function refresh(){
+        setRefreshing(true);
+        let data = await getReservoirData(rigId, true);
+        mutate(data);
+        setRefreshing(false);
+    }
 
     return (
         <>
             <Meta title={`Rig #${rigId} - Tablescan`} url={`https://tableland.mypinata.cloud/ipfs/bafybeidpnfh2zc6esvou3kfhhvxmy2qrmngrqczj7adnuygjsh3ulrrfeu/${rigId}/image_thumb.png`}/>
-            <NavBar />
+            <NavBar refresh={refresh} isLoading={refreshing || isValidating}/>
             <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt="50px">
                 <Flex position='relative' ref={imageRef} h="100%" w={{base: '100%', md: '50%'}} alignItems="center" justifyContent='center' background='#80808014'>
                     <Flex direction="row" position='absolute' bottom='20px' right='20px' >
