@@ -24,7 +24,7 @@ const RigCard = ({id, ...props}) => {
             >
                 <Flex alignItems='center' h="100%">
                     <Image
-                        src={`https://bafybeib3bbctx2gpuzicibprsa3h3zbusogxplccnlgbtmargfnh7bcria.ipfs.dweb.link/${id}/thumb.png`}
+                        src={`https://tableland.mypinata.cloud/ipfs/bafybeidpnfh2zc6esvou3kfhhvxmy2qrmngrqczj7adnuygjsh3ulrrfeu/${id}/image_thumb.png`}
                         height={600}
                         width={600}
                         style={{objectFit:'fill' }}
@@ -42,7 +42,11 @@ const RigCard = ({id, ...props}) => {
                         <Text fontSize='lg' fontWeight={600}>Rig #{id}</Text>
                     </Flex>
                     <Link href={`/rig/${id}`}>
-                        <Button size='sm' borderRadius="100px" colorScheme='blue'>View Rig</Button>
+                        <Button size='sm' borderRadius="100px" color={colorMode === 'light' ? 'white' : 'black'}
+                            backgroundColor={colorMode === 'light' ? 'black' : 'white'}
+                            _hover={{
+                                backgroundColor: colorMode === 'light' ? 'black' : 'white'
+                            }}>View Rig</Button>
                     </Link>
                 </Flex>
             </Flex>

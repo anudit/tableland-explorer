@@ -95,7 +95,7 @@ export async function getUserRigs(address){
 
 
     if (userRigs?.nfts?.length > 0){
-        let userRigsData = userRigs?.nfts?.map(e=>({...e, thumb_alpha: `https://bafybeib3bbctx2gpuzicibprsa3h3zbusogxplccnlgbtmargfnh7bcria.ipfs.dweb.link/${e.token_id}/thumb.png`}))
+        let userRigsData = userRigs?.nfts?.map(e=>({...e, thumb_alpha: `https://tableland.mypinata.cloud/ipfs/bafybeidpnfh2zc6esvou3kfhhvxmy2qrmngrqczj7adnuygjsh3ulrrfeu/${e.token_id}/image_thumb.png`}))
 
         // let userRigsData = await getMetadata(userRigs?.nfts?.map(e=>parseInt(e?.token_id)));
 
