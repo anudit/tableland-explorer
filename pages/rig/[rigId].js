@@ -11,6 +11,13 @@ import { ArrowBackIcon, ArrowForwardIcon, WarningIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { cleanDecimals } from '@/utils/stringUtils';
 import useSWR from 'swr';
+import {
+    Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionPanel,
+    AccordionIcon,
+  } from '@chakra-ui/react'
 
 export async function getStaticPaths() {
 
@@ -72,8 +79,11 @@ const UserSection = ({pageData: propsData, rigId}) => {
                         }}/>
                     </Flex>
                     <Box 
-                        width={{base: "300px", sm: "400px", md: "500px", lg:"600px"}}
-                        height={{base: "300px", sm: "400px", md: "500px", lg:"600px"}}
+                        style={{
+                            'aspectRatio': '1/1'
+                        }}
+                        width={{base: "300px", sm: "400px", md: "clamp(30em, 100%,48em)", lg:"600px"}}
+                        height={{base: "300px", sm: "400px", md: "auto", lg:"auto"}}
                         shadow='dark-lg'    
                     >
                         <chakra.iframe 
@@ -86,7 +96,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                     </Box>
 
                 </Flex>
-                <Flex h="100%" direction='column' w={{base: '100%', md: '50%'}} justifyContent="center" alignItems='center'>
+                <Flex h="auto" direction='column' w={{base: '100%', md: '50%'}} justifyContent="center" alignItems='center'>
                     <Flex direction='column' p={8} w={{base: '100%', md: '90%'}}>
                         <Flex border="1px" borderRadius='5px' width="fit-content" px="8px" py="4px" borderColor={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'} mb={1}>
                             <Text fontSize="xs" mr={1} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>Rarity Rank</Text>
@@ -148,29 +158,52 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                 }
                             </Flex>
                         </Flex>
-                        <Wrap mt={2}>
-                        {
-                            pageData.token.attributes.sort((a, b)=>String(a.key).toLowerCase().charCodeAt(0) - String(b.key).toLowerCase().charCodeAt(0)).map(e=>(
-                                <WrapItem key={e?.key}>
-                                    <Flex
-                                        direction="column"
-                                        backgroundColor='hsl(201deg 94% 60% / 11%)'
-                                        borderColor="blue.500"
-                                        borderWidth="1px"
-                                        borderRadius="10px"
-                                        p={2}
-                                    >
-                                        <Text fontSize='x-small' letterSpacing='1px'  mb={1} textTransform='uppercase' color="blue.500">
-                                            {e?.key}
-                                        </Text>
-                                        <Text fontSize='sm' fontWeight={600}>{e?.value}</Text>
-                                        <Text title={`${e?.tokenCount} Other rigs also have this trait`} fontSize='x-small' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>{e?.tokenCount} ({cleanDecimals(e?.tokenCount/30)}%)</Text>
-                                    </Flex>
-                                </WrapItem>
-                                )
-                            )
-                        }
-                        </Wrap>
+                        <Accordion defaultIndex={[0]} allowMultiple allowToggle>
+                            <AccordionItem borderRadius="10px" borderWidth="1px">
+                                <AccordionButton 
+                                    background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'} 
+                                    _hover={{
+                                        'background': colorMode === 'light' ? 'gray.300' : 'whiteAlpha.200'
+                                    }}
+                                    borderRadius="10px"
+                                    _expanded={{
+                                        'borderBottomRadius': 0
+                                    }}
+                                    py={4}
+                                    px={6}
+                                >
+                                    <Box flex='1' textAlign='left' alignItems='center' display="flex">
+                                        <MetadataIcon mr={2}/> Attributes
+                                    </Box> 
+                                    <AccordionIcon />
+                                </AccordionButton>
+                                <AccordionPanel>
+                                    <Wrap mt={2}>
+                                        {
+                                            pageData.token.attributes.sort((a, b)=>String(a.key).toLowerCase().charCodeAt(0) - String(b.key).toLowerCase().charCodeAt(0)).map(e=>(
+                                                <WrapItem key={e?.key}>
+                                                    <Flex
+                                                        direction="column"
+                                                        backgroundColor='hsl(201deg 94% 60% / 11%)'
+                                                        borderColor="blue.500"
+                                                        borderWidth="1px"
+                                                        borderRadius="10px"
+                                                        p={2}
+                                                    >
+                                                        <Text fontSize='x-small' letterSpacing='1px'  mb={1} textTransform='uppercase' color="blue.500">
+                                                            {e?.key}
+                                                        </Text>
+                                                        <Text fontSize='sm' fontWeight={600}>{e?.value}</Text>
+                                                        <Text title={`${e?.tokenCount} Other rigs also have this trait`} fontSize='x-small' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>{e?.tokenCount} ({cleanDecimals(e?.tokenCount/30)}%)</Text>
+                                                    </Flex>
+                                                </WrapItem>
+                                                )
+                                            )
+                                        }
+                                    </Wrap>
+                                </AccordionPanel>
+                            </AccordionItem>
+                        </Accordion>
                         <br/>
                         <Flex direction="row" alignItems='flex-start'>
                             <Button variant='ghost' leftIcon={<OpenseaIcon />} mb={1} w="fit-content"  onClick={()=>{

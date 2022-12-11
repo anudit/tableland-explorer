@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Input, ButtonGroup, Tooltip, IconButton, Link, useColorMode, Box, Tag, Button, Text, useDisclosure, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Input, ButtonGroup, Tooltip, IconButton, useColorMode, Box, Tag, Button, Text, useDisclosure, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import Link from 'next/link';
 import useSWR from "swr";
 
 import { multifetch } from '@/utils/fetcher';
@@ -252,11 +253,11 @@ const UserSection = () => {
                                                 You seem to have found a land with no Tables. <br/>Learn how to Create one on Tableland Docs.
                                             </Text>
                                             <br/>
-                                            <Button variant="ghost" leftIcon={<TablelandSmallIcon/>} rightIcon={<ExternalLinkIcon />} onClick={()=>{
-                                                window.open('https://docs.tableland.xyz/build-a-dynamic-nft-in-solidity', '_blank');
-                                            }}>
-                                                Tableland Docs
-                                            </Button>
+                                            <Link href='https://docs.tableland.xyz/build-a-dynamic-nft-in-solidity' target="_blank">
+                                                <Button variant="ghost" leftIcon={<TablelandSmallIcon/>} rightIcon={<ExternalLinkIcon />}>
+                                                    Tableland Docs
+                                                </Button>
+                                            </Link>
                                         </Flex>
                                     )
                                 : (
@@ -304,11 +305,11 @@ const UserSection = () => {
                                         Rigs is a generative collection built from 1,074 handcrafted works of art for the builders and creatives of cyberspace. Rigs are built on the Tableland protocol, a decentralized read, write, and own database for relational, composable data — powered by smart contracts and SQL on EVM chains like Ethereum. Rigs are your ticket to rewards for builders, creatives, ambassadors, and believers in Tableland.
                                         </Text>
                                         <br/>
-                                        <Button variant="ghost" leftIcon={<OpenseaIcon />} rightIcon={<ExternalLinkIcon />} onClick={()=>{
-                                            window.open('https://opensea.io/collection/tableland-rigs', '_blank');
-                                        }}>
-                                            Get on Opensea
-                                        </Button>
+                                        <Link href="https://opensea.io/collection/tableland-rigs" target="_blank">
+                                            <Button variant="ghost" leftIcon={<OpenseaIcon />} rightIcon={<ExternalLinkIcon />}>
+                                                Get on Opensea
+                                            </Button>
+                                        </Link>
                                     </Flex>
                                 ) : (
                                     <Flex w="100%" h="100vh" justifyContent='center' alignItems='center'>
