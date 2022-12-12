@@ -52,6 +52,32 @@ export async function getMetadata(tokenIds = []){
     return data;
 }
 
+export async function getFlightData(tokenId = 1){
+    let query = `SELECT
+        json_group_array(json_object(
+            'contract', pilot_contract,
+            'tokenId', cast(pilot_id as text),
+            'owner', owner,
+            'startTime', start_time,
+            'endTime', end_time
+        ))
+    FROM pilot_sessions_1_7
+    WHERE rig_id = ${tokenId}`;
+
+    let resp = await fetch(`https://tableland.network/query?extract=true&unwrap=true&s=${encodeURIComponent(query)}`).then(r=>r.json());
+
+    let metReq = resp.filter(e=>e.contract!=null).map(e=>{
+        return {
+            'contractAddress':e.contract,
+            'tokenId': e.tokenId,
+            'tokenType': "ERC721",
+        }
+    })
+
+    let nftMetadatas = await getNFTMetadataBatch(metReq);
+    return {flightData: resp, nftMetadatas};
+}
+
 export async function getOpenData(tokenId){
 
     const options = {method: 'GET', headers: {'X-API-KEY': Buffer.from('OTYwNDFlMWQxZDRiNGYyZmJlMjZiZDdkZTFiZjcxODU=', 'base64')}};
@@ -72,7 +98,7 @@ export async function getReservoirData(tokenId, metadataRefresh=false){
     });
 
     if (metadataRefresh === true){
-        let ref = await fetch("https://api.reservoir.tools/tokens/refresh/v1", {
+        await fetch("https://api.reservoir.tools/tokens/refresh/v1", {
             "headers": {
                 "accept": "*/*",
                 "accept-language": "en-US,en;q=0.6",
@@ -129,9 +155,30 @@ export async function getUserRigs(address){
 }
 
 export async function getRigOwner(tokenId){
-    let owner = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v2/demo/getOwnersForToken?contractAddress=0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d&tokenId=${tokenId}`).then(e=>e.json());
+    let owner = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v2/jz1AlVEXLDxlzNMcKDg9To03aBnOssyH/getOwnersForToken?contractAddress=0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d&tokenId=${tokenId}`).then(e=>e.json());
     let ret = owner?.owners[0];
     return ret;
+}
+
+export async function getNFTMetadataBatch(tokens){
+    if (tokens.length >= 1){
+
+        console.log('tokens', tokens);
+        let data = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v2/jz1AlVEXLDxlzNMcKDg9To03aBnOssyH/getNFTMetadataBatch`, {
+            method: "POST",
+            body: JSON.stringify({
+                tokens
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        let resp = await data.json();
+        return resp;
+    }
+    else {
+        return [];
+    }
 }
 
 export async function getRigTxns(tokenId){

@@ -1,15 +1,15 @@
 import React, { useState, useRef } from 'react';
-import { chakra, Box, Tooltip, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Wrap, WrapItem } from "@chakra-ui/react";
+import { Avatar, chakra, Box, Tooltip, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Wrap, WrapItem } from "@chakra-ui/react";
 
 import NavBar from '@/components/NavbarSimple';
 import Meta from '@/components/Meta';
-import { EtherscanIcon, EthIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, ShareIcon } from '@/public/icons';
-import { constructTokenURIQuery, getReservoirData } from '@/utils/rigs';
+import { EtherscanIcon, EthIcon, FlightLogIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, ShareIcon } from '@/public/icons';
+import { constructTokenURIQuery, getFlightData, getReservoirData } from '@/utils/rigs';
 import AddressOrEns from '@/components/AddressOrEns';
 import EnsAvatar from '@/components/EnsAvatar';
 import { ArrowBackIcon, ArrowForwardIcon, WarningIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
-import { cleanDecimals } from '@/utils/stringUtils';
+import { cleanDecimals, countdown } from '@/utils/stringUtils';
 import useSWR from 'swr';
 import {
     Accordion,
@@ -17,6 +17,13 @@ import {
     AccordionButton,
     AccordionPanel,
     AccordionIcon,
+    Table,
+    Thead,
+    Tbody,
+    Tr,
+    Th,
+    Td,
+    TableContainer,
   } from '@chakra-ui/react'
 
 export async function getStaticPaths() {
@@ -37,15 +44,18 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context) {
     const res = await getReservoirData(context.params.rigId);
+    const {flightData, nftMetadatas} = await getFlightData(context.params.rigId);
     return {
       props: {
         pageData: res,
-        rigId: context.params.rigId
+        rigId: context.params.rigId,
+        flightData, 
+        nftMetadatas
       },
     }
 }
 
-const UserSection = ({pageData: propsData, rigId}) => {
+const UserSection = ({pageData: propsData, rigId, flightData, nftMetadatas}) => {
 
     const {colorMode} = useColorMode();
     const imageRef = useRef();
@@ -60,6 +70,9 @@ const UserSection = ({pageData: propsData, rigId}) => {
         mutate(data);
         setRefreshing(false);
     }
+    function getMeta(address){
+        return nftMetadatas.filter(n=>n.contract.address.toLowerCase() === address.toLowerCase())[0];
+    }
 
     return (
         <>
@@ -68,12 +81,16 @@ const UserSection = ({pageData: propsData, rigId}) => {
             <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt="50px">
                 <Flex position='relative' ref={imageRef} h="100%" w={{base: '100%', md: '50%'}} alignItems="center" justifyContent='center' background='#80808014'>
                     <Flex direction="row" position='absolute' bottom='20px' right='20px' >
-                        <Link href={`/rig/${parseInt(rigId)-1}`}>
-                            <IconButton mr={1} icon={<ArrowBackIcon />} borderRadius="100%"/>
-                        </Link>
-                        <Link href={`/rig/${parseInt(rigId)+1}`}>
-                            <IconButton mr={1} icon={<ArrowForwardIcon />} borderRadius="100%"/>
-                        </Link>
+                        {parseInt(rigId) !=1 && (
+                            <Link href={`/rig/${parseInt(rigId)-1}`} name="Previous Rig">
+                                <IconButton mr={1} icon={<ArrowBackIcon />} borderRadius="100%"/>
+                            </Link>
+                        )}
+                        {parseInt(rigId) != 3000 && (
+                            <Link href={`/rig/${parseInt(rigId)+1}`} name="Next Rig">
+                                <IconButton mr={1} icon={<ArrowForwardIcon />} borderRadius="100%"/>
+                            </Link>
+                        )}
                         <IconButton icon={<FullscreenIcon />} borderRadius="100%" onClick={()=>{
                             imageRef.current.requestFullscreen();
                         }}/>
@@ -87,6 +104,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                         shadow='dark-lg'    
                     >
                         <chakra.iframe 
+                            title={rigId}
                             src={`https://rigs.tableland.xyz/${rigId}.html`} 
                             width="100%"
                             height="100%"
@@ -158,7 +176,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                 }
                             </Flex>
                         </Flex>
-                        <Accordion defaultIndex={[0]} allowMultiple allowToggle>
+                        <Accordion defaultIndex={[0]} allowMultiple>
                             <AccordionItem borderRadius="10px" borderWidth="1px">
                                 <AccordionButton 
                                     background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'} 
@@ -203,20 +221,70 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                     </Wrap>
                                 </AccordionPanel>
                             </AccordionItem>
+                            <AccordionItem borderRadius="10px" borderWidth="1px" mt={2}>
+                                <AccordionButton 
+                                    background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'} 
+                                    _hover={{
+                                        'background': colorMode === 'light' ? 'gray.300' : 'whiteAlpha.200'
+                                    }}
+                                    borderRadius="10px"
+                                    _expanded={{
+                                        'borderBottomRadius': 0
+                                    }}
+                                    py={4}
+                                    px={6}
+                                >
+                                    <Box flex='1' textAlign='left' alignItems='center' display="flex">
+                                        <FlightLogIcon mr={2}/> Flight Log
+                                    </Box> 
+                                    <AccordionIcon />
+                                </AccordionButton>
+                                <AccordionPanel>
+                                    <TableContainer>
+                                        {flightData.length > 0 ? (
+                                            <Table size='sm'>
+                                                <Thead>
+                                                    <Tr>
+                                                        <Th>Pilot</Th>
+                                                        <Th>Status</Th>
+                                                        <Th>Flight Time</Th>
+                                                    </Tr>
+                                                </Thead>
+                                                <Tbody>
+                                                    {
+                                                        flightData.sort((a, b)=>b.startTime - a.startTime).map(e=>(
+                                                            <Tr key={e.startTime}>
+                                                                <Td>{e.contract ? Boolean(getMeta(e.contract)) === true ? (
+                                                                    <Flex alignItems="center">
+                                                                        <Avatar size="xs" borderRadius="0" src={getMeta(e.contract).media[0].gateway} mr={2}/>
+                                                                        <Text>{getMeta(e.contract).metadata.name}</Text>
+                                                                    </Flex>
+                                                                ) : <AddressOrEns address={e.contract} m={0}/> : "Trainer"}</Td>
+                                                                <Td>{e.endTime ? "Landed" : "In-flight"}</Td>
+                                                                <Td>{e.endTime ? countdown(e.endTime - e.startTime) : "-"}</Td>
+                                                            </Tr>
+                                                        ))
+                                                    }
+                                                </Tbody>
+                                            </Table>
+                                        ) :(<Text>No Flights</Text>)}
+                                    </TableContainer>
+                                </AccordionPanel>
+                            </AccordionItem>
                         </Accordion>
                         <br/>
                         <Flex direction="row" alignItems='flex-start'>
-                            <Button variant='ghost' leftIcon={<OpenseaIcon />} mb={1} w="fit-content"  onClick={()=>{
-                                window.open(`https://opensea.io/assets/ethereum/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${rigId}`, '_target');
-                            }}>View on Opensea</Button>
-                            <Button variant='ghost' leftIcon={<EtherscanIcon />} mb={1} w="fit-content" onClick={()=>{
-                                window.open(`https://etherscan.io/nft/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${rigId}`, '_target');
-                            }}>View on Etherscan</Button>
+                            <Link href={`https://opensea.io/assets/ethereum/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${rigId}`} target="_blank">
+                                <Button variant='ghost' leftIcon={<OpenseaIcon />} mb={1} w="fit-content">View on Opensea</Button>
+                            </Link>
+                            <Link href={`https://etherscan.io/nft/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${rigId}`} target="_blank">
+                                <Button variant='ghost' leftIcon={<EtherscanIcon />} mb={1} w="fit-content">View on Etherscan</Button>
+                            </Link>
                         </Flex>
                         <Flex direction="row" alignItems='flex-start'>
-                            <Button variant='ghost' leftIcon={<MetadataIcon />} mb={1} w="fit-content" onClick={()=>{
-                                window.open(constructTokenURIQuery(rigId), '_target');
-                            }}>View Metadata</Button>
+                            <Link href={constructTokenURIQuery(rigId)} target="_blank">
+                                <Button variant='ghost' leftIcon={<MetadataIcon />} mb={1} w="fit-content">View Metadata</Button>
+                            </Link>
                             <Button variant='ghost' leftIcon={<ShareIcon />} mb={1} w="fit-content" onClick={()=>{
                                 const shareData = {
                                     title: `Tableland - Rig #${rigId}`,
@@ -228,7 +296,6 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                 Share Link
                             </Button>
                         </Flex>
-                        {/* <ProvSection rigId={rigId}/> */}
                     </Flex>
                 </Flex>
             </Flex>
@@ -238,53 +305,3 @@ const UserSection = ({pageData: propsData, rigId}) => {
 }
 
 export default UserSection;
-
-
-// const TsRank = ({rigId, ...props}) => {
-//     const [tsData, setTsData] = useState(false);
-
-//     useEffect(()=>{
-//         if (rigId) getTsRanking([rigId]).then(setTsData).catch((e)=>{
-//             console.log(e);
-//         })
-//     },[rigId])
-
-//     if(tsData && Boolean(tsData?.ranks) === true){
-//         return (
-//             <Tooltip label="Trait Sniper Ranking" placement='top' hasArrow>
-//                 <Button leftIcon={<TsIcon/>} colorScheme='purple' size="xs" variant='solid' onClick={()=>{
-//                     window.open(`https://app.traitsniper.com/tableland-rigs?view=${rigId}`, '_blank')
-//                 }} {...props}>
-//                     #{tsData?.ranks[0]?.rarity_rank}
-//                 </Button>
-//             </Tooltip>
-//         )
-//     }
-//     else {
-//         return (<></>)
-//     }
-// }
-
-// const ProvSection = ({rigId}) => {
-//     const [prov, setProv] = useState(false);
-
-//     useEffect(()=>{
-//         getRigTxns(rigId).then(setProv)
-//     },[rigId])
-
-//     return (
-//         <Flex direction="column" mt="20px">
-//             {
-//                 prov && prov?.map(e=>{
-//                     return (
-//                         <Flex direction='column' key={e.transaction_hash}>
-//                             <Text textTransform='uppercase' fontSize="sm">
-//                                 {e.type}
-//                             </Text>
-//                         </Flex>
-//                     )
-//                 })
-//             }
-//         </Flex>
-//     )
-// }

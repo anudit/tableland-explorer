@@ -214,11 +214,11 @@ const UserSection = () => {
                                 >
                                     <EnsAvatar size="lg" address={address}  mb={2}/>
                                     <AddressOrEns address={address} tooltip={false} m={0} mb={2}/>
-                                    <Text cursor="pointer" onClick={()=>{
-                                        window.open(`https://blockscan.com/address/${address}`, "_blank");
-                                    }}>
-                                        View on Etherscan <ArrowUpIcon ml={2} style={{'transform':'rotate(45deg)'}}/>
-                                    </Text>
+                                    <Link href={`https://blockscan.com/address/${address}`} target="_blank">
+                                        <Text>
+                                            View on Etherscan <ArrowUpIcon ml={2} style={{'transform':'rotate(45deg)'}}/>
+                                        </Text>
+                                    </Link>
                                 </Flex>
                             </Flex>
                         </TabPanel>

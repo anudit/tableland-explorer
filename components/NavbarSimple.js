@@ -23,8 +23,8 @@ const NavBar = ({refresh, isLoading}) => {
       top="0"
     >
       <Flex direction="row" justify="left" alignItems='center' w={{base: "fit-content", md:"33.33%"}}>
-        <Link href="/">
-          <TablelandSmallIcon cursor="pointer" boxSize={8}/>
+        <Link href="/" name="Home">
+          <TablelandSmallIcon cursor="pointer" boxSize={8} />
         </Link>
       </Flex>
       <Flex direction="row" justify="right" alignItems='center' w={{base: "fit-content", md:"33.33%"}} align='right'>
