@@ -221,6 +221,7 @@ export default function Home() {
                   onClick={()=>{
                     setSqlMode(mode=>!mode);
                   }}
+                  name="Search"
                 />
               </Tooltip>
             </Flex>
@@ -255,6 +256,7 @@ export default function Home() {
               icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />}
               onClick={toggleColorMode}
               mr={2}
+              name="Switch Theme"
             />
           </Flex>
         </Flex>

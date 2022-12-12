@@ -34,7 +34,7 @@ const HistoryCard = ({tableName, hist, ...props}) => {
             <Flex direction='row'>
                 <Text fontSize='small'>{prettyTime(parseInt(hist.time)*1000)}</Text>
                 <Link href={`${nameToExplorer(tableName)}/tx/${hist.id}`} target="_blank">
-                    <ExternalLinkIcon ml={2} cursor="pointer"/>
+                    <ExternalLinkIcon ml={2} cursor="pointer" name="Open in New-Tab"/>
                 </Link>
             </Flex>
             </Flex>

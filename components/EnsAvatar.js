@@ -25,6 +25,7 @@ const EnsAvatar = ({address, ...props}) => {
             src={link}
             title={address}
             name={address ? address.slice(2) : "0x"}
+            alt="Avatar"
             {...props}
         />
     )

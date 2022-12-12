@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Avatar, chakra, Box, Tooltip, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Wrap, WrapItem } from "@chakra-ui/react";
+import React, { useEffect, useState, useRef } from 'react';
+import { Spinner, Avatar, chakra, Box, Tooltip, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Wrap, WrapItem } from "@chakra-ui/react";
 
 import NavBar from '@/components/NavbarSimple';
 import Meta from '@/components/Meta';
@@ -44,18 +44,16 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context) {
     const res = await getReservoirData(context.params.rigId);
-    const {flightData, nftMetadatas} = await getFlightData(context.params.rigId);
+    
     return {
       props: {
         pageData: res,
-        rigId: context.params.rigId,
-        flightData, 
-        nftMetadatas
-      },
+        rigId: context.params.rigId
+      }
     }
 }
 
-const UserSection = ({pageData: propsData, rigId, flightData, nftMetadatas}) => {
+const UserSection = ({pageData: propsData, rigId}) => {
 
     const {colorMode} = useColorMode();
     const imageRef = useRef();
@@ -64,6 +62,13 @@ const UserSection = ({pageData: propsData, rigId, flightData, nftMetadatas}) => 
     });
     const [refreshing, setRefreshing] = useState(false);
 
+    const [flights, setFlights] = useState(false);
+    useEffect(()=>{
+        getFlightData(rigId).then(({flightData, nftMetadatas})=>{
+            setFlights({flightData, nftMetadatas})
+        })
+    }, [rigId]);
+
     async function refresh(){
         setRefreshing(true);
         let data = await getReservoirData(rigId, true);
@@ -71,7 +76,7 @@ const UserSection = ({pageData: propsData, rigId, flightData, nftMetadatas}) => 
         setRefreshing(false);
     }
     function getMeta(address){
-        return nftMetadatas.filter(n=>n.contract.address.toLowerCase() === address.toLowerCase())[0];
+        return flights?.nftMetadatas.filter(n=>n.contract.address.toLowerCase() === address.toLowerCase())[0];
     }
 
     return (
@@ -92,7 +97,12 @@ const UserSection = ({pageData: propsData, rigId, flightData, nftMetadatas}) => 
                             </Link>
                         )}
                         <IconButton icon={<FullscreenIcon />} borderRadius="100%" onClick={()=>{
-                            imageRef.current.requestFullscreen();
+                            if (window.innerWidth == screen.width && window.innerHeight == screen.height){
+                                document.exitFullscreen();
+                            }
+                            else {
+                                imageRef.current.requestFullscreen();
+                            }
                         }}/>
                     </Flex>
                     <Box 
@@ -241,7 +251,7 @@ const UserSection = ({pageData: propsData, rigId, flightData, nftMetadatas}) => 
                                 </AccordionButton>
                                 <AccordionPanel>
                                     <TableContainer>
-                                        {flightData.length > 0 ? (
+                                        {flights ? flights.flightData.length > 0 ? (
                                             <Table size='sm'>
                                                 <Thead>
                                                     <Tr>
@@ -252,7 +262,7 @@ const UserSection = ({pageData: propsData, rigId, flightData, nftMetadatas}) => 
                                                 </Thead>
                                                 <Tbody>
                                                     {
-                                                        flightData.sort((a, b)=>b.startTime - a.startTime).map(e=>(
+                                                        flights.flightData.sort((a, b)=>b.startTime - a.startTime).map(e=>(
                                                             <Tr key={e.startTime}>
                                                                 <Td>{e.contract ? Boolean(getMeta(e.contract)) === true ? (
                                                                     <Flex alignItems="center">
@@ -261,13 +271,14 @@ const UserSection = ({pageData: propsData, rigId, flightData, nftMetadatas}) => 
                                                                     </Flex>
                                                                 ) : <AddressOrEns address={e.contract} m={0}/> : "Trainer"}</Td>
                                                                 <Td>{e.endTime ? "Landed" : "In-flight"}</Td>
-                                                                <Td>{e.endTime ? countdown(e.endTime - e.startTime) : "-"}</Td>
+                                                                <Td>{e.endTime ? "~" + countdown(12.07*parseInt(e.endTime - e.startTime)) : "-"}</Td>
                                                             </Tr>
                                                         ))
                                                     }
                                                 </Tbody>
                                             </Table>
-                                        ) :(<Text>No Flights</Text>)}
+                                        ) : (<Text>No Flights</Text>) : (<Spinner />)
+                                        }
                                     </TableContainer>
                                 </AccordionPanel>
                             </AccordionItem>

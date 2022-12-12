@@ -292,7 +292,7 @@ export function countdown(s) {
 
   (d || h || m) && tmp.push(m + 'm');
 
-  tmp.push(s + 's');
+  tmp.push(parseInt(s) + 's');
 
   return tmp.join(' ');
 }
