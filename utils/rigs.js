@@ -162,8 +162,6 @@ export async function getRigOwner(tokenId){
 
 export async function getNFTMetadataBatch(tokens){
     if (tokens.length >= 1){
-
-        console.log('tokens', tokens);
         let data = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v2/jz1AlVEXLDxlzNMcKDg9To03aBnOssyH/getNFTMetadataBatch`, {
             method: "POST",
             body: JSON.stringify({
