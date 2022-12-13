@@ -35,7 +35,34 @@ export async function garageStatsQuery(){
                 output: "table",
                 extract: true,
                 unwrap: true,
-                statement: `\n  SELECT\n  (\n    SELECT count(distinct(rig_id)) FROM\n    rig_attributes_42161_9\n  ) AS num_rigs,\n  (\n    SELECT count(*) FROM (\n      SELECT DISTINCT(rig_id)\n      FROM pilot_sessions_1_7\n      WHERE end_time IS NULL\n    )\n  ) AS num_rigs_in_flight,\n  (\n    SELECT count(*) FROM (\n      SELECT DISTINCT pilot_contract, pilot_id\n      FROM pilot_sessions_1_7\n    )\n  ) AS num_pilots,\n  (\n    SELECT coalesce(sum(coalesce(end_time, ${blkNumber}) - start_time), 0)\n    FROM pilot_sessions_1_7\n  ) AS total_flight_time,\n  (\n    SELECT coalesce(avg(coalesce(end_time, ${blkNumber}) - start_time), 0)\n    FROM pilot_sessions_1_7\n  ) AS avg_flight_time\n  FROM rig_attributes_42161_9\n  LIMIT 1;`
+                statement: `SELECT
+                (
+                  SELECT count(distinct(rig_id)) FROM
+                  rig_attributes_42161_9
+                ) AS num_rigs,
+                (
+                  SELECT count(*) FROM (
+                    SELECT DISTINCT(rig_id)
+                    FROM pilot_sessions_1_7
+                    WHERE end_time IS NULL
+                  )
+                ) AS num_rigs_in_flight,
+                (
+                  SELECT count(*) FROM (
+                    SELECT DISTINCT pilot_contract, pilot_id
+                    FROM pilot_sessions_1_7
+                  )
+                ) AS num_pilots,
+                (
+                  SELECT coalesce(sum(coalesce(end_time, ${blkNumber}) - start_time), 0)
+                  FROM pilot_sessions_1_7
+                ) AS total_flight_time,
+                (
+                  SELECT coalesce(avg(coalesce(end_time, ${blkNumber}) - start_time), 0)
+                  FROM pilot_sessions_1_7
+                ) AS avg_flight_time
+                FROM rig_attributes_42161_9
+                LIMIT 1;`
             }]
         }),
         "method": "POST",
@@ -53,6 +80,17 @@ export async function getMetadata(tokenIds = []){
 }
 
 export async function getFlightData(tokenId = 1){
+
+    let blkNumber = await fetch("https://rpc.ankr.com/eth", {
+        "headers": {
+          "accept": "*/*",
+          "content-type": "application/json",
+        },
+        "body": "{\"method\":\"eth_blockNumber\",\"params\":[],\"id\":42,\"jsonrpc\":\"2.0\"}",
+        "method": "POST",
+    }).then(r=>r.json());
+    blkNumber = parseInt(blkNumber['result']);
+
     let query = `SELECT
         json_group_array(json_object(
             'contract', pilot_contract,
@@ -75,7 +113,7 @@ export async function getFlightData(tokenId = 1){
     })
 
     let nftMetadatas = await getNFTMetadataBatch(metReq);
-    return {flightData: resp, nftMetadatas};
+    return {flightData: resp, nftMetadatas, latestBlock: blkNumber};
 }
 
 export async function getOpenData(tokenId){
@@ -117,7 +155,7 @@ export async function getReservoirData(tokenId, metadataRefresh=false){
             "credentials": "include"
         }).then(r=>r.json()).catch(console.log);
     }
-    
+
     if (res.status === 200) {
         res = await res.json()
         return res['tokens'][0];

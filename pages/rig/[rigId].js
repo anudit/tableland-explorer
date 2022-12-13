@@ -44,7 +44,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context) {
     const res = await getReservoirData(context.params.rigId);
-    
+
     return {
       props: {
         pageData: res,
@@ -64,8 +64,8 @@ const UserSection = ({pageData: propsData, rigId}) => {
 
     const [flights, setFlights] = useState(false);
     useEffect(()=>{
-        getFlightData(rigId).then(({flightData, nftMetadatas})=>{
-            setFlights({flightData, nftMetadatas})
+        getFlightData(rigId).then(({flightData, nftMetadatas, latestBlock})=>{
+            setFlights({flightData, nftMetadatas, latestBlock})
         })
     }, [rigId]);
 
@@ -105,17 +105,17 @@ const UserSection = ({pageData: propsData, rigId}) => {
                             }
                         }}/>
                     </Flex>
-                    <Box 
+                    <Box
                         style={{
                             'aspectRatio': '1/1'
                         }}
                         width={{base: "300px", sm: "400px", md: "clamp(30em, 100%,48em)", lg:"600px"}}
                         height={{base: "300px", sm: "400px", md: "auto", lg:"auto"}}
-                        shadow='dark-lg'    
+                        shadow='dark-lg'
                     >
-                        <chakra.iframe 
+                        <chakra.iframe
                             title={rigId}
-                            src={`https://rigs.tableland.xyz/${rigId}.html`} 
+                            src={`https://rigs.tableland.xyz/${rigId}.html`}
                             width="100%"
                             height="100%"
                             scrolling="no"
@@ -188,8 +188,8 @@ const UserSection = ({pageData: propsData, rigId}) => {
                         </Flex>
                         <Accordion defaultIndex={[0]} allowMultiple>
                             <AccordionItem borderRadius="10px" borderWidth="1px">
-                                <AccordionButton 
-                                    background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'} 
+                                <AccordionButton
+                                    background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'}
                                     _hover={{
                                         'background': colorMode === 'light' ? 'gray.300' : 'whiteAlpha.200'
                                     }}
@@ -202,7 +202,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                 >
                                     <Box flex='1' textAlign='left' alignItems='center' display="flex">
                                         <MetadataIcon mr={2}/> Attributes
-                                    </Box> 
+                                    </Box>
                                     <AccordionIcon />
                                 </AccordionButton>
                                 <AccordionPanel>
@@ -232,8 +232,8 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                 </AccordionPanel>
                             </AccordionItem>
                             <AccordionItem borderRadius="10px" borderWidth="1px" mt={2}>
-                                <AccordionButton 
-                                    background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'} 
+                                <AccordionButton
+                                    background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'}
                                     _hover={{
                                         'background': colorMode === 'light' ? 'gray.300' : 'whiteAlpha.200'
                                     }}
@@ -246,7 +246,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                 >
                                     <Box flex='1' textAlign='left' alignItems='center' display="flex">
                                         <FlightLogIcon mr={2}/> Flight Log
-                                    </Box> 
+                                    </Box>
                                     <AccordionIcon />
                                 </AccordionButton>
                                 <AccordionPanel>
@@ -265,13 +265,15 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                                         flights.flightData.sort((a, b)=>b.startTime - a.startTime).map(e=>(
                                                             <Tr key={e.startTime}>
                                                                 <Td>{e.contract ? Boolean(getMeta(e.contract)) === true ? (
-                                                                    <Flex alignItems="center">
-                                                                        <Avatar size="xs" borderRadius="0" src={getMeta(e.contract).media[0].gateway} mr={2}/>
-                                                                        <Text>{getMeta(e.contract).metadata.name}</Text>
-                                                                    </Flex>
+                                                                    <Link href={'https://opensea.io/assets/ethereum/'+e.contract+'/'+getMeta(e.contract).id.tokenId} target="_blank">
+                                                                        <Flex alignItems="center">
+                                                                            <Avatar size="xs" borderRadius="0" src={getMeta(e.contract).media[0].gateway} mr={2}/>
+                                                                            <Text>{getMeta(e.contract).title}</Text>
+                                                                        </Flex>
+                                                                    </Link>
                                                                 ) : <AddressOrEns address={e.contract} m={0}/> : "Trainer"}</Td>
                                                                 <Td>{e.endTime ? "Landed" : "In-flight"}</Td>
-                                                                <Td>{e.endTime ? "~" + countdown(12.07*parseInt(e.endTime - e.startTime)) : "-"}</Td>
+                                                                <Td>{e.endTime ? "~" + countdown(12.07*parseInt(e.endTime - e.startTime)) : countdown(12.07*parseInt(flights.latestBlock - e.startTime))}</Td>
                                                             </Tr>
                                                         ))
                                                     }

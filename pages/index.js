@@ -111,7 +111,7 @@ export default function Home() {
             direction="row"
             justifyContent="center"
             alignItems="center"
-            w={{base:"100vw", md:"50vw", lg: "30vw"}}
+            w={{base:"100vw", md:"50vw", lg: "40vw"}}
             p={2}
           >
             <TablelandSmallIcon boxSize={10} />
@@ -189,6 +189,8 @@ export default function Home() {
                       sqlError={sqlError}
                       setSqlError={setSqlError}
                       mt={2}
+                      background={colorMode === 'dark'? 'rgb(25, 25, 25)': 'rgb(242, 242, 242)'}
+                      border="none"
                       style={{
                         borderRadius: '30px',
                         fontSize: '20px',
@@ -392,7 +394,7 @@ const GarageStatsSection = () => {
           </Text>
           <Skeleton isLoaded={Boolean(data)}>
             <Text>
-              {(parseInt(data['total_flight_time'])/(60*60*24*365)).toPrecision(2)} years
+              {(parseInt(data['total_flight_time']*12.07)/(60*60*24*365)).toPrecision(2)} years
             </Text>
           </Skeleton>
         </Flex>
@@ -402,7 +404,7 @@ const GarageStatsSection = () => {
           </Text>
           <Skeleton isLoaded={Boolean(data)}>
             <Text>
-              {(parseInt(data['total_flight_time'])/(60*60*24*parseInt(data['num_rigs_in_flight']))).toPrecision(2)} days
+              {(parseInt(data['total_flight_time']*12.07)/(60*60*24*parseInt(data['num_rigs_in_flight']))).toPrecision(2)} days
             </Text>
           </Skeleton>
         </Flex>
