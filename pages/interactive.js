@@ -22,13 +22,28 @@ const InteractiveView = () => {
 
     const router = useRouter();
     const { query, name } = router.query;
-    const [tabsData, setTabsData] = useState([{name: 'New Query', id: 0}]);
+    const [loaded, setLoaded] = useState(false);
+    const [tabsData, setTabsData] = useState([]);
     const { colorMode } = useColorMode();
 
     useEffect(()=>{
-        console.log('tabs now', tabsData)
-    },[tabsData])
+        if(query && !loaded){
+            setTabsData((oldData)=>{
+                let newData = [].concat(oldData);
+                let newId = Math.max(...oldData.map(e=>e?.id))+1;
+                if (isFinite(newId) == false) newId = 0;
+                newData.push({name: name || `Query ${newId}`, id: newId, defaultQuery: query});
+                return newData;
+            })
+            console.log('set with query', query)
+            setLoaded(true)
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[query])
 
+    useEffect(()=>{
+        console.log('tabs now', tabsData);
+    },[tabsData])
 
     function closeTab(tabId){
         setTabsData((oldData)=>{
@@ -69,17 +84,17 @@ const InteractiveView = () => {
                     </Link>
                     {
                         tabsData.map((val)=>
-                        <Tab key={val.id} borderBottom="none" borderRadius={0}>
-                            <TerminalIcon boxSize={4} mr={2}/>
-                            <Text noOfLines={1}  suppressContentEditableWarning={true} contentEditable="true" onKeyDown={(e)=>{
-                                updateTabName(val.id, e.currentTarget.innerText);
-                            }}>{val.name}</Text>
-                            <Box as='span' ml='2'>
-                            <CloseIcon boxSize={2} _hover={{color: "red"}} onClick={()=>{
-                                closeTab(val.id)
-                            }}/>
-                            </Box>
-                        </Tab>
+                            <Tab key={val.id} borderBottom="none" borderRadius={0}>
+                                <TerminalIcon boxSize={4} mr={2}/>
+                                <Text noOfLines={1}  suppressContentEditableWarning={true} contentEditable="true" onKeyDown={(e)=>{
+                                    updateTabName(val.id, e.currentTarget.innerText);
+                                }}>{val.name}</Text>
+                                <Box as='span' ml='2'>
+                                <CloseIcon boxSize={2} _hover={{color: "red"}} onClick={()=>{
+                                    closeTab(val.id)
+                                }}/>
+                                </Box>
+                            </Tab>
                         )
                     }
                     <SmallAddIcon boxSize={6} mx={2} cursor="pointer" onClick={newTab} />
@@ -89,7 +104,7 @@ const InteractiveView = () => {
                         tabsData.map((val)=>(
                             <TabPanel key={val.id} p={0}>
                                 <TabView
-                                    defaultQuery={query || "SELECT image from rigs_80001_1881"}
+                                    defaultQuery={val?.defaultQuery || "SELECT image from rigs_80001_1881"}
                                     name={name || val.name}
                                 />
                             </TabPanel>
@@ -230,7 +245,7 @@ const TabView = ({defaultQuery, name}) => {
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
-            <chakra.div position="relative" height="calc(100vh - 100px)" width="100%">
+            <chakra.div position="relative" width="100%">
                     {
                     data ? data?.message ? (
                         <Alert status='error'>
@@ -238,11 +253,11 @@ const TabView = ({defaultQuery, name}) => {
                             {data?.message === "Row not found"? "Row not found, The table is empty." : data?.message}
                         </Alert>
                     ) : (
-                        <chakra.div color="black !important" position="relative" height="calc(100vh - 100px)" width="100%">
+                        <chakra.div color="black !important" position="relative" height="calc(100vh - 30vh)" width="100%">
                             <Grid data={data} downloadFilename='custom' />
                         </chakra.div>
                     ) : (
-                        <Flex w="100%" h="calc(100vh - 100px)" justifyContent='center' alignItems='center'>
+                        <Flex w="100%" h="calc(100vh - 30vh)" justifyContent='center' alignItems='center'>
                             <Spinner />
                         </Flex>
                     )

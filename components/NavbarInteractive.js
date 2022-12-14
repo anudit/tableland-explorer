@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Tooltip, Flex, IconButton, Spinner, ButtonGroup, useClipboard } from "@chakra-ui/react";
+import { Text, Tooltip, Flex, IconButton, Spinner, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import { CodeIcon } from "@/public/icons";
 import { CheckIcon } from "@chakra-ui/icons";
 import { LinkIcon } from "@chakra-ui/icons";
 import { CopyIcon } from "@chakra-ui/icons";
-import SqlInput from "./RunSql";
+import SqlEditor from "./SqlEditor";
 import { encodeSqlForUrl } from "@/utils/stringUtils";
 
 const NavBar = ({refresh, isLoading, onOpen, inputValue, setInputValue, name=false}) => {
@@ -16,26 +16,25 @@ const NavBar = ({refresh, isLoading, onOpen, inputValue, setInputValue, name=fal
 
   return (
     <Flex
-      as="nav"
       justify={{base:null, md:"space-between"}}
       alignItems='center'
       w="100%"
-      py={2}
-      px={2}
       // background={useColorModeValue('#fcfcfcdb', '#0000005e')}
       // backdropFilter='blur(20px)'
-      height="50px"
+      height="30vh"
+      direction="column"
     >
-      <Tooltip placement="bottom" hasArrow label={sqlError || 'SQL looks good.' } bg={sqlError? 'red' : 'green.300'}>
-        <Flex w="100%">
-          <SqlInput
-            inputValue={inputValue}
-            setInputValue={setInputValue}
-            sqlError={sqlError} setSqlError={setSqlError} size="sm" mt={2}
-          />
-        </Flex>
-      </Tooltip>
-      <Flex direction="row" justify="right" alignItems='center' w="fit-content" align='right'>
+      <Flex w="100%" id='editor' h="100%">
+        <SqlEditor
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          sqlError={sqlError} setSqlError={setSqlError} size="sm"
+        />
+      </Flex>
+      <Flex  w="100%" direction="row" justifyContent="space-between">
+        <Text bg={sqlError? 'red.600' : 'green.600'} width="100%" size="md" p={1} pl={2}>
+          {sqlError || 'SQL looks good.' }
+        </Text>
         <ButtonGroup size='sm' isAttached variant='ghost'>
           <Tooltip hasArrow label={isLoading ? "Refreshing Data" : "Refresh Data"} placement='left'>
             <IconButton colorScheme='facebook' onClick={refresh} icon={isLoading ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isLoading}/>
@@ -54,6 +53,7 @@ const NavBar = ({refresh, isLoading, onOpen, inputValue, setInputValue, name=fal
             }} icon={hasCopiedLink ? <CheckIcon /> : <LinkIcon />} />
           </Tooltip>
         </ButtonGroup>
+
       </Flex>
     </Flex>
   );
