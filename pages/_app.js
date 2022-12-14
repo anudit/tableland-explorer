@@ -5,6 +5,7 @@ import customTheme from '@/styles/theme';
 import {EnsCacheProvider} from '@/contexts/EnsCache';
 import { LivepeerConfig, createReactClient, studioProvider } from '@livepeer/react';
 import Script from "next/script";
+import '../components/interactive/SplitView.css'
 
 const client = createReactClient({
   provider: studioProvider({ apiKey: 'cec3b877-1c4d-4773-a06a-7785ea58f4b3' }),

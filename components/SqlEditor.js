@@ -4,10 +4,12 @@ import { Parser } from 'node-sql-parser';
 import fetcher from "@/utils/fetcher";
 import { nameToSubgraph, parseTableData } from "@/utils/stringUtils";
 import Editor from "@monaco-editor/react";
+import { useColorMode } from "@chakra-ui/react";
 
-const SqlEditor = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, ref) => {
+const SqlEditor = ({inputValue, setInputValue, setSqlError, ...props}, ref) => {
 
   const parser = new Parser();
+  const { colorMode } = useColorMode();
 
   useEffect(()=>{
     init().then(function () {
@@ -75,15 +77,11 @@ const SqlEditor = ({inputValue, setInputValue, sqlError, setSqlError, ...props},
       w="100%"
       h="100%"
       defaultLanguage="sql"
-      theme="vs-dark"
+      theme={colorMode === 'dark' ? "vs-dark" : "light"}
       onChange={(value)=>{
         setInputValue(value.trim())
       }}
       value={inputValue}
-      mb={2}
-      isInvalid={sqlError}
-      focusBorderColor={sqlError ? 'red' : 'green.300'}
-      // defaultValue={global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query?.replaceAll('%25', '%').replaceAll('%2A', '*') : ""}
       {...props}
     />
   );

@@ -187,7 +187,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                             </Flex>
                         </Flex>
                         <Accordion defaultIndex={[0]} allowMultiple>
-                            <AccordionItem borderRadius="10px" borderWidth="1px">
+                            <AccordionItem borderRadius="10px" borderWidth="1px" borderColor={colorMode === 'light' ? '#0000001a' : '#ffffff1a'}>
                                 <AccordionButton
                                     background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'}
                                     _hover={{
@@ -231,7 +231,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                     </Wrap>
                                 </AccordionPanel>
                             </AccordionItem>
-                            <AccordionItem borderRadius="10px" borderWidth="1px" mt={2}>
+                            <AccordionItem borderRadius="10px" borderWidth="1px" mt={2} borderColor={colorMode === 'light' ? '#0000001a' : '#ffffff1a'}>
                                 <AccordionButton
                                     background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'}
                                     _hover={{

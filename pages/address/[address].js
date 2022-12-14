@@ -206,6 +206,7 @@ const UserSection = () => {
                                     width={{base: "100%", md: "20%"}}
                                     align="start"
                                     borderWidth="1px"
+                                    borderColor={colorMode === 'light' ? '#0000001a' : '#ffffff1a'}
                                     mt={4}
                                     p={4}
                                     borderRadius={10}

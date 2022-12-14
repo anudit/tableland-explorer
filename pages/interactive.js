@@ -6,7 +6,7 @@ import useSWR from "swr";
 
 import Meta from '@/components/Meta';
 import fetcher from '@/utils/fetcher';
-import NavBar from '../components/NavbarInteractive';
+import InteractiveEditor from '../components/interactive/InteractiveEditor';
 
 import { TablelandSmallIcon } from '@/public/icons';
 import { CloseIcon, SmallAddIcon } from '@chakra-ui/icons';
@@ -16,7 +16,9 @@ import {
 import Link from 'next/link';
 import sdk from 'postman-collection';
 import { TerminalIcon } from '@/public/icons';
+import { ActionBar } from "@/components/interactive/ActionBar";
 const codegen = require('postman-code-generators')
+import Split from 'react-split';
 
 const InteractiveView = () => {
 
@@ -77,14 +79,21 @@ const InteractiveView = () => {
     return (
         <>
             <Meta/>
-            <Tabs defaultIndex={0} variant='enclosed' w="100%" colorScheme={colorMode === 'dark' ? 'white': 'black'}>
+            <Tabs defaultIndex={0} variant='soft-rounded' w="100%" h="100vh" colorScheme='whiteAlpha'>
                 <TabList display='flex' alignItems='center' direction="row" w="100%" overflowX='auto' h="50px" borderBottom='none'>
                     <Link href="/">
                         <TablelandSmallIcon cursor="pointer" boxSize={6} mx={3}/>
                     </Link>
                     {
                         tabsData.map((val)=>
-                            <Tab key={val.id} borderBottom="none" borderRadius={0}>
+                            <Tab
+                                key={val.id}
+                                _selected={{
+                                    color: colorMode === 'dark'? 'white': 'black',
+                                    borderBottom: '1px'
+                                }}
+                                borderBottomRadius='0'
+                            >
                                 <TerminalIcon boxSize={4} mr={2}/>
                                 <Text noOfLines={1}  suppressContentEditableWarning={true} contentEditable="true" onKeyDown={(e)=>{
                                     updateTabName(val.id, e.currentTarget.innerText);
@@ -125,7 +134,7 @@ const TabView = ({defaultQuery, name}) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [snippets, setSnippets] = useState(false);
     const [sqlValue, setSqlValue] = useState(defaultQuery);
-
+    const [sqlError, setSqlError] = useState(false);
 
     const { data, error, mutate, isValidating } = useSWR(
         sqlValue ? [`https://testnet.tableland.network/query?mode=json&s=${sqlValue}`] : null,
@@ -191,12 +200,16 @@ const TabView = ({defaultQuery, name}) => {
 
     if (error) return <div>failed to load, {error}</div>;
     return (
-        <chakra.div>
-            <NavBar
+        <Split className="split" direction='vertical' style={{
+            flexDirection: 'column'
+        }} sizes={[25, 75]} minSize={200}>
+            <InteractiveEditor
                 inputValue={sqlValue}
                 setInputValue={setSqlValue}
                 refresh={refresh}
                 isLoading={refreshing || isValidating}
+                sqlError={sqlError}
+                setSqlError={setSqlError}
                 onOpen={onOpen}
                 name={name}
             />
@@ -246,23 +259,30 @@ const TabView = ({defaultQuery, name}) => {
                 </DrawerContent>
             </Drawer>
             <chakra.div position="relative" width="100%">
-                    {
+                {
                     data ? data?.message ? (
                         <Alert status='error'>
                             <AlertIcon />
                             {data?.message === "Row not found"? "Row not found, The table is empty." : data?.message}
                         </Alert>
                     ) : (
-                        <chakra.div color="black !important" position="relative" height="calc(100vh - 30vh)" width="100%">
+                        <chakra.div color="black !important" position="relative" width="100%" h="95%">
                             <Grid data={data} downloadFilename='custom' />
                         </chakra.div>
                     ) : (
-                        <Flex w="100%" h="calc(100vh - 30vh)" justifyContent='center' alignItems='center'>
+                        <Flex w="100%" h="100%" justifyContent='center' alignItems='center'>
                             <Spinner />
                         </Flex>
                     )
                 }
+                <ActionBar
+                    inputValue={sqlValue}
+                    sqlError={sqlError}
+                    isLoading={refreshing || isValidating}
+                    refresh={refresh}
+                    onOpen={onOpen}
+                />
             </chakra.div>
-        </chakra.div>
+        </Split>
     )
 }
