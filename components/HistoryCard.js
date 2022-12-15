@@ -1,5 +1,5 @@
 import React from "react";
-import { Code, Flex, Text, useClipboard } from "@chakra-ui/react";
+import { useColorMode, Code, Flex, Text, useClipboard } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { nameToExplorer, prettyTime, stringSize } from "@/utils/stringUtils";
 import AddressOrEns from "./AddressOrEns";
@@ -7,13 +7,14 @@ import Link from "next/link";
 
 const HistoryCard = ({tableName, hist, ...props}) => {
     const { hasCopied, onCopy } = useClipboard(hist?.statement);
-    
+    const { colorMode } = useColorMode();
+
     return (
         <Flex
             direction='column'
             borderWidth={1}
             borderRadius={4}
-            borderColor='gray.100'
+            borderColor={colorMode === 'light' ? '#0000001a' : '#ffffff1a'}
             p={2}
             _hover={{
                 borderColor: 'gray.500'
@@ -26,7 +27,7 @@ const HistoryCard = ({tableName, hist, ...props}) => {
                 <Text fontWeight='bold' fontSize='small'>
                     {hist.statement.split(' ')[0].toUpperCase()} by
                 </Text>
-                <AddressOrEns address={hist.actionBy.id} ml={1} fontSize="sm"/>                
+                <AddressOrEns address={hist.actionBy.id} ml={1} fontSize="sm"/>
                 <Text fontWeight='light' fontSize='xs' >
                 &nbsp;({stringSize(hist.statement)})
                 </Text>

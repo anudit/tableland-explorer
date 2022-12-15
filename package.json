@@ -21,7 +21,7 @@
     "@monaco-editor/react": "^4.4.6",
     "critters": "^0.0.16",
     "ethers": "^5.7.2",
-    "framer-motion": "^7.9.0",
+    "framer-motion": "^7.9.1",
     "hsl-rgb": "^1.0.0",
     "hsl-triad": "^1.0.0",
     "next": "13.0.6",

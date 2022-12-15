@@ -1,24 +1,19 @@
-import { Grid } from "@anudit/flat-ui";
-import { Alert, AlertIcon, chakra, Flex, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, useDisclosure } from "@chakra-ui/react";
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import useSWR from "swr";
+import { Grid } from "@anudit/flat-ui";
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { List, ListItem, chakra, Flex, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, useDisclosure, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Text, Textarea, useColorMode } from '@chakra-ui/react';
+import { CloseIcon, SmallAddIcon, SettingsIcon, WarningTwoIcon } from "@chakra-ui/icons";
+import sdk from 'postman-collection';
+import Split from 'react-split';
+const codegen = require('postman-code-generators')
 
 import Meta from '@/components/Meta';
-import fetcher from '@/utils/fetcher';
-import InteractiveEditor from '../components/interactive/InteractiveEditor';
-
-import { TablelandSmallIcon } from '@/public/icons';
-import { CloseIcon, SmallAddIcon } from '@chakra-ui/icons';
-import {
-    Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Text, Textarea, useColorMode
-} from '@chakra-ui/react';
-import Link from 'next/link';
-import sdk from 'postman-collection';
-import { TerminalIcon } from '@/public/icons';
+import InteractiveEditor from '@/components/interactive/InteractiveEditor';
 import { ActionBar } from "@/components/interactive/ActionBar";
-const codegen = require('postman-code-generators')
-import Split from 'react-split';
+import fetcher from '@/utils/fetcher';
+import { TablelandSmallIcon, TerminalIcon } from '@/public/icons';
 
 const InteractiveView = () => {
 
@@ -135,6 +130,7 @@ const TabView = ({defaultQuery, name}) => {
     const [snippets, setSnippets] = useState(false);
     const [sqlValue, setSqlValue] = useState(defaultQuery);
     const [sqlError, setSqlError] = useState(false);
+    const { colorMode } = useColorMode();
 
     const { data, error, mutate, isValidating } = useSWR(
         sqlValue ? [`https://testnet.tableland.network/query?mode=json&s=${sqlValue}`] : null,
@@ -261,10 +257,34 @@ const TabView = ({defaultQuery, name}) => {
             <chakra.div position="relative" width="100%">
                 {
                     data ? data?.message ? (
-                        <Alert status='error'>
-                            <AlertIcon />
-                            {data?.message === "Row not found"? "Row not found, The table is empty." : data?.message}
-                        </Alert>
+                        <Flex alignItems='center' justifyContent="center" width="100%" h="100%">
+                            <Flex direction="row" justifyContent="space-evenly" alignItems="center" w={{base: "100%", md:"340px"}} borderRadius={1} py={4} px={8}
+                                background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'}
+                                _hover={{
+                                    'background': colorMode === 'light' ? 'gray.300' : 'whiteAlpha.200'
+                                }}
+                            >
+                                <Flex direction='column'>
+                                    <WarningTwoIcon boxSize={10} mr={4} color={colorMode === 'light' ? 'red.500' : 'red.300'}/>
+                                    <Text fontWeight={600} color={colorMode === 'light' ? 'red.500' : 'red.300'}>Error</Text>
+                                </Flex>
+                                <List spacing={0}>
+                                    {
+                                        data?.message === 'Row not found' ? (
+                                            <>
+                                                <ListItem key={0}> <SettingsIcon mr={2} mb={1}/>{data?.message}</ListItem>
+                                                <ListItem key={1}> <SettingsIcon mr={2} mb={1}/>Table is Empty</ListItem>
+                                            </>
+                                        ) :
+                                        data?.message.split(': ').map((val, ind)=>(
+                                            <ListItem key={ind}>
+                                                <SettingsIcon mr={2} mb='2px' />{val}
+                                            </ListItem>
+                                        ))
+                                    }
+                                </List>
+                            </Flex>
+                        </Flex>
                     ) : (
                         <chakra.div color="black !important" position="relative" width="100%" h="95%">
                             <Grid data={data} downloadFilename='custom' />
