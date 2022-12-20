@@ -1,11 +1,12 @@
 import React from 'react';
-import { useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Spinner, Button } from "@chakra-ui/react";
+import { Tooltip, useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Spinner, Button } from "@chakra-ui/react";
 import timeAgo, { nameToAvatar, nameToChainName, parseTableData, toProperCase } from '@/utils/stringUtils';
 import Link from 'next/link';
 import AddressOrEns from './AddressOrEns';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import Image from 'next/image';
 import EnsAvatar from './EnsAvatar';
+import { ShuffleIcon } from '@/public/icons';
 
 const loaderProp = ({ src }) => { return src }
 
@@ -69,19 +70,37 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                         <Text fontSize='lg' fontWeight={600} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">{toProperCase(tableName.split("_").slice(0,-2).join(' '))}</Text>
                         <Text size='sm'  ml={2} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>#{tableId}</Text>
                     </Flex>
-                    <Link href={`/${tableName}`}>
-                        <Button 
-                            size='sm' 
-                            borderRadius="100px" 
-                            color={colorMode === 'light' ? 'white' : 'black'}
-                            backgroundColor={colorMode === 'light' ? 'black' : 'white'}
-                            _hover={{
-                                backgroundColor: colorMode === 'light' ? 'black' : 'white'
-                            }}
-                        >
-                                Explore Table
-                        </Button>
-                    </Link>
+                    <Flex direction='row' alignItems='center'>
+                        <Tooltip label='Remix Table Schema (Soon)' placement='top'>
+                            <Button
+                                isDisabled
+                                leftIcon={<ShuffleIcon />}
+                                size='sm'
+                                borderRadius="100px"
+                                color={colorMode === 'light' ? 'white' : 'black'}
+                                backgroundColor={colorMode === 'light' ? 'black' : 'white'}
+                                _hover={{
+                                    backgroundColor: colorMode === 'light' ? 'black' : 'white'
+                                }}
+                                mr={2}
+                            >
+                                Remix
+                            </Button>
+                        </Tooltip>
+                        <Link href={`/${tableName}`}>
+                            <Button
+                                size='sm'
+                                borderRadius="100px"
+                                color={colorMode === 'light' ? 'white' : 'black'}
+                                backgroundColor={colorMode === 'light' ? 'black' : 'white'}
+                                _hover={{
+                                    backgroundColor: colorMode === 'light' ? 'black' : 'white'
+                                }}
+                            >
+                                    Explore Table
+                            </Button>
+                        </Link>
+                    </Flex>
                 </Flex>
             </Flex>
         )

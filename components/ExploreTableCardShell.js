@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Skeleton, useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Button } from "@chakra-ui/react";
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import EnsAvatar from './EnsAvatar';
+import { ShuffleIcon } from '@/public/icons';
 
 const TableCardSkeleton = (props) => {
 
@@ -55,6 +56,7 @@ const TableCardSkeleton = (props) => {
                         </Skeleton>
                     </Flex>
                 <Skeleton>
+                    <Button size='sm' borderRadius="100px" colorScheme='blue' mr={2} leftIcon={<ShuffleIcon />}>Remix</Button>
                     <Button size='sm' borderRadius="100px" colorScheme='blue'>Explore Table</Button>
                 </Skeleton>
             </Flex>
