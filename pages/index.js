@@ -10,7 +10,7 @@ import {
 } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
 import {multifetch} from "../utils/fetcher";
-import {encodeSqlForUrl, nameToAvatar, nameToChainName, networkDeets, toProperCase} from "../utils/stringUtils";
+import {encodeSqlForUrl, nameToAvatar, networkDeets, toProperCase} from "../utils/stringUtils";
 import { SearchIcon } from "@chakra-ui/icons";
 import SqlInput from "@/components/RunSql";
 import Meta from "@/components/Meta";
@@ -322,31 +322,86 @@ const ChainsSection = () => {
       <Heading>Networks</Heading>
       <br/>
       <Flex top="0px" direction="column">
-        {
-          data ? data.map(e=>e?.data?.tables).flat().map(e=>(
-            <Flex direction='row' align="center" key={e.name} mb={1}>
-              <Avatar size="sm" src={nameToAvatar(e.name)} title={nameToChainName(e.name)} />
-              <Flex direction='column' ml={4}>
-                  <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-                    {nameToChainName(e.name)}
-                  </Text>
-                  <Text>{e.tableId} Tables</Text>
-              </Flex>
+          <Flex direction='column' align="center" key={0} mb={2} alignItems='flex-start'>
+            <Flex direction="row" alignItems="center">
+              <Avatar size="xs" src={networkDeets['1'].avatar} title={networkDeets['1'].name} mr={2}/>
+              <Text fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                Ethereum
+              </Text>
             </Flex>
-          )) : Object.keys(networkDeets).map(n=>(
-            <Flex direction='row' align="center" key={n} mb={1}>
-              <Avatar size="sm" src={networkDeets[n]?.avatar} title={networkDeets[n]?.name} />
-              <Flex direction='column' ml={4}>
-                <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-                  {networkDeets[n]?.name}
-                </Text>
-                <Skeleton>
-                  <Text>0 Tables</Text>
-                </Skeleton>
-              </Flex>
+            <Flex direction='row' ml={4} mt={1}>
+              <Text size="sm" mr={1}>Mainnet : </Text>
+              <Skeleton isLoaded={Boolean(data)}>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[0].tableId} Tables</Text>
+              </Skeleton>
             </Flex>
-          ))
-        }
+            <Flex direction='row' ml={4} mt={1}>
+              <Text size="sm" mr={1}>Gorli : </Text>
+              <Skeleton isLoaded={Boolean(data)}>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[1].tableId} Tables</Text>
+              </Skeleton>
+            </Flex>
+          </Flex>
+          <Flex direction='column' align="center" key={0} mb={2} alignItems='flex-start'>
+            <Flex direction="row" alignItems="center">
+              <Avatar size="xs" src={networkDeets['137'].avatar} title={networkDeets['137'].name} mr={2}/>
+              <Text fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                Polygon (PoS)
+              </Text>
+            </Flex>
+            <Flex direction='row' ml={4} mt={1}>
+              <Text size="sm" mr={1}>Mainnet : </Text>
+              <Skeleton isLoaded={Boolean(data)}>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[2].tableId} Tables</Text>
+              </Skeleton>
+            </Flex>
+            <Flex direction='row' ml={4} mt={1}>
+              <Text size="sm" mr={1}>Mumbai : </Text>
+              <Skeleton isLoaded={Boolean(data)}>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[3].tableId} Tables</Text>
+              </Skeleton>
+            </Flex>
+          </Flex>
+          <Flex direction='column' align="center" key={0} mb={2} alignItems='flex-start'>
+            <Flex direction="row" alignItems="center">
+              <Avatar size="xs" src={networkDeets['10'].avatar} title={networkDeets['10'].name} mr={2}/>
+              <Text fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                Optimism
+              </Text>
+            </Flex>
+            <Flex direction='row' ml={4} mt={1}>
+              <Text size="sm" mr={1}>Mainnet : </Text>
+              <Skeleton isLoaded={Boolean(data)}>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[4].tableId} Tables</Text>
+              </Skeleton>
+            </Flex>
+            <Flex direction='row' ml={4} mt={1}>
+              <Text size="sm" mr={1}>Goerli : </Text>
+              <Skeleton isLoaded={Boolean(data)}>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[5].tableId} Tables</Text>
+              </Skeleton>
+            </Flex>
+          </Flex>
+          <Flex direction='column' align="center" key={0} mb={2} alignItems='flex-start'>
+            <Flex direction="row" alignItems="center">
+              <Avatar size="xs" src={networkDeets['42161'].avatar} title={networkDeets['42161'].name} mr={2}/>
+              <Text fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                Arbitrum
+              </Text>
+            </Flex>
+            <Flex direction='row' ml={4} mt={1}>
+              <Text size="sm" mr={1}>Mainnet : </Text>
+              <Skeleton isLoaded={Boolean(data)}>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[6].tableId} Tables</Text>
+              </Skeleton>
+            </Flex>
+            <Flex direction='row' ml={4} mt={1}>
+              <Text size="sm" mr={1}>Goerli : </Text>
+              <Skeleton isLoaded={Boolean(data)}>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[7].tableId} Tables</Text>
+              </Skeleton>
+            </Flex>
+          </Flex>
       </Flex>
       <GarageStatsSection/>
     </Flex>
@@ -394,7 +449,7 @@ const GarageStatsSection = () => {
           </Text>
           <Skeleton isLoaded={Boolean(data)}>
             <Text>
-              {(parseInt(data['total_flight_time']*12.07)/(60*60*24*365)).toPrecision(2)} years
+              {(parseInt(data['total_flight_time']*12.07)/(60*60*24*365)).toFixed(2)} years
             </Text>
           </Skeleton>
         </Flex>
