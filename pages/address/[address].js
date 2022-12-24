@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Input, ButtonGroup, Tooltip, IconButton, useColorMode, Box, Tag, Button, Text, useDisclosure, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Tooltip, IconButton, useColorMode, Box, Tag, Button, Text, useDisclosure, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import Link from 'next/link';
 import useSWR from "swr";
 
@@ -9,15 +9,14 @@ import TableCard from '@/components/ExploreTableCard';
 import Meta from '@/components/Meta';
 import DetailsModal from '@/components/DetailsModal';
 import { FeedIcon, OpenseaIcon, TableIcon, TablelandSmallIcon } from '@/public/icons';
-import { ExternalLinkIcon, ArrowUpIcon, MoonIcon, RepeatIcon, SunIcon } from '@chakra-ui/icons';
+import { ExternalLinkIcon, ArrowUpIcon, RepeatIcon } from '@chakra-ui/icons';
 import { getFeed, getUserRigs } from '@/utils/rigs';
 import RigCard from '@/components/RigCard';
 import RigAction from '@/components/RigAction';
 import EnsAvatar from '@/components/EnsAvatar';
 import AddressOrEns from '@/components/AddressOrEns';
-import { TablelandIcon } from '@/public/icons';
 import { EnsCacheContext } from '@/contexts/EnsCache';
-import { isAddress } from "ethers/lib/utils";
+import UniversalSearch from '@/components/UniversalSearch';
 
 const UserSection = () => {
 
@@ -25,12 +24,10 @@ const UserSection = () => {
     const { address } = router.query;
     const [activeModalData, setActiveModalData] = useState({});
     const [userRigs, setUserRigs] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [feed, setFeed] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { colorMode, toggleColorMode } = useColorMode();
-    const inpRef = useRef(null);
-    const { ensToAddress, lensToAddress } = useContext(EnsCacheContext);
+    const { colorMode } = useColorMode();
+    const { ensToAddress } = useContext(EnsCacheContext);
     const [localEns, setLocalEns] = useState(false);
 
     const { data, error, isValidating } = useSWR(address ? `{
@@ -83,76 +80,13 @@ const UserSection = () => {
     return (
         <>
             <Meta title={localEns ? `${localEns} - Tablescan` : false} />
-            <Flex
-                as="nav"
-                justify="space-between"
-                alignItems='center'
-                w="100%"
-                py={2}
-                px={4}
-                height="100px"
-                top="0"
-                position="sticky"
-                zIndex={2}
-                backgroundColor={colorMode === 'dark' ? 'black' : 'white'}
-            >
-                <Flex direction="row" justify="center" w={{base: "48px", md:"9%"}} alignItems="center">
-                    <Link href="/">
-                        <TablelandIcon cursor="pointer" display={{base: 'none', xl: 'flex'}} width="120px" _hover={{color: '#326cfc'}}/>
-                        <TablelandSmallIcon cursor="pointer" display={{base: 'flex', xl: 'none'}} width="64px" _hover={{color: '#326cfc'}}/>
-                    </Link>
-                </Flex>
-                <Flex direction="row" justify="left" w={{base: "100%", md:"80%"}}>
-                    <Input
-                        w={{base: "100%", md:"40%"}}
-                        height="60px"
-                        shadow='md'
-                        defaultValue={localEns || address}
-                        ref={inpRef}
-                        disabled={loading}
-                        borderRadius={10}
-                        fontSize="lg"
-                        borderColor={colorMode === 'light' ? '#dfdfdf' : '#343333'}
-                        placeholder="Search for an Address or Ens Name"
-                        onKeyDown={(e)=>{
-                            let searchValue = e.currentTarget.value;
-                            if(e.code == 'Enter'){
-                                if (isAddress(searchValue)) router.push(`/address/${searchValue}`);
-                                if (searchValue.endsWith('.eth')) {
-                                    setLoading(true);
-                                    ensToAddress(searchValue).then(res=>{
-                                        if (isAddress(res)) router.push(`/address/${res}`)
-                                    }).finally(()=>{
-                                        setLoading(false);
-                                    })
-                                }
-                                if (searchValue.endsWith('.lens')) {
-                                    setLoading(true);
-                                    lensToAddress(searchValue).then(res=>{
-                                        if (isAddress(res)) router.push(`/address/${res}`)
-                                    }).finally(()=>{
-                                        setLoading(false);
-                                    })
-                                }
-                                if (searchValue.startsWith('#')) {
-                                    let rid = parseInt(searchValue.slice(1));
-                                    if (rid>0 && rid<=3000) router.push(`/rig/${rid}`)
-                                }
-                            }
-                        }}
-                    />
-                </Flex>
-                <Flex direction="row" justify="right" alignItems='center' w={{base: "fit-content", md:"10%"}} align='right'>
-                    <ButtonGroup size='sm' isAttached variant='ghost'>
-                        <Tooltip hasArrow label={isValidating ? "Refreshing Data" : "Refresh Data"} placement='left'>
-                            <IconButton icon={isValidating ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isValidating}/>
-                        </Tooltip>
-                        <IconButton onClick={toggleColorMode}  icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} />
-                    </ButtonGroup>
-                </Flex>
-            </Flex>
+            <UniversalSearch defaultValue={localEns || address }>
+                <Tooltip hasArrow label={isValidating ? "Refreshing Data" : "Refresh Data"} placement='left'>
+                    <IconButton variant={'ghost'} icon={isValidating ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isValidating}/>
+                </Tooltip>
+            </UniversalSearch>
             <Flex position="relative" height="calc(100vh - 50px)" width="100%">
-                <Tabs colorScheme='messenger' width="100%">
+                <Tabs colorScheme='messenger' width="100%" mt={20}>
                     <TabList display='flex' justifyContent='center' borderBottomWidth='0.5px' borderBottomColor={colorMode === 'light' ? '#dfdfdf' : '#343333'}>
                         <Flex w={{base: "100%", md:"80%"}}>
                             <Tab>

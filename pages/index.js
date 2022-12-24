@@ -1,37 +1,16 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { useRouter } from 'next/router';
-import { SimpleGrid, Stack, Skeleton, Heading, useColorModeValue, useDisclosure, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
-import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
-import {
-  AutoComplete,
-  AutoCompleteInput,
-  AutoCompleteItem,
-  AutoCompleteList
-} from "@choc-ui/chakra-autocomplete";
+import React, { useEffect, useState } from "react";
+import { SimpleGrid, Stack, Skeleton, Heading, useDisclosure, useColorMode, Flex, Avatar, Text  } from "@chakra-ui/react";
 import useSWR from "swr";
-import {multifetch} from "../utils/fetcher";
-import {encodeSqlForUrl, nameToAvatar, networkDeets, toProperCase} from "../utils/stringUtils";
-import { SearchIcon } from "@chakra-ui/icons";
-import SqlInput from "@/components/RunSql";
+import { multifetch } from "../utils/fetcher";
+import { networkDeets } from "../utils/stringUtils";
 import Meta from "@/components/Meta";
-import { isAddress } from "ethers/lib/utils";
-import { SunIcon } from "@chakra-ui/icons";
-import { MoonIcon } from "@chakra-ui/icons";
 import DetailsModal from '@/components/DetailsModal';
 import TableCard from "@/components/ExploreTableCard";
 
 export default function Home() {
 
-  const router = useRouter();
-  const searchBox = useRef();
-  const [searchValue, setSearchValue] = useState('');
-  const { colorMode, toggleColorMode } = useColorMode();
-  const [isSqlMode, setSqlMode] = useState(false);
-  const [sqlError, setSqlError] = useState(false);
   const [activeModalData, setActiveModalData] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { ensToAddress, lensToAddress } = useContext(EnsCacheContext);
-  const [sqlValue, setSqlValue] = useState("SELECT image from rigs_80001_1881");
 
   function infoClick(id){
     let selectData = exploreData
@@ -42,29 +21,6 @@ export default function Home() {
     setActiveModalData(selectData[id]);
     onOpen();
   }
-
-  const onChangeTest = (event) => {
-    setSearchValue(event.target.value);
-  }
-
-  // Autocomplete Search
-  const { data, error } = useSWR(`{
-    tables(where: {name_contains_nocase: "${searchValue}"}, first: 2, orderBy: created, orderDirection: desc) {
-          name
-          owner {
-              id
-          }
-          tableId
-          statement
-          tokenURI
-          created
-          txnHash
-          controller {
-              id
-          }
-          historyCount
-    }
-  }`, multifetch);
 
   // Explore Feed
   const { data: exploreData } = useSWR(`{
@@ -86,182 +42,13 @@ export default function Home() {
           }
   }`, multifetch);
 
-  useEffect(()=>{
-    if(error) console.log(error);
-  }, [error]);
-
   return (
     <>
       <Meta />
 
       <Flex direction='column' m="0" h="max-content" alignItems='center'>
 
-        <Flex
-          direction="row"
-          justifyContent="space-around"
-          alignItems='center'
-          h="70px"
-          position='fixed'
-          w="100%"
-          background={useColorModeValue('#fcfcfcdb', '#0000005e')}
-          backdropFilter='blur(20px)'
-          zIndex={2}
-        >
-          <Flex
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            w={{base:"100vw", md:"50vw", lg: "40vw"}}
-            p={2}
-          >
-            <TablelandSmallIcon boxSize={10} />
-            <Flex direction="row" width="100%" ml={2} alignItems='center'>
-              {
-                !isSqlMode ? (
-                  <FormControl id="table-name" w="100%">
-                    <AutoComplete openOnFocus onSelectOption={(data)=>{
-                      router.push(`/${data.item.value}`);
-                    }}>
-                      <AutoCompleteInput
-                        variant="filled"
-                        ref={searchBox}
-                        onChange={onChangeTest}
-                        placeholder="Search for Tables or ENS Names"
-                        autoComplete="off"
-
-                        onKeyDown={(e)=>{
-                          if(e.code == 'Enter'){
-                            if (isAddress(searchValue)) router.push(`/address/${searchValue}`);
-                            if (searchValue.endsWith('.eth')) {
-                              ensToAddress(searchValue).then(res=>{
-                                if (isAddress(res)) router.push(`/address/${res}`)
-                              })
-                            }
-                            if (searchValue.endsWith('.lens')) {
-                              lensToAddress(searchValue).then(res=>{
-                                if (isAddress(res)) router.push(`/address/${res}`)
-                              })
-                            }
-                            if (searchValue.startsWith('#')) {
-                              let rid = parseInt(searchValue.slice(1));
-                              if (rid>0 && rid<=3000) router.push(`/rig/${rid}`)
-                            }
-                          }
-                        }}
-                        style={{
-                          background: colorMode === 'light' ? '#f2f2f2': '#191919',
-                          borderRadius: '30px',
-                          fontSize: '20px',
-                          padding: '10px',
-                          height: '50px',
-                          paddingLeft: '20px'
-                        }}
-                      />
-                      <AutoCompleteList id="setValue">
-                        {data && data
-                          .map(e=>e?.data?.tables)
-                          .flat()
-                          .sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})
-                          .map((table, oid) => (
-                            <AutoCompleteItem
-                              key={`option-${oid}`}
-                              value={table.name}
-                              align="center"
-                              display='flex'
-                              flexDirection='row'
-                              alignItems="center"
-                            >
-                              <Avatar size="sm" bg='whiteAlpha.500' src={nameToAvatar(table.name)} />
-                              <Text ml="4" fontWeight={'medium'}>
-                                {toProperCase(table.name.split("_").slice(0,-2).join(' '))}&nbsp;
-                                <Tag size='sm' mt="2px">#{table.tableId}</Tag>
-                              </Text>
-                            </AutoCompleteItem>
-                          ))
-                        }
-                      </AutoCompleteList>
-                    </AutoComplete>
-                  </FormControl>
-                ) : (
-                  <Tooltip placement="bottom" hasArrow label={sqlError || 'SQL looks good.' } bg={sqlError? 'red' : 'green.300'}>
-                    <SqlInput
-                      inputValue={sqlValue} setInputValue={setSqlValue}
-                      sqlError={sqlError}
-                      setSqlError={setSqlError}
-                      mt={2}
-                      background={colorMode === 'dark'? 'rgb(25, 25, 25)': 'rgb(242, 242, 242)'}
-                      border="none"
-                      style={{
-                        borderRadius: '30px',
-                        fontSize: '20px',
-                        padding: '10px',
-                        height: '50px',
-                        paddingLeft: '20px'
-                      }}
-                      onKeyUp={(event)=>{
-                        if (event.key == 'Enter' && !sqlError){
-                          event.currentTarget.disabled = true;
-                          router.push(`/interactive?query=${encodeSqlForUrl(event.currentTarget.value)}`);
-                        }
-                      }}
-                    />
-                  </Tooltip>
-                )
-              }
-              <Tooltip
-                label={isSqlMode ? 'Switch to Search Mode': 'Switch to SQL Mode'}
-                aria-label={isSqlMode ? 'Switch to Search Mode': 'Switch to SQL Mode'}
-                hasArrow
-                placement='left'
-              >
-                <IconButton
-                  variant='unstyled'
-                  borderRadius='100%'
-                  icon={isSqlMode? <SqlIcon boxSize={6}/> : <SearchIcon />}
-                  size='lg'
-                  ml={2}
-                  onClick={()=>{
-                    setSqlMode(mode=>!mode);
-                  }}
-                  name="Search"
-                />
-              </Tooltip>
-            </Flex>
-          </Flex>
-          <Flex direction="row">
-            {/* <Link href="/explore">
-              {isLargerThanMd ? (
-                <Button
-                  variant='outline'
-                  borderRadius='100px'
-                  size='lg'
-                  leftIcon={<AppsIcon />}
-                  mr={2}
-                  fontWeight="100"
-                >
-                  Discover
-                </Button>
-              ) : (
-                <IconButton
-                  variant='outline'
-                  borderRadius='100%'
-                  size='lg'
-                  icon={<AppsIcon />}
-                  mr={2}
-                />
-              )}
-            </Link> */}
-            <IconButton
-              variant='outline'
-              borderRadius='100%'
-              size='lg'
-              icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />}
-              onClick={toggleColorMode}
-              mr={2}
-              name="Switch Theme"
-            />
-          </Flex>
-        </Flex>
+        <UniversalSearch />
         <Flex direction="row" justifyContent="space-around" mt="70px" w={{base: "100%", md: "80%"}}>
             <Flex direction="column" >
                 <Flex direction="column" width={{base: '100%', md: '600px'}}>
@@ -336,7 +123,7 @@ const ChainsSection = () => {
               </Skeleton>
             </Flex>
             <Flex direction='row' ml={4} mt={1}>
-              <Text size="sm" mr={1}>Gorli : </Text>
+              <Text size="sm" mr={1}>Görli : </Text>
               <Skeleton isLoaded={Boolean(data)}>
                 <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[1].tableId} Tables</Text>
               </Skeleton>
@@ -376,7 +163,7 @@ const ChainsSection = () => {
               </Skeleton>
             </Flex>
             <Flex direction='row' ml={4} mt={1}>
-              <Text size="sm" mr={1}>Goerli : </Text>
+              <Text size="sm" mr={1}>Görli : </Text>
               <Skeleton isLoaded={Boolean(data)}>
                 <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[5].tableId} Tables</Text>
               </Skeleton>
@@ -396,7 +183,7 @@ const ChainsSection = () => {
               </Skeleton>
             </Flex>
             <Flex direction='row' ml={4} mt={1}>
-              <Text size="sm" mr={1}>Goerli : </Text>
+              <Text size="sm" mr={1}>Görli : </Text>
               <Skeleton isLoaded={Boolean(data)}>
                 <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[7].tableId} Tables</Text>
               </Skeleton>
@@ -422,7 +209,7 @@ const GarageStatsSection = () => {
       <br/>
       <Heading>Garage</Heading>
       <br/>
-      <SimpleGrid columns={2} spacingX='40px' spacingY='10px' top="0px" direction="column">
+      <SimpleGrid columns={2} spacingX='40px' spacingY='4px' top="0px" direction="column">
         <Flex direction='column' align="left" key='num_rigs_in_flight' mb={2} w="120px">
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Rigs In-flight
@@ -483,9 +270,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 import RigAction from "@/components/RigAction";
-import { EnsCacheContext } from "@/contexts/EnsCache";
 import BottomStats from "@/components/BottomStats";
 import TableCardSkeleton from "@/components/ExploreTableCardShell";
+import UniversalSearch from "@/components/UniversalSearch";
 
 const ActionsSection = () => {
 

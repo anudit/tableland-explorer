@@ -1,11 +1,13 @@
 import { mergeKeyValue, sleep } from "./stringUtils";
 
+const ethereumRpcUrl = 'https://eth.llamarpc.com/rpc/01GN04VPE4RTRF8NH87ZP86K24';
+
 export function constructTokenURIQuery(tokenIds = []){
     return `https://tableland.network/query?extract=true&unwrap=true&s=${encodeURIComponent(`select json_object('name','Rig #'||rig_id,'external_url','https://garage.tableland.xyz/rigs/'||rig_id,'image','ipfs://'||renders_cid||'/'||rig_id||'/'||image_full_name,'image_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_full_alpha_name,'image_medium','ipfs://'||renders_cid||'/'||rig_id||'/'||image_medium_name,'image_medium_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_medium_alpha_name,'thumb','ipfs://'||renders_cid||'/'||rig_id||'/'||image_thumb_name,'thumb_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_thumb_alpha_name,'animation_url',animation_base_url||rig_id||'.html','attributes',json_insert((select json_group_array(json_object('display_type',display_type,'trait_type',trait_type,'value',value))from rig_attributes_42161_15 where rig_id=348 group by rig_id),'$[#]',json_object('display_type','string','trait_type','Garage Status','value',coalesce((select coalesce(end_time, 'In-Flight') from pilot_sessions_1_7 where rig_id=348 and end_time is null),'Parked')))) from rig_attributes_42161_15 join lookups_42161_10 where rig_id in (${tokenIds.toString()}) group by rig_id;`)}`
 }
 
 export async function garageStatsQuery(){
-    let blkNumber = await fetch("https://rpc.ankr.com/eth", {
+    let blkNumber = await fetch(ethereumRpcUrl, {
         "headers": {
           "accept": "*/*",
           "content-type": "application/json",
@@ -81,7 +83,7 @@ export async function getMetadata(tokenIds = []){
 
 export async function getFlightData(tokenId = 1){
 
-    let blkNumber = await fetch("https://rpc.ankr.com/eth", {
+    let blkNumber = await fetch(ethereumRpcUrl, {
         "headers": {
           "accept": "*/*",
           "content-type": "application/json",
@@ -106,7 +108,7 @@ export async function getFlightData(tokenId = 1){
 
     let metReq = resp.filter(e=>e.contract!=null).map(e=>{
         return {
-            'contractAddress':e.contract,
+            'contractAddress': e.contract,
             'tokenId': e.tokenId,
             'tokenType': "ERC721",
         }
@@ -114,17 +116,6 @@ export async function getFlightData(tokenId = 1){
 
     let nftMetadatas = await getNFTMetadataBatch(metReq);
     return {flightData: resp, nftMetadatas, latestBlock: blkNumber};
-}
-
-export async function getOpenData(tokenId){
-
-    const options = {method: 'GET', headers: {'X-API-KEY': Buffer.from('OTYwNDFlMWQxZDRiNGYyZmJlMjZiZDdkZTFiZjcxODU=', 'base64')}};
-    // let promiseArray = tokenIds.map(id=>fetch(`https://api.opensea.io/api/v1/asset/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${id}/?include_orders=true`, options).then(response => response.json()));
-    // let data = await Promise.allSettled(promiseArray);
-    // return data.map(e=>e.value);
-
-    let res = await fetch(`https://api.opensea.io/api/v1/asset/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/${tokenId}/?include_orders=true`, options).then(response => response.json());
-    return res;
 }
 
 export async function getReservoirData(tokenId, metadataRefresh=false){
@@ -149,7 +140,9 @@ export async function getReservoirData(tokenId, metadataRefresh=false){
             },
             "referrer": "https://www.reservoir.market/0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d/956",
             "referrerPolicy": "strict-origin-when-cross-origin",
-            "body": `{\"token\":\"0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d:${tokenId}\"}`,
+            "body": JSON.stringify({
+                "token": `0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d:${tokenId}`
+            }),
             "method": "POST",
             "mode": "cors",
             "credentials": "include"
@@ -173,6 +166,15 @@ export async function getOpenStats(){
     return res;
 }
 
+export async function getVerbwireStats(){
+
+}
+
+export async function verbwireSearch(){
+
+}
+
+
 export async function getUserRigs(address){
     let userRigs = await fetch(`https://api.nftport.xyz/v0/accounts/${address}?chain=ethereum&contract_address=0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d`,{
         headers: { 'Authorization': 'ad985098-7dbb-4bee-9f7d-ffa06d5a44d9' }
@@ -190,12 +192,6 @@ export async function getUserRigs(address){
         return [];
     }
 
-}
-
-export async function getRigOwner(tokenId){
-    let owner = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v2/jz1AlVEXLDxlzNMcKDg9To03aBnOssyH/getOwnersForToken?contractAddress=0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d&tokenId=${tokenId}`).then(e=>e.json());
-    let ret = owner?.owners[0];
-    return ret;
 }
 
 export async function getNFTMetadataBatch(tokens){

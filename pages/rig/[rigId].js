@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Spinner, Avatar, chakra, Box, Tooltip, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Wrap, WrapItem } from "@chakra-ui/react";
 
-import NavBar from '@/components/NavbarSimple';
 import Meta from '@/components/Meta';
 import { EtherscanIcon, EthIcon, FlightLogIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, ShareIcon } from '@/public/icons';
 import { constructTokenURIQuery, getFlightData, getReservoirData } from '@/utils/rigs';
@@ -25,6 +24,8 @@ import {
     Td,
     TableContainer,
   } from '@chakra-ui/react'
+import UniversalSearch from '@/components/UniversalSearch';
+import { RepeatIcon } from '@chakra-ui/icons';
 
 export async function getStaticPaths() {
 
@@ -80,9 +81,13 @@ const UserSection = ({pageData: propsData, rigId}) => {
     }
 
     return (
-        <>
+        <Flex direction='column' m="0" h="max-content">
             <Meta title={`Rig #${rigId} - Tablescan`} url={`https://tableland.mypinata.cloud/ipfs/bafybeidpnfh2zc6esvou3kfhhvxmy2qrmngrqczj7adnuygjsh3ulrrfeu/${rigId}/image_thumb.png`}/>
-            <NavBar refresh={refresh} isLoading={refreshing || isValidating}/>
+            <UniversalSearch>
+                <Tooltip hasArrow label={refreshing || isValidating ? "Refreshing Data" : "Refresh Data"} placement='left'>
+                    <IconButton variant="ghost" onClick={refresh} icon={refreshing || isValidating ? <Spinner size="xs"/> : <RepeatIcon />} disabled={refreshing || isValidating}/>
+                </Tooltip>
+            </UniversalSearch>
             <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt="50px">
                 <Flex position='relative' ref={imageRef} h="100%" w={{base: '100%', md: '50%'}} alignItems="center" justifyContent='center' background='#80808014'>
                     <Flex direction="row" position='absolute' bottom='20px' right='20px' >
@@ -312,7 +317,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                     </Flex>
                 </Flex>
             </Flex>
-        </>
+        </Flex>
     )
 
 }
