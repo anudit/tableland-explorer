@@ -82,7 +82,12 @@ const UserSection = () => {
             <Meta title={localEns ? `${localEns} - Tablescan` : false} />
             <UniversalSearch defaultValue={localEns || address }>
                 <Tooltip hasArrow label={isValidating ? "Refreshing Data" : "Refresh Data"} placement='left'>
-                    <IconButton variant={'ghost'} icon={isValidating ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isValidating}/>
+                    <IconButton
+                        borderRadius='100%'
+                        variant={'ghost'}
+                        icon={isValidating ? <Spinner size="xs"/> : <RepeatIcon />}
+                        disabled={isValidating}
+                    />
                 </Tooltip>
             </UniversalSearch>
             <Flex position="relative" height="calc(100vh - 50px)" width="100%">

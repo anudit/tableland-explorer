@@ -85,10 +85,10 @@ const UserSection = ({pageData: propsData, rigId}) => {
             <Meta title={`Rig #${rigId} - Tablescan`} url={`https://tableland.mypinata.cloud/ipfs/bafybeidpnfh2zc6esvou3kfhhvxmy2qrmngrqczj7adnuygjsh3ulrrfeu/${rigId}/image_thumb.png`}/>
             <UniversalSearch>
                 <Tooltip hasArrow label={refreshing || isValidating ? "Refreshing Data" : "Refresh Data"} placement='left'>
-                    <IconButton variant="ghost" onClick={refresh} icon={refreshing || isValidating ? <Spinner size="xs"/> : <RepeatIcon />} disabled={refreshing || isValidating}/>
+                    <IconButton borderRadius='100%' variant="ghost" onClick={refresh} icon={refreshing || isValidating ? <Spinner size="xs"/> : <RepeatIcon />} disabled={refreshing || isValidating}/>
                 </Tooltip>
             </UniversalSearch>
-            <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt="50px">
+            <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt={{base:"70px", md:"50px"}}>
                 <Flex position='relative' ref={imageRef} h="100%" w={{base: '100%', md: '50%'}} alignItems="center" justifyContent='center' background='#80808014'>
                     <Flex direction="row" position='absolute' bottom='20px' right='20px' >
                         {parseInt(rigId) !=1 && (

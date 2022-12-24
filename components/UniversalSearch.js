@@ -70,8 +70,8 @@ export default function UniversalSearch({children, defaultValue}) {
             w={{base:"100vw", md:"50vw", lg: "40vw"}}
             p={2}
         >
-        <Link href="\">
-            <TablelandSmallIcon boxSize={10} />
+        <Link href="/">
+            <TablelandSmallIcon boxSize={10} _hover={{fill: 'royalBlue'}}/>
         </Link>
         <Flex direction="row" width="100%" ml={2} alignItems='center'>
             {

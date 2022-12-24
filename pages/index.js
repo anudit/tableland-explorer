@@ -104,15 +104,15 @@ const ChainsSection = () => {
   }`, multifetch);
 
   return (
-    <Flex direction="column" width={{base: '100%', md: '200px'}} position="sticky" top="50px">
+    <Flex direction="column" width={{base: '100%', md: '250px'}} position="sticky" top="50px">
       <br/><br/>
-      <Heading>Networks</Heading>
+      <Heading size='lg'>⛓️ Networks</Heading>
       <br/>
       <Flex top="0px" direction="column">
-          <Flex direction='column' align="center" key={0} mb={2} alignItems='flex-start'>
+          <Flex direction='column' align="center" key={0} mb={4} alignItems='flex-start'>
             <Flex direction="row" alignItems="center">
               <Avatar size="xs" src={networkDeets['1'].avatar} title={networkDeets['1'].name} mr={2}/>
-              <Text fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+              <Text fontWeight={600} fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                 Ethereum
               </Text>
             </Flex>
@@ -129,10 +129,10 @@ const ChainsSection = () => {
               </Skeleton>
             </Flex>
           </Flex>
-          <Flex direction='column' align="center" key={0} mb={2} alignItems='flex-start'>
+          <Flex direction='column' align="center" key={1} mb={4} alignItems='flex-start'>
             <Flex direction="row" alignItems="center">
               <Avatar size="xs" src={networkDeets['137'].avatar} title={networkDeets['137'].name} mr={2}/>
-              <Text fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+              <Text fontWeight={600} fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                 Polygon (PoS)
               </Text>
             </Flex>
@@ -149,10 +149,10 @@ const ChainsSection = () => {
               </Skeleton>
             </Flex>
           </Flex>
-          <Flex direction='column' align="center" key={0} mb={2} alignItems='flex-start'>
+          <Flex direction='column' align="center" key={2} mb={4} alignItems='flex-start'>
             <Flex direction="row" alignItems="center">
               <Avatar size="xs" src={networkDeets['10'].avatar} title={networkDeets['10'].name} mr={2}/>
-              <Text fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+              <Text fontWeight={600} fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                 Optimism
               </Text>
             </Flex>
@@ -169,10 +169,10 @@ const ChainsSection = () => {
               </Skeleton>
             </Flex>
           </Flex>
-          <Flex direction='column' align="center" key={0} mb={2} alignItems='flex-start'>
+          <Flex direction='column' align="center" key={3} mb={4} alignItems='flex-start'>
             <Flex direction="row" alignItems="center">
               <Avatar size="xs" src={networkDeets['42161'].avatar} title={networkDeets['42161'].name} mr={2}/>
-              <Text fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+              <Text fontWeight={600} fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                 Arbitrum
               </Text>
             </Flex>
@@ -207,7 +207,7 @@ const GarageStatsSection = () => {
   return (
     <>
       <br/>
-      <Heading>Garage</Heading>
+      <Heading size='lg'>🏗️ Garage</Heading>
       <br/>
       <SimpleGrid columns={2} spacingX='40px' spacingY='4px' top="0px" direction="column">
         <Flex direction='column' align="left" key='num_rigs_in_flight' mb={2} w="120px">
@@ -240,13 +240,13 @@ const GarageStatsSection = () => {
             </Text>
           </Skeleton>
         </Flex>
-        <Flex direction='column' align="left" key='total_flight_time' mb={2} w="120px">
+        <Flex direction='column' align="left" key='avg_flight_time' mb={2} w="120px">
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Avg. Flight Time
           </Text>
           <Skeleton isLoaded={Boolean(data)}>
             <Text>
-              {(parseInt(data['total_flight_time']*12.07)/(60*60*24*parseInt(data['num_rigs_in_flight']))).toPrecision(2)} days
+              {(parseInt(data['avg_flight_time']*12.07)/(60*60*24)).toFixed(2)} days
             </Text>
           </Skeleton>
         </Flex>
