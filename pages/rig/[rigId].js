@@ -10,20 +10,7 @@ import { ArrowBackIcon, ArrowForwardIcon, WarningIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { cleanDecimals, countdown } from '@/utils/stringUtils';
 import useSWR from 'swr';
-import {
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    TableContainer,
-  } from '@chakra-ui/react'
+import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react'
 import UniversalSearch from '@/components/UniversalSearch';
 import { RepeatIcon } from '@chakra-ui/icons';
 
@@ -234,22 +221,24 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                     <Wrap mt={2}>
                                         {
                                             pageData.token.attributes.sort((a, b)=>String(a.key).toLowerCase().charCodeAt(0) - String(b.key).toLowerCase().charCodeAt(0)).map(e=>(
-                                                <WrapItem key={e?.key}>
-                                                    <Flex
-                                                        direction="column"
-                                                        backgroundColor='hsl(201deg 94% 60% / 11%)'
-                                                        borderColor="blue.500"
-                                                        borderWidth="1px"
-                                                        borderRadius="10px"
-                                                        p={2}
-                                                    >
-                                                        <Text fontSize='x-small' letterSpacing='1px'  mb={1} textTransform='uppercase' color="blue.500">
-                                                            {e?.key}
-                                                        </Text>
-                                                        <Text fontSize='sm' fontWeight={600}>{e?.value}</Text>
-                                                        <Text title={`${e?.tokenCount} Other rigs also have this trait`} fontSize='x-small' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>{e?.tokenCount} ({cleanDecimals(e?.tokenCount/30)}%)</Text>
-                                                    </Flex>
-                                                </WrapItem>
+                                                <Link href={`/attributes?search=${e?.value}`} key={e?.key}>
+                                                    <WrapItem >
+                                                        <Flex
+                                                            direction="column"
+                                                            backgroundColor='hsl(201deg 94% 60% / 11%)'
+                                                            borderColor="blue.500"
+                                                            borderWidth="1px"
+                                                            borderRadius="10px"
+                                                            p={2}
+                                                        >
+                                                            <Text fontSize='x-small' letterSpacing='1px'  mb={1} textTransform='uppercase' color="blue.500">
+                                                                {e?.key}
+                                                            </Text>
+                                                            <Text fontSize='sm' fontWeight={600}>{e?.value}</Text>
+                                                            <Text title={`${e?.tokenCount} Other rigs also have this trait`} fontSize='x-small' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>{e?.tokenCount} ({cleanDecimals(e?.tokenCount/30)}%)</Text>
+                                                        </Flex>
+                                                    </WrapItem>
+                                                </Link>
                                                 )
                                             )
                                         }
