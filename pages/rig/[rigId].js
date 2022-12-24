@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Spinner, Avatar, chakra, Box, Tooltip, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Wrap, WrapItem } from "@chakra-ui/react";
+import { Spinner, Avatar, chakra, Stack, Box, Tooltip, useColorMode, IconButton, Image, Button, Text, Heading, Flex, Wrap, WrapItem } from "@chakra-ui/react";
 
 import Meta from '@/components/Meta';
 import { EtherscanIcon, EthIcon, FlightLogIcon, FullscreenIcon, MetadataIcon, OpenseaIcon, ShareIcon } from '@/public/icons';
@@ -153,9 +153,9 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                     />
                                 </Flex>
                             </Flex>
-                            <Flex direction='row' mr={4}>
+                            <Stack direction="row" spacing='24px'>
                                 {
-                                    Boolean(pageData.token.lastBuy.value) && (
+                                    Boolean(pageData.token.lastSell.value) && (
                                         <Flex direction='row' alignItems="center" mr={{base: 8, md: 4}}>
                                             <EthIcon boxSize={8} />
                                             <Flex direction='column'>
@@ -163,7 +163,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                                     Last Sale
                                                 </Text>
                                                 <Text ml={2} fontWeight={400} size={{base: 'sm', md: 'md'}}>
-                                                    {pageData.token.lastBuy.value.toFixed(4)}{" ETH"}
+                                                    {pageData.token.lastSell.value.toFixed(4)}{" ETH"}
                                                 </Text>
                                             </Flex>
                                         </Flex>
@@ -189,7 +189,27 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                         </Link>
                                     )
                                 }
-                            </Flex>
+                                {
+                                    Boolean(pageData.market.floorAsk?.id) && (
+                                        <Link href={pageData.market.floorAsk.source.url} target="_blank">
+                                            <Flex direction='row' alignItems="center">
+                                                <Image src={pageData.market.floorAsk.source.icon} height={8} width={8} title={pageData.market.floorAsk.source.name} />
+                                                <Flex direction='column'>
+                                                    <Text ml={2} mb='-1' fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                                                        Listed for
+                                                    </Text>
+                                                    <Text ml={2} fontWeight={400} size={{base: 'sm', md: 'md'}}>
+                                                        {pageData.market.floorAsk.price.amount.native}
+                                                        {" " + pageData.market.floorAsk.price.currency.symbol}
+                                                        {" "}
+                                                        (${cleanDecimals(pageData.market.floorAsk.price.amount.usd)})
+                                                    </Text>
+                                                </Flex>
+                                            </Flex>
+                                        </Link>
+                                    )
+                                }
+                            </Stack>
                         </Flex>
                         <Accordion defaultIndex={[0]} allowMultiple>
                             <AccordionItem borderRadius="10px" borderWidth="1px" borderColor={colorMode === 'light' ? '#0000001a' : '#ffffff1a'}>
