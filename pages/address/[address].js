@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Tooltip, IconButton, useColorMode, Box, Tag, Button, Text, useDisclosure, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { ExternalLinkIcon, RepeatIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import useSWR from "swr";
 
@@ -8,8 +9,7 @@ import { multifetch } from '@/utils/fetcher';
 import TableCard from '@/components/ExploreTableCard';
 import Meta from '@/components/Meta';
 import DetailsModal from '@/components/DetailsModal';
-import { FeedIcon, OpenseaIcon, TableIcon, TablelandSmallIcon } from '@/public/icons';
-import { ExternalLinkIcon, ArrowUpIcon, RepeatIcon } from '@chakra-ui/icons';
+import { EtherscanIcon, FeedIcon, OpenseaIcon, TableIcon, TablelandSmallIcon } from '@/public/icons';
 import { getFeed, getUserRigs } from '@/utils/rigs';
 import RigCard from '@/components/RigCard';
 import RigAction from '@/components/RigAction';
@@ -29,6 +29,8 @@ const UserSection = () => {
     const { colorMode } = useColorMode();
     const { ensToAddress } = useContext(EnsCacheContext);
     const [localEns, setLocalEns] = useState(false);
+
+    const randomRig = Math.floor(Math.random()*3000);
 
     const { data, error, isValidating } = useSWR(address ? `{
         tables(where: {owner: "${address.toLowerCase()}"}, orderBy: created, orderDirection: desc) {
@@ -90,8 +92,31 @@ const UserSection = () => {
                     />
                 </Tooltip>
             </UniversalSearch>
-            <Flex position="relative" height="calc(100vh - 50px)" width="100%">
-                <Tabs colorScheme='messenger' width="100%" mt={20}>
+            <Flex position="relative" height="calc(100vh - 50px)" width="100%" direction='column'>
+                <Flex w="100%" direction='column' alignItems='center' mt='70px'>
+                    <Flex
+                        w={{base: "100%", md:"90%" }}
+                        minHeight={{base:"150px" , md:"200px" }}
+                        borderBottomRadius={30}
+                        background={`url(https://tableland.mypinata.cloud/ipfs/bafybeidpnfh2zc6esvou3kfhhvxmy2qrmngrqczj7adnuygjsh3ulrrfeu/${randomRig}/image_thumb.png) #000000bb`}
+                        backgroundBlendMode='color'
+                        backgroundRepeat='no-repeat'
+                        backgroundSize='cover'
+                        backgroundPosition='center'
+                    />
+                    <Flex w={{base: "95%", md:"80%" }} mt={{base:'-50px', md:'-70px'}} justifyContent='space-between'>
+                        <Flex direction='column'>
+                            <EnsAvatar size={{base: "xl", md:"2xl"}} address={address} borderWidth='6px' borderColor={colorMode === 'dark' ? "black" : "white"}/>
+                            <AddressOrEns address={address} fontWeight={900} fontSize="2xl" />
+                        </Flex>
+                        <Flex direction='row' mt={24}>
+                            <Link href={`https://blockscan.com/address/${address}`} target="_blank">
+                                <IconButton icon={<EtherscanIcon />} variant="ghost" />
+                            </Link>
+                        </Flex>
+                    </Flex>
+                </Flex>
+                <Tabs  width="100%">
                     <TabList display='flex' justifyContent='center' borderBottomWidth='0.5px' borderBottomColor={colorMode === 'light' ? '#dfdfdf' : '#343333'}>
                         <Flex w={{base: "100%", md:"80%"}}>
                             <Tab>
@@ -100,7 +125,7 @@ const UserSection = () => {
                             </Tab>
                             <Tab>
                                 <Box as='span' mr='2'> <TableIcon /> </Box>
-                                Tables {data && (<Tag ml={2}>{data.map(e=>e?.data?.tables).flat().length}</Tag>)}
+                                Tables {data && (<Tag ml={2} variant='subtle'>{data.map(e=>e?.data?.tables).flat().length}</Tag>)}
                             </Tab>
                             <Tab>
                                 <Box as='span' mr='2'>
@@ -110,7 +135,7 @@ const UserSection = () => {
                                         stroke={colorMode == 'light' ? 'black' : 'white'}
                                     />
                                 </Box>
-                                Rigs {userRigs && (<Tag ml={2}>{userRigs.length}</Tag>)}
+                                Rigs {userRigs && (<Tag ml={2} variant='subtle'>{userRigs.length}</Tag>)}
                             </Tab>
                         </Flex>
                     </TabList>
@@ -139,26 +164,6 @@ const UserSection = () => {
                                             <Text fontSize="md" mt={2} align="left">No activity found.</Text>
                                         )
                                     }
-                                </Flex>
-                                <Flex
-                                    direction="column"
-                                    width={{base: "100%", md: "20%"}}
-                                    align="start"
-                                    borderWidth="1px"
-                                    borderColor={colorMode === 'light' ? '#0000001a' : '#ffffff1a'}
-                                    mt={4}
-                                    p={4}
-                                    borderRadius={10}
-                                    top="120px"
-                                    position={{base: "inherit", md:"sticky"}}
-                                >
-                                    <EnsAvatar size="lg" address={address}  mb={2}/>
-                                    <AddressOrEns address={address} tooltip={false} m={0} mb={2}/>
-                                    <Link href={`https://blockscan.com/address/${address}`} target="_blank">
-                                        <Text>
-                                            View on Etherscan <ArrowUpIcon ml={2} style={{'transform':'rotate(45deg)'}}/>
-                                        </Text>
-                                    </Link>
                                 </Flex>
                             </Flex>
                         </TabPanel>
