@@ -250,3 +250,12 @@ export async function getTsRanking(tokenIds = []){
     return data;
 }
 
+
+export async function getProjects(){
+
+    let query = `SELECT * FROM tableverse_5_1344`;
+
+    let resp = await fetch(`https://testnet.tableland.network/query?mode=json&s=${encodeURIComponent(query)}`).then(r=>r.json());
+
+    return resp;
+}

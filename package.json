@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 8001",
+    "dev": "next dev --port 8000",
     "build": "next build",
     "start": "next start",
     "export": "next export",
@@ -11,22 +11,24 @@
   },
   "dependencies": {
     "@anudit/flat-ui": "0.14.4",
-    "@chakra-ui/icons": "^2.0.14",
-    "@chakra-ui/react": "^2.4.4",
+    "@chakra-ui/icons": "^2.0.15",
+    "@chakra-ui/react": "^2.4.6",
     "@choc-ui/chakra-autocomplete": "^5.1.4",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@livepeer/react": "^1.5.6",
     "@livepeer/webrtmp-sdk": "^0.2.3",
     "@monaco-editor/react": "^4.4.6",
+    "@next/font": "^13.1.1",
+    "@tableland/sdk": "^3.1.5",
     "critters": "^0.0.16",
     "ethers": "^5.7.2",
-    "framer-motion": "^8.0.2",
+    "framer-motion": "^8.1.9",
     "hsl-rgb": "^1.0.0",
     "hsl-triad": "^1.0.0",
     "next": "13.1.1",
     "next-pwa": "^5.6.0",
-    "node-sql-parser": "^4.6.3",
+    "node-sql-parser": "^4.6.4",
     "postman-code-generators": "^1.2.2",
     "postman-collection": "^4.1.6",
     "react": "18.2.0",
@@ -34,13 +36,14 @@
     "react-draggable": "^4.4.5",
     "react-fast-marquee": "^1.3.5",
     "react-split": "^2.0.14",
+    "react-wrap-balancer": "^0.3.0",
     "string-hash": "^1.1.3",
     "swiper": "^8.4.5",
     "swr": "^2.0.0"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "13.1.1",
-    "eslint": "8.30.0",
+    "eslint": "8.31.0",
     "eslint-config-next": "13.1.1"
   }
 }

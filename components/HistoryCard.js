@@ -23,21 +23,21 @@ const HistoryCard = ({tableName, hist, ...props}) => {
             {...props}
         >
             <Flex direction='row' justifyContent='space-between' mb={2}>
-            <Flex direction='row' justifyContent="center">
-                <Text fontWeight='bold' fontSize='small'>
-                    {hist.statement.split(' ')[0].toUpperCase()} by
-                </Text>
-                <AddressOrEns address={hist.actionBy.id} ml={1} fontSize="sm"/>
-                <Text fontWeight='light' fontSize='xs' >
-                &nbsp;({stringSize(hist.statement)})
-                </Text>
-            </Flex>
-            <Flex direction='row'>
-                <Text fontSize='small'>{prettyTime(parseInt(hist.time)*1000)}</Text>
-                <Link href={`${nameToExplorer(tableName)}/tx/${hist.id}`} target="_blank">
-                    <ExternalLinkIcon ml={2} cursor="pointer" name="Open in New-Tab"/>
-                </Link>
-            </Flex>
+                <Flex direction='row' justifyContent="center" alignItems="center">
+                    <Text fontWeight='bold' fontSize={{base: '2xs', md:'sm'}}>
+                        {hist.statement.split(' ')[0].toUpperCase()} by
+                    </Text>
+                    <AddressOrEns address={hist.actionBy.id} ml={1} fontSize={{base: 'xs', md:'sm'}}/>
+                    <Text fontWeight='light' fontSize={{base: '2xs', md:'sm'}} >
+                    &nbsp;({stringSize(hist.statement)})
+                    </Text>
+                </Flex>
+                <Flex direction='row' alignItems="center">
+                    <Text fontSize={{base: '2xs', md:'sm'}}>{prettyTime(parseInt(hist.time)*1000)}</Text>
+                    <Link href={`${nameToExplorer(tableName)}/tx/${hist.id}`} target="_blank">
+                        <ExternalLinkIcon ml={2} cursor="pointer" name="Open in New-Tab" mb='5px'/>
+                    </Link>
+                </Flex>
             </Flex>
             <Code p={1} onClick={onCopy}>
                 <Text fontSize='xs' lineHeight='20px' noOfLines={4}>{hasCopied? "Copied" : hist.statement}</Text>

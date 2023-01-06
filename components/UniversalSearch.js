@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
-import { useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
-import { SqlIcon, TablelandSmallIcon } from "@/public/icons";
+import { useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
+import { AppsIcon, SqlIcon, TablelandSmallIcon } from "@/public/icons";
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
 import {multifetch} from "../utils/fetcher";
@@ -16,7 +16,7 @@ export default function UniversalSearch({children, defaultValue}) {
 
   const router = useRouter();
   const searchBox = useRef();
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState(defaultValue);
   const { colorMode, toggleColorMode } = useColorMode();
   const [isSqlMode, setSqlMode] = useState(false);
   const [sqlError, setSqlError] = useState(false);
@@ -26,6 +26,8 @@ export default function UniversalSearch({children, defaultValue}) {
   const onChangeTest = (event) => {
     setSearchValue(event.target.value);
   }
+
+  const [isLargerThanMd] = useMediaQuery('(min-width: 1280px)')
 
   // Autocomplete Search
   const { data, error } = useSWR(`{
@@ -84,7 +86,7 @@ export default function UniversalSearch({children, defaultValue}) {
                         variant="filled"
                         ref={searchBox}
                         onChange={onChangeTest}
-                        defaultValue={defaultValue || null}
+                        // defaultValue={defaultValue || null}
                         placeholder="Search for Tables or ENS Names"
                         autoComplete="off"
 
@@ -189,29 +191,29 @@ export default function UniversalSearch({children, defaultValue}) {
         </Flex>
         </Flex>
         <Flex direction="row" alignItems="center">
-        {/* <Link href="/explore">
-            {isLargerThanMd ? (
-            <Button
-                variant='outline'
-                borderRadius='100px'
-                size='lg'
-                leftIcon={<AppsIcon />}
-                mr={2}
-                fontWeight="100"
-            >
-                Discover
-            </Button>
-            ) : (
-            <IconButton
-                variant='outline'
-                borderRadius='100%'
-                size='lg'
-                icon={<AppsIcon />}
-                mr={2}
-            />
-            )}
-        </Link> */}
-            {children}
+            {children && children}
+            <Link href="/discover">
+                {isLargerThanMd ? (
+                    <Button
+                        variant='outline'
+                        borderRadius='100px'
+                        size='lg'
+                        leftIcon={<AppsIcon />}
+                        mr={2}
+                        fontWeight="100"
+                    >
+                        Discover
+                    </Button>
+                ) : (
+                    <IconButton
+                        variant='outline'
+                        borderRadius='100%'
+                        size='lg'
+                        icon={<AppsIcon />}
+                        mr={2}
+                    />
+                )}
+            </Link>
             <IconButton
                 variant='outline'
                 borderRadius='100%'

@@ -12,7 +12,7 @@ export default function Home() {
   const [activeModalData, setActiveModalData] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  function infoClick(id){
+  function infoClick(id) {
     let selectData = exploreData
       .map(e=>e?.data?.tables)
       .flat()
