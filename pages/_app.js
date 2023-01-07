@@ -7,6 +7,7 @@ import { LivepeerConfig, createReactClient, studioProvider } from '@livepeer/rea
 import Script from "next/script";
 import { Inter } from '@next/font/google'
 import '../components/interactive/SplitView.css'
+import { WalletProvider } from "@/contexts/Wallet";
 
 const client = createReactClient({
   provider: studioProvider({ apiKey: 'cec3b877-1c4d-4773-a06a-7785ea58f4b3' }),
@@ -19,22 +20,24 @@ const inter = Inter({
 
 const App = ({ Component, pageProps }) => {
   return (
-    <ChakraProvider theme={customTheme} resetCSS>
-      <EnsCacheProvider>
-        <LivepeerConfig client={client}>
-          <Script
-            async
-            defer
-            data-website-id="3fd38d02-6d5b-4041-ab46-c904808194bf"
-            src="https://umami-tablescan.vercel.app/umami.js"
-          />
-          <Head>
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-          </Head>
-          <Component {...pageProps} className={inter.className} />
-        </LivepeerConfig>
-      </EnsCacheProvider>
-    </ChakraProvider>
+    <WalletProvider>
+      <ChakraProvider theme={customTheme} resetCSS>
+        <EnsCacheProvider>
+          <LivepeerConfig client={client}>
+            <Script
+              async
+              defer
+              data-website-id="3fd38d02-6d5b-4041-ab46-c904808194bf"
+              src="https://umami-tablescan.vercel.app/umami.js"
+            />
+            <Head>
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </Head>
+            <Component {...pageProps} className={inter.className} />
+          </LivepeerConfig>
+        </EnsCacheProvider>
+      </ChakraProvider>
+    </WalletProvider>
   )
 }
 

@@ -11,6 +11,7 @@ import { isAddress } from "ethers/lib/utils";
 import { SearchIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { EnsCacheContext } from "@/contexts/EnsCache";
 import Link from "next/link";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 export default function UniversalSearch({children, defaultValue}) {
 
@@ -192,6 +193,7 @@ export default function UniversalSearch({children, defaultValue}) {
         </Flex>
         <Flex direction="row" alignItems="center">
             {children && children}
+            <ConnectButton chainStatus="icon" accountStatus={{smallScreen:"avatar", largeScreen: "full"}} showBalance={false} />
             <Link href="/discover">
                 {isLargerThanMd ? (
                     <Button
@@ -199,7 +201,7 @@ export default function UniversalSearch({children, defaultValue}) {
                         borderRadius='100px'
                         size='lg'
                         leftIcon={<AppsIcon />}
-                        mr={2}
+                        mx={2}
                         fontWeight="100"
                     >
                         Discover
@@ -210,7 +212,7 @@ export default function UniversalSearch({children, defaultValue}) {
                         borderRadius='100%'
                         size='lg'
                         icon={<AppsIcon />}
-                        mr={2}
+                        mx={2}
                     />
                 )}
             </Link>

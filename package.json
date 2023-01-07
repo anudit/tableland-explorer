@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 8000",
+    "dev": "next dev --port 8002",
     "build": "next build",
     "start": "next start",
     "export": "next export",
@@ -20,10 +20,11 @@
     "@livepeer/webrtmp-sdk": "^0.2.3",
     "@monaco-editor/react": "^4.4.6",
     "@next/font": "^13.1.1",
+    "@rainbow-me/rainbowkit": "^0.8.1",
     "@tableland/sdk": "^3.1.5",
     "critters": "^0.0.16",
     "ethers": "^5.7.2",
-    "framer-motion": "^8.1.9",
+    "framer-motion": "^8.2.4",
     "hsl-rgb": "^1.0.0",
     "hsl-triad": "^1.0.0",
     "next": "13.1.1",
@@ -39,7 +40,8 @@
     "react-wrap-balancer": "^0.3.0",
     "string-hash": "^1.1.3",
     "swiper": "^8.4.5",
-    "swr": "^2.0.0"
+    "swr": "^2.0.0",
+    "wagmi": "^0.10.5"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "13.1.1",

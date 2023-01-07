@@ -46,7 +46,16 @@ export default function Home() {
     <>
       <Meta />
 
-      <Flex direction='column' m="0" h="max-content" alignItems='center'>
+      <Flex
+        direction='column'
+        m="0"
+        h="max-content"
+        alignItems='center'
+        backgroundImage="url(/lightbackground.png)"
+        backgroundRepeat="no-repeat"
+        backgroundPosition="top right"
+        backgroundAttachment="fixed"
+      >
 
         <UniversalSearch />
         <Flex direction="row" justifyContent="space-around" mt="70px" w={{base: "100%", md: "80%"}}>

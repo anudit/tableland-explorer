@@ -286,6 +286,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                                                         </Flex>
                                                                     </Link>
                                                                 ) : <AddressOrEns address={e.contract} m={0}/> : "Trainer"}</Td>
+
                                                                 <Td>{e.endTime ? "Landed" : "In-flight"}</Td>
                                                                 <Td>{e.endTime ? "~" + countdown(12.07*parseInt(e.endTime - e.startTime)) : countdown(12.07*parseInt(flights.latestBlock - e.startTime))}</Td>
                                                             </Tr>

@@ -26,14 +26,16 @@ const theme = extendTheme({
       Modal: {
         baseStyle: (props) => ({
           dialog: {
-            bg: props.colorMode === "dark" ? "#111" : "white",
+            bg: props.colorMode === "dark" ? "#111111db" : "white",
+            backdropFilter: "blur(24px)"
           },
         }),
       },
       Drawer: {
         baseStyle: (props) => ({
           dialog: {
-            bg: props.colorMode === "dark" ? "#111" : "white",
+            bg: props.colorMode === "dark" ? "#111111db" : "white",
+            backdropFilter: "blur(24px)"
           },
         }),
       },

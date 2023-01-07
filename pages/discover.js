@@ -48,7 +48,7 @@ export default function DiscoverPage() {
                                         borderStyle="solid"
                                         borderWidth="2px"
                                         borderRadius="40px"
-                                        borderColor={colorMode === 'light' ? 'grey.200': 'grey.700'}
+                                        borderColor={colorMode === 'light' ? 'gray.200': 'gray.700'}
                                         _hover={{
                                             translateX:'-5px',
                                             transition: 'all 0.5s',

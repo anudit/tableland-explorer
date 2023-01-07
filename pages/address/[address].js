@@ -125,7 +125,7 @@ const UserSection = () => {
                             </Tab>
                             <Tab>
                                 <Box as='span' mr='2'> <TableIcon /> </Box>
-                                Tables {data && (<Tag ml={2} variant='outline'>{data.map(e=>e?.data?.tables).flat().length}</Tag>)}
+                                Tables {data && (<Tag ml={2} variant='outline' boxShadow='none'>{data.map(e=>e?.data?.tables).flat().length}</Tag>)}
                             </Tab>
                             <Tab>
                                 <Box as='span' mr='2'>
@@ -135,7 +135,7 @@ const UserSection = () => {
                                         stroke={colorMode == 'light' ? 'black' : 'white'}
                                     />
                                 </Box>
-                                Rigs {userRigs && (<Tag ml={2} variant='outline'>{userRigs.length}</Tag>)}
+                                Rigs {userRigs && (<Tag ml={2} variant='outline' boxShadow='none'>{userRigs.length}</Tag>)}
                             </Tab>
                         </Flex>
                     </TabList>

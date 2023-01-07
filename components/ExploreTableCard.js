@@ -1,5 +1,5 @@
-import React from 'react';
-import { Tooltip, useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Spinner, Button } from "@chakra-ui/react";
+import React, { useState, useContext } from 'react';
+import { Input, Textarea, useDisclosure, Tooltip, useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Spinner, Button } from "@chakra-ui/react";
 import timeAgo, { nameToAvatar, nameToChainName, parseTableData, toProperCase } from '@/utils/stringUtils';
 import Link from 'next/link';
 import AddressOrEns from './AddressOrEns';
@@ -7,12 +7,56 @@ import { InfoOutlineIcon } from '@chakra-ui/icons';
 import Image from 'next/image';
 import EnsAvatar from './EnsAvatar';
 import { ShuffleIcon } from '@/public/icons';
+import { useAccount } from 'wagmi';
+import { WalletContext } from '@/contexts/Wallet';
+
+import { AlertDialog, AlertDialogBody, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay } from '@chakra-ui/react'
 
 const loaderProp = ({ src }) => { return src }
 
 const TableCard = ({tableName, infoClick, table, ...props}) => {
 
+    const [remixName, setRemixName] = useState(false);
     const { colorMode } = useColorMode()
+    const { address } = useAccount();
+    const { cleanStatement, tablelandSdk, setupSdk } = useContext(WalletContext);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    async function createTableProcess(tableId="", tableName="", statement = ""){
+
+        try {
+            let {justName, statementCleaned} = cleanStatement(tableId, tableName, statement);
+
+            let resp = false;
+            if(!tablelandSdk) {
+                let respSdk = setupSdk();
+                if (respSdk){
+                    resp = true;
+                }
+            }
+            else resp = true;
+
+
+            if (resp){
+                onOpen();
+
+                const { name } = await tablelandSdk.create(
+                    statementCleaned,
+                    { prefix: justName }
+                );
+
+                setRemixName(name);
+            }
+
+
+        } catch (error) {
+            console.log('error', error);
+            setRemixName(false);
+            onClose();
+        }
+
+    }
+
 
     if (tableName){
         let {chainId, tableId} = parseTableData(tableName);
@@ -27,6 +71,54 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                 borderColor={colorMode === 'light' ? 'gray.200': 'gray.800'}
                 {...props}
             >
+                <AlertDialog
+                    isOpen={isOpen}
+                    onClose={onClose}
+                >
+                    <AlertDialogOverlay>
+                        <AlertDialogContent>
+                            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                {
+                                    remixName ? "Table Created 🥳": "Approve Table Creation"
+                                }
+                            </AlertDialogHeader>
+
+                            {
+                                remixName ? (
+                                    <AlertDialogBody alignContent='center'>
+                                        <Link href={`/${remixName}`} target="_blank">
+                                            <Button>Explore Table</Button>
+                                        </Link>
+                                        <br/>
+                                        <br/>
+                                    </AlertDialogBody>
+                                ) : table?.name ? (
+
+                                    <AlertDialogBody>
+                                        <Text>Table Name</Text>
+                                        <Input
+                                            value={cleanStatement(table.id, table.name, table.statement).justName}
+                                            size='sm'
+                                            readOnly
+                                        />
+                                        <Text mt={4}>Creation Statement</Text>
+                                        <Textarea
+                                            value={cleanStatement(table.id, table.name, table.statement).statementCleaned}
+                                            size='sm'
+                                            readOnly
+                                        />
+                                        <br/><br/>
+                                    </AlertDialogBody>
+                                ) : (
+                                    <AlertDialogBody>
+                                        Loading...
+                                    </AlertDialogBody>
+                                )
+                            }
+                        </AlertDialogContent>
+                    </AlertDialogOverlay>
+                </AlertDialog>
+
                 <Flex direction='row' p={3} justifyContent="space-between" alignItems='center'>
                     <Flex direction='row' align="center" ml={2}>
                         <AvatarGroup >
@@ -71,9 +163,9 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                         <Text size='sm'  ml={2} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>#{tableId}</Text>
                     </Flex>
                     <Flex direction='row' alignItems='center'>
-                        <Tooltip label='Remix Table Schema (Soon)' placement='top'>
+                        <Tooltip label={!address ? 'Connect Wallet' : `Remix Table Schema`} placement='top'>
                             <Button
-                                isDisabled
+                                isDisabled={!address}
                                 leftIcon={<ShuffleIcon />}
                                 size='sm'
                                 borderRadius="100px"
@@ -83,6 +175,9 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                                     backgroundColor: colorMode === 'light' ? 'black' : 'white'
                                 }}
                                 mr={2}
+                                onClick={()=>{
+                                    createTableProcess(table.id, tableName, table.statement);
+                                }}
                             >
                                 Remix
                             </Button>
