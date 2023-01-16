@@ -28,7 +28,7 @@ const App = ({ Component, pageProps }) => {
               async
               defer
               data-website-id="3fd38d02-6d5b-4041-ab46-c904808194bf"
-              src="https://umami-tablescan.vercel.app/umami.js"
+              src="https://umami-stats.vercel.app/umami.js"
             />
             <Head>
               <meta name="viewport" content="width=device-width, initial-scale=1" />
