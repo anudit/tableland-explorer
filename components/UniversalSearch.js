@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
 import { useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
-import { AppsIcon, SqlIcon, TablelandSmallIcon } from "@/public/icons";
+import { AppsIcon, SqlIcon, TablelandSmallIcon, WalletIcon } from "@/public/icons";
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
 import {multifetch} from "../utils/fetcher";
@@ -12,7 +12,6 @@ import { SearchIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { EnsCacheContext } from "@/contexts/EnsCache";
 import Link from "next/link";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { WalletIcon } from "out/icons";
 
 export default function UniversalSearch({children, defaultValue}) {
 
