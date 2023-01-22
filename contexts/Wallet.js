@@ -1,5 +1,4 @@
 import React, { useState, createContext, useEffect } from "react";
-import { getAddress } from "ethers/lib/utils";
 
 import '@rainbow-me/rainbowkit/styles.css';
 import {
@@ -10,7 +9,6 @@ import {
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { mainnet, polygon, optimism, arbitrum, goerli, arbitrumGoerli, optimismGoerli, polygonMumbai } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
-import { connect } from "@tableland/sdk";
 import { useNetwork } from "wagmi";
 
 export const WalletContext = createContext(undefined);
@@ -41,27 +39,27 @@ export const WalletProvider = ({children}) => {
 
     async function setupSdk(){
 
-        try {
+        // try {
 
-            let chainName = "";
-            if (chain.name === "Ethereum") chainName = "ethereum";
-            if (chain.name === 'Goerli') chainName = "ethereum-goerli";
-            if (chain.name === "Polygon") chainName = "polygon";
-            if (chain.name === "Polygon Mumbai") chainName = "polygon-mumbai";
-            if (chain.name === "Optimism One") chainName = "optimism";
-            if (chain.name === "Optimism Goerli") chainName = "optimism-goerli";
-            if (chain.name === "Arbitrum One") chainName = "arbitrum";
-            if (chain.name === "Arbitrum Goerli") chainName = "arbitrum-goerli";
+        //     let chainName = "";
+        //     if (chain.name === "Ethereum") chainName = "ethereum";
+        //     if (chain.name === 'Goerli') chainName = "ethereum-goerli";
+        //     if (chain.name === "Polygon") chainName = "polygon";
+        //     if (chain.name === "Polygon Mumbai") chainName = "polygon-mumbai";
+        //     if (chain.name === "Optimism One") chainName = "optimism";
+        //     if (chain.name === "Optimism Goerli") chainName = "optimism-goerli";
+        //     if (chain.name === "Arbitrum One") chainName = "arbitrum";
+        //     if (chain.name === "Arbitrum Goerli") chainName = "arbitrum-goerli";
 
-            const tableland = await connect({ network: "testnet", chain: chainName });
-            await tableland.siwe();
-            setTablelandSdk(tableland);
-            return true;
+        //     // const tableland = await connect({ network: "testnet", chain: chainName });
+        //     // await tableland.siwe();
+        //     // setTablelandSdk(tableland);
+        //     return true;
 
-        } catch (error) {
-            setTablelandSdk(false);
-            return false;
-        }
+        // } catch (error) {
+        //     setTablelandSdk(false);
+        //     return false;
+        // }
     }
 
     useEffect(()=>{

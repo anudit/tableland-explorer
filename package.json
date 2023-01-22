@@ -11,23 +11,24 @@
   },
   "dependencies": {
     "@anudit/flat-ui": "0.14.4",
-    "@chakra-ui/icons": "^2.0.16",
-    "@chakra-ui/react": "^2.4.8",
+    "@chakra-ui/icons": "^2.0.17",
+    "@chakra-ui/react": "^2.4.9",
     "@choc-ui/chakra-autocomplete": "^5.1.4",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@livepeer/react": "^2.1.0",
     "@livepeer/webrtmp-sdk": "^0.2.3",
     "@monaco-editor/react": "^4.4.6",
-    "@next/font": "^13.1.2",
+    "@next/font": "^13.1.4",
     "@rainbow-me/rainbowkit": "^0.8.1",
-    "@tableland/sdk": "4.0.0-pre.3",
+    "@tableland/sdk": "4.0.0-pre.4",
+    "@valist/sdk": "^2.7.1",
     "critters": "^0.0.16",
     "ethers": "^5.7.2",
-    "framer-motion": "^8.4.3",
+    "framer-motion": "^8.5.0",
     "hsl-rgb": "^1.0.0",
     "hsl-triad": "^1.0.0",
-    "next": "13.1.2",
+    "next": "13.1.4",
     "next-pwa": "^5.6.0",
     "node-sql-parser": "^4.6.4",
     "postman-code-generators": "^1.2.2",
@@ -39,13 +40,13 @@
     "react-split": "^2.0.14",
     "react-wrap-balancer": "^0.3.0",
     "string-hash": "^1.1.3",
-    "swiper": "^8.4.5",
-    "swr": "^2.0.0",
-    "wagmi": "^0.10.10"
+    "swiper": "^8.4.6",
+    "swr": "^2.0.1",
+    "wagmi": "^0.10.12"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "13.1.2",
+    "@next/eslint-plugin-next": "13.1.4",
     "eslint": "8.32.0",
-    "eslint-config-next": "13.1.2"
+    "eslint-config-next": "13.1.4"
   }
 }

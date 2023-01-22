@@ -3,7 +3,7 @@ import { mergeKeyValue, sleep } from "./stringUtils";
 const ethereumRpcUrl = 'https://eth.llamarpc.com/rpc/01GN04VPE4RTRF8NH87ZP86K24';
 
 export function constructTokenURIQuery(tokenIds = []){
-    return `https://tableland.network/query?extract=true&unwrap=true&s=${encodeURIComponent(`select json_object('name','Rig #'||rig_id,'external_url','https://garage.tableland.xyz/rigs/'||rig_id,'image','ipfs://'||renders_cid||'/'||rig_id||'/'||image_full_name,'image_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_full_alpha_name,'image_medium','ipfs://'||renders_cid||'/'||rig_id||'/'||image_medium_name,'image_medium_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_medium_alpha_name,'thumb','ipfs://'||renders_cid||'/'||rig_id||'/'||image_thumb_name,'thumb_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_thumb_alpha_name,'animation_url',animation_base_url||rig_id||'.html','attributes',json_insert((select json_group_array(json_object('display_type',display_type,'trait_type',trait_type,'value',value))from rig_attributes_42161_15 where rig_id=348 group by rig_id),'$[#]',json_object('display_type','string','trait_type','Garage Status','value',coalesce((select coalesce(end_time, 'In-Flight') from pilot_sessions_1_7 where rig_id=348 and end_time is null),'Parked')))) from rig_attributes_42161_15 join lookups_42161_10 where rig_id in (${tokenIds.toString()}) group by rig_id;`)}`
+    return `https://tableland.network/api/v1/query?extract=true&unwrap=true&s=${encodeURIComponent(`select json_object('name','Rig #'||rig_id,'external_url','https://garage.tableland.xyz/rigs/'||rig_id,'image','ipfs://'||renders_cid||'/'||rig_id||'/'||image_full_name,'image_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_full_alpha_name,'image_medium','ipfs://'||renders_cid||'/'||rig_id||'/'||image_medium_name,'image_medium_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_medium_alpha_name,'thumb','ipfs://'||renders_cid||'/'||rig_id||'/'||image_thumb_name,'thumb_alpha','ipfs://'||renders_cid||'/'||rig_id||'/'||image_thumb_alpha_name,'animation_url',animation_base_url||rig_id||'.html','attributes',json_insert((select json_group_array(json_object('display_type',display_type,'trait_type',trait_type,'value',value))from rig_attributes_42161_15 where rig_id=348 group by rig_id),'$[#]',json_object('display_type','string','trait_type','Garage Status','value',coalesce((select coalesce(end_time, 'In-Flight') from pilot_sessions_1_7 where rig_id=348 and end_time is null),'Parked')))) from rig_attributes_42161_15 join lookups_42161_10 where rig_id in (${tokenIds.toString()}) group by rig_id;`)}`
 }
 
 export async function garageStatsQuery(){
@@ -29,44 +29,7 @@ export async function garageStatsQuery(){
         },
         "referrer": "https://garage.tableland.xyz/",
         "referrerPolicy": "strict-origin-when-cross-origin",
-        "body": JSON.stringify({
-            id: 1,
-            jsonrpc: "2.0",
-            method:  "tableland_runReadQuery",
-            params: [{
-                output: "table",
-                extract: true,
-                unwrap: true,
-                statement: `SELECT
-                (
-                  SELECT count(distinct(rig_id)) FROM
-                  rig_attributes_42161_9
-                ) AS num_rigs,
-                (
-                  SELECT count(*) FROM (
-                    SELECT DISTINCT(rig_id)
-                    FROM pilot_sessions_1_7
-                    WHERE end_time IS NULL
-                  )
-                ) AS num_rigs_in_flight,
-                (
-                  SELECT count(*) FROM (
-                    SELECT DISTINCT pilot_contract, pilot_id
-                    FROM pilot_sessions_1_7
-                  )
-                ) AS num_pilots,
-                (
-                  SELECT coalesce(sum(coalesce(end_time, ${blkNumber}) - start_time), 0)
-                  FROM pilot_sessions_1_7
-                ) AS total_flight_time,
-                (
-                  SELECT coalesce(avg(coalesce(end_time, ${blkNumber}) - start_time), 0)
-                  FROM pilot_sessions_1_7
-                ) AS avg_flight_time
-                FROM rig_attributes_42161_9
-                LIMIT 1;`
-            }]
-        }),
+        "body": JSON.stringify({"jsonrpc":"2.0","method":"tableland_runReadQuery","id":1,"params":[{"statement":`\n  SELECT\n  (\n    SELECT count(distinct(rig_id)) FROM\n    rig_attributes_42161_15\n  ) AS num_rigs,\n  (\n    SELECT count(*) FROM (\n      SELECT DISTINCT(rig_id)\n      FROM pilot_sessions_1_7\n      WHERE end_time IS NULL\n    )\n  ) AS num_rigs_in_flight,\n  (\n    SELECT count(*) FROM (\n      SELECT DISTINCT pilot_contract, pilot_id\n      FROM pilot_sessions_1_7\n    )\n  ) AS num_pilots,\n  (\n    SELECT coalesce(sum(coalesce(end_time, ${blkNumber}) - start_time), 0)\n    FROM pilot_sessions_1_7\n  ) AS total_flight_time,\n  (\n    SELECT coalesce(avg(coalesce(end_time, ${blkNumber}) - start_time), 0)\n    FROM pilot_sessions_1_7\n  ) AS avg_flight_time\n  FROM rig_attributes_42161_15\n  LIMIT 1;`,"output":"table"}]}),
         "method": "POST",
         "mode": "cors",
         "credentials": "omit"
@@ -104,7 +67,7 @@ export async function getFlightData(tokenId = 1){
     FROM pilot_sessions_1_7
     WHERE rig_id = ${tokenId}`;
 
-    let resp = await fetch(`https://tableland.network/query?extract=true&unwrap=true&s=${encodeURIComponent(query)}`).then(r=>r.json());
+    let resp = await fetch(`https://tableland.network/api/v1/query?extract=true&unwrap=true&s=${encodeURIComponent(query)}`).then(r=>r.json());
 
     let metReq = resp.filter(e=>e.contract!=null).map(e=>{
         return {
@@ -255,7 +218,7 @@ export async function getProjects(){
 
     let query = `SELECT * FROM tableverse_5_1344`;
 
-    let resp = await fetch(`https://testnet.tableland.network/query?mode=json&s=${encodeURIComponent(query)}`).then(r=>r.json());
+    let resp = await fetch(`https://testnets.tableland.network/api/v1/query?mode=json&s=${encodeURIComponent(query)}`).then(r=>r.json());
 
     return resp;
 }

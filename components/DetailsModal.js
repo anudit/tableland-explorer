@@ -2,7 +2,7 @@ import React from 'react';
 import { useColorMode, Avatar, chakra, Flex, Textarea, Text } from "@chakra-ui/react";
 import { ArrowUpIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import { nameToAvatar, nameToChainName, nameToExplorer, parseTableData } from "@/utils/stringUtils";
+import { isMainnetTable, nameToAvatar, nameToChainName, nameToExplorer, parseTableData } from "@/utils/stringUtils";
 import {
   Modal,
   ModalOverlay,
@@ -121,7 +121,7 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                         </Text>
                     </Link>
 
-                    <Link href={`https://testnet.tableland.network/query?mode=json&s=select%20*%20from%20${tableMetadata?.name}`} target="_blank">
+                    <Link href={`https://${isMainnetTable(tableMetadata?.name) ? '' : 'testnets.'}tableland.network/api/v1/query?mode=json&s=select%20*%20from%20${tableMetadata?.name}`} target="_blank">
                         <Text cursor="pointer" fontWeight={'medium'} fontSize='sm'_hover={{'textDecoration': 'underline'}}>
                             Raw <ArrowUpIcon mb={1} style={{'transform': 'rotate(45deg)'}}/>
                         </Text>

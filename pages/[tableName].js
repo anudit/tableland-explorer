@@ -5,7 +5,7 @@ import { Grid } from "@anudit/flat-ui";
 import useSWR from "swr";
 
 import fetcher from '@/utils/fetcher';
-import { nameToAvatar, nameToSubgraph, nameToTime, parseTableData, toProperCase, freqTable, networkDeets } from '@/utils/stringUtils';
+import { nameToAvatar, nameToSubgraph, nameToTime, parseTableData, toProperCase, freqTable, networkDeets, isMainnetTable } from '@/utils/stringUtils';
 import Meta from '@/components/Meta';
 import { FilterIcon, PlayIcon, SqlIcon, StopIcon, TablelandSmallIcon } from '@/public/icons';
 import Link from 'next/link';
@@ -43,7 +43,7 @@ const TableSection = () => {
 
 
     const { data, error, mutate, isValidating } = useSWR(
-        tableName ? [`https://testnet.tableland.network/query?mode=json&s=select%20*%20from%20${tableName}`] : null,
+        tableName ? [`https://${isMainnetTable(tableName) ? '' : 'testnets.'}tableland.network/api/v1/query?mode=json&s=select%20*%20from%20${tableName}`] : null,
         fetcher,
         { refreshInterval: tableName? nameToTime(tableName) : 10000, revalidateOnFocus: true }
     );
@@ -99,7 +99,7 @@ const TableSection = () => {
 
     async function refresh(){
         setRefreshing(true);
-        let data = await fetcher(`https://testnet.tableland.network/query?mode=json&s=select%20*%20from%20${tableName}`);
+        let data = await fetcher(`https://${isMainnetTable(tableName) ? '' : 'testnets.'}tableland.network/api/v1/query?mode=json&s=select%20*%20from%20${tableName}`);
         mutate(data);
         setRefreshing(false);
     }

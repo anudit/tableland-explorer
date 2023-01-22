@@ -32,7 +32,7 @@ export default function DiscoverPage() {
                 <Heading size="3xl" align="center">Explore the Tableverse</Heading>
             </Flex>
             {
-                projectList ? (
+                projectList != false ? (
                     <SimpleGrid
                         columns={{base: 1, md: 2, lg: 3}}
                         spacing='20px'

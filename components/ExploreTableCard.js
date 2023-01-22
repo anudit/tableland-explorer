@@ -11,6 +11,7 @@ import { useAccount } from 'wagmi';
 import { WalletContext } from '@/contexts/Wallet';
 
 import { AlertDialog, AlertDialogBody, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay } from '@chakra-ui/react'
+import { Database } from '@tableland/sdk';
 
 const loaderProp = ({ src }) => { return src }
 
@@ -19,7 +20,7 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
     const [remixName, setRemixName] = useState(false);
     const { colorMode } = useColorMode()
     const { address } = useAccount();
-    const { cleanStatement, tablelandSdk, setupSdk } = useContext(WalletContext);
+    const { cleanStatement } = useContext(WalletContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     async function createTableProcess(tableId="", tableName="", statement = ""){
@@ -27,26 +28,17 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
         try {
             let {justName, statementCleaned} = cleanStatement(tableId, tableName, statement);
 
-            let resp = false;
-            if(!tablelandSdk) {
-                let respSdk = setupSdk();
-                if (respSdk){
-                    resp = true;
-                }
-            }
-            else resp = true;
+            const db = new Database();
 
+            onOpen();
 
-            if (resp){
-                onOpen();
+            const { meta: create } = await db
+                .prepare(statementCleaned)
+                .run();
 
-                const { name } = await tablelandSdk.create(
-                    statementCleaned,
-                    { prefix: justName }
-                );
+            await create.wait;
 
-                setRemixName(name);
-            }
+            setRemixName(justName);
 
 
         } catch (error) {
@@ -165,7 +157,7 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                     <Flex direction='row' alignItems='center'>
                         <Tooltip label={!address ? 'Connect Wallet' : `Remix Table Schema`} placement='top'>
                             <Button
-                                isDisabled={!address}
+                                isDisabled={true}
                                 leftIcon={<ShuffleIcon />}
                                 size='sm'
                                 borderRadius="100px"

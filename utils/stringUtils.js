@@ -192,6 +192,14 @@ export function nameToTime(name){
     else return null;
 }
 
+export function isMainnetTable(tableName){
+    let {chainId} = parseTableData(tableName);
+
+    // eslint-disable-next-line no-extra-boolean-cast
+    if(chainId) return !Boolean(networkDeets[chainId].faucet);
+    else return true;
+}
+
 export function nameToChainName(name){
     let {chainId} = parseTableData(name);
 

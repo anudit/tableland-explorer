@@ -12,6 +12,7 @@ import { SearchIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { EnsCacheContext } from "@/contexts/EnsCache";
 import Link from "next/link";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { WalletIcon } from "out/icons";
 
 export default function UniversalSearch({children, defaultValue}) {
 
@@ -193,7 +194,96 @@ export default function UniversalSearch({children, defaultValue}) {
         </Flex>
         <Flex direction="row" alignItems="center">
             {children && children}
-            <ConnectButton chainStatus="icon" accountStatus={{smallScreen:"avatar", largeScreen: "full"}} showBalance={false} />
+            <ConnectButton.Custom>
+            {({
+                account,
+                chain,
+                openAccountModal,
+                openChainModal,
+                openConnectModal,
+                mounted,
+            }) => {
+                const ready = mounted;
+                const connected = ready && account && chain;
+
+                return (
+                <div
+                    {...(!ready && {
+                    'aria-hidden': true,
+                    'style': {
+                        opacity: 0,
+                        pointerEvents: 'none',
+                        userSelect: 'none',
+                    },
+                    })}
+                >
+                    {(() => {
+                    if (!connected) {
+                        if (!isLargerThanMd){
+                            return (
+                                <IconButton
+                                    variant='outline'
+                                    borderRadius='100%'
+                                    size='lg'
+                                    icon={<WalletIcon />}
+                                    onClick={openConnectModal}
+                                />
+                            )
+                        }
+                        else return (
+                            <Button
+                                variant='outline'
+                                borderRadius='100px'
+                                size='lg'
+                                leftIcon={<WalletIcon />}
+                                mx={2}
+                                fontWeight="100"
+                                onClick={openConnectModal}
+                            >
+                                Connect Wallet
+                            </Button>
+                        );
+                    }
+
+                    if (chain.unsupported) {
+                        return (
+                            <button onClick={openChainModal} type="button">
+                                Wrong network
+                            </button>
+                        );
+                    }
+
+                    return (
+                        <div>
+                            {
+                                isLargerThanMd ? (
+                                    <Button
+                                        variant='outline'
+                                        borderRadius='100px'
+                                        size='lg'
+                                        leftIcon={chain.hasIcon ? <Avatar src={chain.iconUrl} size="xs" /> : undefined}
+                                        fontWeight="100"
+                                        onClick={openAccountModal}
+                                    >
+                                        {account.displayName}
+                                    </Button>
+                                ) : (
+                                    <IconButton
+                                        variant='outline'
+                                        borderRadius='100%'
+                                        size='lg'
+                                        icon={chain.hasIcon ? <Avatar src={chain.iconUrl} size="xs" /> : undefined}
+                                        onClick={openAccountModal}
+                                    />
+                                )
+                            }
+                        </div>
+                    );
+                    })()}
+                </div>
+                );
+            }}
+            </ConnectButton.Custom>
             <Link href="/discover">
                 {isLargerThanMd ? (
                     <Button
