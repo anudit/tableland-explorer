@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
-import { useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
+import { useDisclosure, useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
 import { AppsIcon, SqlIcon, TablelandSmallIcon, WalletIcon } from "@/public/icons";
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
@@ -8,10 +8,22 @@ import {multifetch} from "../utils/fetcher";
 import {encodeSqlForUrl, nameToAvatar, toProperCase} from "../utils/stringUtils";
 import SqlInput from "@/components/RunSql";
 import { isAddress } from "ethers/lib/utils";
-import { SearchIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
+import { SearchIcon, SunIcon, MoonIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { EnsCacheContext } from "@/contexts/EnsCache";
 import Link from "next/link";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+
+import {
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    MenuItemOption,
+    MenuGroup,
+    MenuOptionGroup,
+    MenuDivider,
+  } from '@chakra-ui/react'
+import Offset from "./Offset";
 
 export default function UniversalSearch({children, defaultValue}) {
 
@@ -23,6 +35,7 @@ export default function UniversalSearch({children, defaultValue}) {
   const [sqlError, setSqlError] = useState(false);
   const { ensToAddress, lensToAddress } = useContext(EnsCacheContext);
   const [sqlValue, setSqlValue] = useState("SELECT image from rigs_80001_1881");
+  const { isOpen:isOpenClimate, onOpen:onOpenClimate, onClose:onCloseClimate } = useDisclosure();
 
   const onChangeTest = (event) => {
     setSearchValue(event.target.value);
@@ -255,26 +268,35 @@ export default function UniversalSearch({children, defaultValue}) {
                     return (
                         <div>
                             {
-                                isLargerThanMd ? (
-                                    <Button
-                                        variant='outline'
-                                        borderRadius='100px'
-                                        size='lg'
-                                        leftIcon={chain.hasIcon ? <Avatar src={chain.iconUrl} size="xs" /> : undefined}
-                                        fontWeight="100"
-                                        onClick={openAccountModal}
-                                    >
-                                        {account.displayName}
-                                    </Button>
-                                ) : (
-                                    <IconButton
-                                        variant='outline'
-                                        borderRadius='100%'
-                                        size='lg'
-                                        icon={chain.hasIcon ? <Avatar src={chain.iconUrl} size="xs" /> : undefined}
-                                        onClick={openAccountModal}
-                                    />
-                                )
+                                <Menu >
+                                    {
+                                        isLargerThanMd ? (
+                                            <MenuButton
+                                                as={Button}
+                                                leftIcon={chain.hasIcon ? <Avatar src={chain.iconUrl} size="xs" /> : undefined}
+                                                rightIcon={<ChevronDownIcon />}
+                                                variant='outline'
+                                                borderRadius='100px'
+                                                size='lg'
+                                                fontWeight="100"
+                                            >
+                                                {account.displayName}
+                                            </MenuButton>
+                                        ) : (
+                                            <MenuButton
+                                                as={IconButton}
+                                                icon={<ChevronDownIcon />}
+                                                variant='outline'
+                                                borderRadius='100%'
+                                                size='lg'
+                                            />
+                                        )
+                                    }
+                                    <MenuList>
+                                        <MenuItem icon={<span>🌳</span>} onClick={onOpenClimate}><Offset onClose={onCloseClimate} isOpen={isOpenClimate}/></MenuItem>
+                                        <MenuItem icon={<WalletIcon />} onClick={openAccountModal}>Disconnect</MenuItem>
+                                    </MenuList>
+                                </Menu>
                             }
                         </div>
                     );

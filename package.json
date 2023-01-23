@@ -21,7 +21,7 @@
     "@monaco-editor/react": "^4.4.6",
     "@next/font": "^13.1.4",
     "@rainbow-me/rainbowkit": "^0.8.1",
-    "@tableland/sdk": "4.0.0-pre.4",
+    "@tableland/sdk": "3.1.7",
     "@valist/sdk": "^2.7.1",
     "critters": "^0.0.16",
     "ethers": "^5.7.2",
@@ -38,11 +38,11 @@
     "react-draggable": "^4.4.5",
     "react-fast-marquee": "^1.3.5",
     "react-split": "^2.0.14",
-    "react-wrap-balancer": "^0.3.0",
+    "react-wrap-balancer": "^0.4.0",
     "string-hash": "^1.1.3",
     "swiper": "^8.4.6",
     "swr": "^2.0.1",
-    "wagmi": "^0.10.12"
+    "wagmi": "^0.10.14"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "13.1.4",

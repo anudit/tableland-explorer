@@ -216,7 +216,7 @@ export async function getTsRanking(tokenIds = []){
 
 export async function getProjects(){
 
-    let query = `SELECT * FROM tableverse_5_1344`;
+    let query = `SELECT * FROM tableverse_5_5_1375`;
 
     let resp = await fetch(`https://testnets.tableland.network/api/v1/query?mode=json&s=${encodeURIComponent(query)}`).then(r=>r.json());
 

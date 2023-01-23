@@ -142,7 +142,7 @@ const ChainsSection = () => {
             <Flex direction="row" alignItems="center">
               <Avatar size="xs" src={networkDeets['137'].avatar} title={networkDeets['137'].name} mr={2}/>
               <Text fontWeight={600} fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-                Polygon (PoS)
+                Polygon
               </Text>
             </Flex>
             <Flex direction='row' ml={4} mt={1}>

@@ -149,9 +149,9 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
 
                     </Flex>
                 </Flex>
-                <Flex direction='row' m={4} alignItems='center' justifyContent='space-between'>
+                <Flex direction={{base: 'column', md: 'row'}} m={4} alignItems='center' justifyContent='space-between'>
                     <Flex direction='row' alignItems='center'>
-                        <Text fontSize='lg' fontWeight={600} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">{toProperCase(tableName.split("_").slice(0,-2).join(' '))}</Text>
+                        <Text fontSize={{base:'sm' , md:'lg'}} fontWeight={600} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" w="100%">{toProperCase(tableName.split("_").slice(0,-2).join(' '))}</Text>
                         <Text size='sm'  ml={2} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>#{tableId}</Text>
                     </Flex>
                     <Flex direction='row' alignItems='center'>

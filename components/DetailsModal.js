@@ -3,19 +3,7 @@ import { useColorMode, Avatar, chakra, Flex, Textarea, Text } from "@chakra-ui/r
 import { ArrowUpIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { isMainnetTable, nameToAvatar, nameToChainName, nameToExplorer, parseTableData } from "@/utils/stringUtils";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
-  StatGroup,
-} from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Stat, StatLabel, StatNumber, StatHelpText, StatGroup } from '@chakra-ui/react';
 import AddressOrEns from './AddressOrEns';
 import EnsAvatar from './EnsAvatar';
 

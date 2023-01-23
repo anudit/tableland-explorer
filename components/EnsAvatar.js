@@ -21,6 +21,7 @@ const EnsAvatar = ({address, ...props}) => {
 
     return (
         <Avatar
+            p="1px"
             size="sm"
             src={link}
             title={address}
