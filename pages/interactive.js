@@ -14,6 +14,8 @@ import InteractiveEditor from '@/components/interactive/InteractiveEditor';
 import { ActionBar } from "@/components/interactive/ActionBar";
 import fetcher from '@/utils/fetcher';
 import { TablelandSmallIcon, TerminalIcon } from '@/public/icons';
+import { Parser } from 'node-sql-parser';
+import { isMainnetTable } from '@/utils/stringUtils';
 
 const InteractiveView = () => {
 
@@ -123,6 +125,11 @@ const InteractiveView = () => {
 
 export default InteractiveView;
 
+const isMainnetTableFromQuery = (query) => {
+    const parser = new Parser();
+    const ast = parser.astify(query);
+    return isMainnetTable(ast.from[0].table);
+}
 
 const TabView = ({defaultQuery, name}) => {
     const [refreshing, setRefreshing] = useState(false);
@@ -133,14 +140,14 @@ const TabView = ({defaultQuery, name}) => {
     const { colorMode } = useColorMode();
 
     const { data, error, mutate, isValidating } = useSWR(
-        sqlValue ? [`https://testnet.tableland.network/query?mode=json&s=${sqlValue}`] : null,
+        sqlValue ? [`https://${isMainnetTableFromQuery(sqlValue) ? '' : 'testnets.'}tableland.network/api/v1/query?statement=?mode=json&s=${sqlValue}`] : null,
         fetcher,
         { refreshInterval: 10000, revalidateOnFocus: true }
     );
 
     async function refresh(){
         setRefreshing(true);
-        let data = await fetcher(`https://testnet.tableland.network/query?mode=json&s=${sqlValue}`);
+        let data = await fetcher(`https://${isMainnetTableFromQuery(sqlValue) ? '' : 'testnets.'}tableland.network/api/v1/query?statement=?mode=json&s=${sqlValue}`);
         mutate(data);
         setRefreshing(false);
     }
@@ -151,7 +158,7 @@ const TabView = ({defaultQuery, name}) => {
             codegen.convert(
                 lang,
                 variant,
-                new sdk.Request(`https://testnet.tableland.network/query?mode=json&s=${encodeURIComponent(sqlValue)}`),
+                new sdk.Request(`https://${isMainnetTableFromQuery(sqlValue) ? '' : 'testnets.'}tableland.network/api/v1/query?statement=?mode=json&s=${encodeURIComponent(sqlValue)}`),
                 {
                     indentCount: 3,
                     indentType: 'Space',

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { TwitterIcon } from "@/public/icons";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { getProjects } from "@/utils/rigs";
+import Footer from "@/components/Footer";
 
 export default function DiscoverPage() {
 
@@ -104,6 +105,8 @@ export default function DiscoverPage() {
                     </Flex>
                 )
             }
+
+            <Footer/>
         </Flex>
     )
 

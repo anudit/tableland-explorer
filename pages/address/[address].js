@@ -17,6 +17,7 @@ import EnsAvatar from '@/components/EnsAvatar';
 import AddressOrEns from '@/components/AddressOrEns';
 import { EnsCacheContext } from '@/contexts/EnsCache';
 import UniversalSearch from '@/components/UniversalSearch';
+import { avatar, getImageDataURL } from '@/utils/stringUtils';
 
 const UserSection = () => {
 
@@ -29,8 +30,6 @@ const UserSection = () => {
     const { colorMode } = useColorMode();
     const { ensToAddress } = useContext(EnsCacheContext);
     const [localEns, setLocalEns] = useState(false);
-
-    const randomRig = Math.floor(Math.random()*3000);
 
     const { data, error, isValidating } = useSWR(address ? `{
         tables(where: {owner: "${address.toLowerCase()}"}, orderBy: created, orderDirection: desc) {
@@ -98,7 +97,7 @@ const UserSection = () => {
                         w={{base: "100%", md:"90%" }}
                         minHeight={{base:"150px" , md:"200px" }}
                         borderBottomRadius={30}
-                        background={`url(https://tableland.mypinata.cloud/ipfs/bafybeidpnfh2zc6esvou3kfhhvxmy2qrmngrqczj7adnuygjsh3ulrrfeu/${randomRig}/image_thumb.png) #000000bb`}
+                        background={`url(${getImageDataURL(avatar('profile-'+address))})`}
                         backgroundBlendMode='color'
                         backgroundRepeat='no-repeat'
                         backgroundSize='cover'
