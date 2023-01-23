@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useDisclosure } from '@chakra-ui/react';
 import { Stat, StatLabel, StatNumber, StatHelpText, StatGroup, Flex, Button, Spinner, Modal, ModalOverlay, ModalContent, ModalHeader, Text, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import { useAccount } from 'wagmi';
 import { prettifyNumber } from '@/utils/stringUtils';
@@ -15,6 +14,7 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
         if (carbon===false){
             fetch(`/api/offset?address=${address}`).then(e=>e.json()).then(setCarbon)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return(

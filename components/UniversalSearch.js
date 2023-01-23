@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
-import { useDisclosure, useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
+import { Menu, MenuButton, MenuList, MenuItem, useDisclosure, useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
 import { AppsIcon, SqlIcon, TablelandSmallIcon, WalletIcon } from "@/public/icons";
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
@@ -13,16 +13,6 @@ import { EnsCacheContext } from "@/contexts/EnsCache";
 import Link from "next/link";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-import {
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-    MenuItemOption,
-    MenuGroup,
-    MenuOptionGroup,
-    MenuDivider,
-  } from '@chakra-ui/react'
 import Offset from "./Offset";
 
 export default function UniversalSearch({children, defaultValue}) {
