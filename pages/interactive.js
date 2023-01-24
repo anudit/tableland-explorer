@@ -126,9 +126,13 @@ const InteractiveView = () => {
 export default InteractiveView;
 
 const isMainnetTableFromQuery = (query) => {
-    const parser = new Parser();
-    const ast = parser.astify(query);
-    return isMainnetTable(ast.from[0].table);
+    try {
+        const parser = new Parser();
+        const ast = parser.astify(query);
+        return isMainnetTable(ast.from[0].table);
+    } catch (error) {
+        return false;
+    }
 }
 
 const TabView = ({defaultQuery, name}) => {
