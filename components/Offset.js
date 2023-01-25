@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Stat, StatLabel, StatNumber, StatHelpText, StatGroup, Flex, Button, Spinner, Modal, ModalOverlay, ModalContent, ModalHeader, Text, ModalBody, ModalCloseButton } from '@chakra-ui/react';
+import { Alert, AlertIcon, Stat, StatLabel, StatNumber, StatHelpText, StatGroup, Flex, Button, Spinner, Modal, ModalOverlay, ModalContent, ModalHeader, Text, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import { useAccount } from 'wagmi';
 import { prettifyNumber } from '@/utils/stringUtils';
 import Link from 'next/link';
@@ -7,6 +7,7 @@ import { SeedchainIcon, ToucanIcon } from '@/public/icons';
 import { useNetwork } from 'wagmi';
 import { ethers } from 'ethers';
 import { useSigner } from 'wagmi';
+import { formatEther, isAddress } from 'ethers/lib/utils.js';
 
 const HELPER_ADDRESS = "0x4E01404D07c5C85D35a2b6A6Ad777D29CC51Eaa1";
 const HELPER_ABI = [{"inputs":[{"internalType":"string[]","name":"_eligibleTokenSymbols","type":"string[]"},{"internalType":"address[]","name":"_eligibleTokenAddresses","type":"address[]"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint8","name":"version","type":"uint8"}],"name":"Initialized","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"who","type":"address"},{"indexed":false,"internalType":"address","name":"poolToken","type":"address"},{"indexed":false,"internalType":"address[]","name":"tco2s","type":"address[]"},{"indexed":false,"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"name":"Redeemed","type":"event"},{"stateMutability":"payable","type":"fallback"},{"inputs":[{"internalType":"address","name":"_poolToken","type":"address"}],"name":"autoOffsetExactInETH","outputs":[{"internalType":"address[]","name":"tco2s","type":"address[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_fromToken","type":"address"},{"internalType":"uint256","name":"_amountToSwap","type":"uint256"},{"internalType":"address","name":"_poolToken","type":"address"}],"name":"autoOffsetExactInToken","outputs":[{"internalType":"address[]","name":"tco2s","type":"address[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_poolToken","type":"address"},{"internalType":"uint256","name":"_amountToOffset","type":"uint256"}],"name":"autoOffsetExactOutETH","outputs":[{"internalType":"address[]","name":"tco2s","type":"address[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_depositedToken","type":"address"},{"internalType":"address","name":"_poolToken","type":"address"},{"internalType":"uint256","name":"_amountToOffset","type":"uint256"}],"name":"autoOffsetExactOutToken","outputs":[{"internalType":"address[]","name":"tco2s","type":"address[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_poolToken","type":"address"},{"internalType":"uint256","name":"_amountToOffset","type":"uint256"}],"name":"autoOffsetPoolToken","outputs":[{"internalType":"address[]","name":"tco2s","type":"address[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_fromToken","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"autoRedeem","outputs":[{"internalType":"address[]","name":"tco2s","type":"address[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address[]","name":"_tco2s","type":"address[]"},{"internalType":"uint256[]","name":"_amounts","type":"uint256[]"}],"name":"autoRetire","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"}],"name":"balances","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_fromMaticAmount","type":"uint256"},{"internalType":"address","name":"_toToken","type":"address"}],"name":"calculateExpectedPoolTokenForETH","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_fromToken","type":"address"},{"internalType":"uint256","name":"_fromAmount","type":"uint256"},{"internalType":"address","name":"_toToken","type":"address"}],"name":"calculateExpectedPoolTokenForToken","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_toToken","type":"address"},{"internalType":"uint256","name":"_toAmount","type":"uint256"}],"name":"calculateNeededETHAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_fromToken","type":"address"},{"internalType":"address","name":"_toToken","type":"address"},{"internalType":"uint256","name":"_toAmount","type":"uint256"}],"name":"calculateNeededTokenAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"contractRegistryAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_tokenSymbol","type":"string"}],"name":"deleteEligibleTokenAddress","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_erc20Addr","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"","type":"string"}],"name":"eligibleTokenAddresses","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_tokenSymbol","type":"string"},{"internalType":"address","name":"_address","type":"address"}],"name":"setEligibleTokenAddress","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_address","type":"address"}],"name":"setToucanContractRegistry","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"sushiRouterAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_toToken","type":"address"}],"name":"swapExactInETH","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_fromToken","type":"address"},{"internalType":"uint256","name":"_fromAmount","type":"uint256"},{"internalType":"address","name":"_toToken","type":"address"}],"name":"swapExactInToken","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_toToken","type":"address"},{"internalType":"uint256","name":"_toAmount","type":"uint256"}],"name":"swapExactOutETH","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_fromToken","type":"address"},{"internalType":"address","name":"_toToken","type":"address"},{"internalType":"uint256","name":"_toAmount","type":"uint256"}],"name":"swapExactOutToken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_erc20Addr","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
@@ -25,6 +26,7 @@ const helperInstance = new ethers.Contract(HELPER_ADDRESS, HELPER_ABI, signer);
 const Offset = ({ isOpen, onOpen, onClose }) => {
 
     const [carbon, setCarbon] = useState(false);
+    const [carbonHistory, setCarbonHistory] = useState(false);
     const { address } = useAccount();
     const { chain } = useNetwork()
     const { data: signer } = useSigner();
@@ -32,10 +34,44 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
     const [ toucanOffsetCost, setToucanOffsetCost ] = useState(false);
 
     useEffect(()=>{
-        if (carbon === false) fetch(`/api/offset?address=${address}`).then(e=>e.json()).then(ca=>{
-            setCarbon(ca);
-            getToucanOffsetAmount((ca['powData']['impact'] + ca['posData']['impact']).toFixed(3));
-        })
+        if (isAddress(address) == true && carbon === false) {
+            fetch(`/api/offset?address=${address}`).then(e=>e.json()).then(ca=>{
+                setCarbon(ca);
+                getToucanOffsetAmount((ca['powData']['impact'] + ca['posData']['impact']).toFixed(3));
+            })
+            fetch(`https://api.thegraph.com/subgraphs/name/anudit/klima-retirements`, {
+                method:"POST",
+                body: JSON.stringify({
+                    'query': `{
+                        user(id: "${address.toLowerCase()}") {
+                          id
+                          totalCarbonRetired
+                          totalRetirements
+                          retirements {
+                            id
+                            tokenLabel
+                            carbonToken
+                            beneficiaryAddress
+                            beneficiaryString
+                            retiredAmount
+                            retirementMessage
+                          }
+                        }
+                    }`,
+                })
+            }).then(e=>e.json()).then(od=>{
+
+                if (od.data?.user ===  null){
+                    setCarbonHistory({totalRetirements: 0, totalCarbonRetired: 0})
+                }
+                else {
+                    const totalRetirements = parseInt( od.data.user.totalRetirements.toString() );
+                    const totalCarbonRetired = parseFloat( formatEther(od.data.user.totalCarbonRetired) )
+                    setCarbonHistory({totalRetirements, totalCarbonRetired})
+                }
+
+            })
+        }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address])
@@ -61,7 +97,7 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
                     addresses.nct,
                     ethers.utils.parseEther(valueInTons.toString())
                 );
-                let resp = helperInstance.connect(signer).autoOffsetExactInETH(
+                helperInstance.connect(signer).autoOffsetExactInETH(
                     addresses.nct,
                     {value: amount}
                 );
@@ -81,7 +117,7 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>🌳 Climate Action [⚠️ Experimental]</ModalHeader>
+                    <ModalHeader>🌳 Climate Action</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         {
@@ -89,6 +125,14 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
                                 <Spinner/>
                             ) : (
                                 <Flex direction="column">
+
+                                    <Alert status='warning'>
+                                        <AlertIcon />
+                                        Experimental
+                                    </Alert>
+                                    <br/>
+
+                                    <Text my={2} fontSize="lg">Your Carbon Emissions</Text>
 
                                     <StatGroup>
                                         <Stat>
@@ -108,6 +152,9 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
                                         </Stat>
                                     </StatGroup>
                                     <br/>
+
+                                    <Text my={2} fontSize="lg">Your Carbon Impact</Text>
+
                                     <StatGroup>
                                         <Stat>
                                             <StatLabel>Total ({prettifyNumber(carbon['powData']['gas'] + carbon['posData']['gas'])} Gas)</StatLabel>
@@ -118,9 +165,9 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
                                         </Stat>
                                         <Stat>
                                             <StatLabel>Your Offsets</StatLabel>
-                                            <StatNumber>0 TCO<sub>2</sub></StatNumber>
+                                            <StatNumber>{carbonHistory === false ? '...': carbonHistory?.totalCarbonRetired.toFixed(3)} TCO<sub>2</sub></StatNumber>
                                             <StatHelpText>
-                                                Total on-chain offsets
+                                                Across {carbonHistory === false ? '...': carbonHistory?.totalRetirements} Retirements.
                                             </StatHelpText>
                                         </Stat>
                                     </StatGroup>

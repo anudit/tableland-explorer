@@ -1,6 +1,7 @@
 import { isAddress } from "ethers/lib/utils.js"
+import withCors from "middleware/withCors";
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
     const { address } = req.query
 
     if (isAddress(address)){
@@ -12,3 +13,5 @@ export default async function handler(req, res) {
     }
 
 }
+
+export default withCors(handler);

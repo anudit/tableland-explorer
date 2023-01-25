@@ -15,13 +15,13 @@ const Meta = ({url, title}) => {
             <meta property="og:url" content="https://tableland.xyz/" />
             <meta property="og:title" content={title || "Tablescan"} />
             <meta property="og:description" content="An explorer for Tableland Network." />
-            <meta property="og:image" content={url || 'https://i.imgur.com/5ErjwNI.png'} />
+            <meta property="og:image" content={url || 'https://res.cloudinary.com/anudit/image/upload/v1674573911/convo/tablescan.png'} />
 
             <meta property="twitter:card" content="summary_large_image" />
             <meta property="twitter:url" content="https://tableland.xyz/" />
             <meta property="twitter:title" content={title || "Tablescan"} />
             <meta property="twitter:description" content="An explorer for Tableland Network." />
-            <meta property="twitter:image" content={url || 'https://i.imgur.com/5ErjwNI.png'} />
+            <meta property="twitter:image" content={url || 'https://res.cloudinary.com/anudit/image/upload/v1674573911/convo/tablescan.png'} />
 
             <meta name="theme-color" content="#000" />
         </Head>
