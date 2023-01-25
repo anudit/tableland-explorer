@@ -78,8 +78,7 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
 
     async function getToucanOffsetAmount(valueInTons = 0){
 
-        helperInstance.calculateNeededTokenAmount(
-            addresses.weth,
+        helperInstance.calculateNeededETHAmount(
             addresses.nct,
             ethers.utils.parseEther(valueInTons.toString())
         ).then((e)=>{
@@ -92,8 +91,8 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
         if (chain.name === 'Polygon'){
 
             try {
-                let amount = helperInstance.calculateNeededTokenAmount(
-                    addresses.weth,
+
+                let amount = helperInstance.calculateNeededETHAmount(
                     addresses.nct,
                     ethers.utils.parseEther(valueInTons.toString())
                 );
@@ -103,6 +102,7 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
                 );
 
             } catch (error) {
+                alert(error?.message);
                 console.log('error', error);
             }
 

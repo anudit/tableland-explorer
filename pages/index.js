@@ -25,21 +25,21 @@ export default function Home() {
   // Explore Feed
   const { data: exploreData } = useSWR(`{
     tables(first: 3, orderBy: created, orderDirection: desc, where: {historyCount_gt: 3}) {
-              id
-              name
-              owner {
-                  id
-              }
-              tableId
-              statement
-              tokenURI
-              created
-              txnHash
-              controller {
-                  id
-              }
-              historyCount
-          }
+        id
+        name
+        owner {
+            id
+        }
+        tableId
+        statement
+        tokenURI
+        created
+        txnHash
+        controller {
+            id
+        }
+        historyCount
+    }
   }`, multifetch);
 
   return (

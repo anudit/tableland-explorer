@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
 import { Menu, MenuButton, MenuList, MenuItem, useDisclosure, useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
-import { AppsIcon, SqlIcon, TablelandSmallIcon, WalletIcon } from "@/public/icons";
+import { AppsIcon, SqlIcon, TablelandSmallIcon, TreeIcon, WalletIcon } from "@/public/icons";
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
 import {multifetch} from "../utils/fetcher";
@@ -283,7 +283,7 @@ export default function UniversalSearch({children, defaultValue}) {
                                         )
                                     }
                                     <MenuList>
-                                        <MenuItem icon={<span>🌳</span>} onClick={onOpenClimate}><Offset onClose={onCloseClimate} isOpen={isOpenClimate}/></MenuItem>
+                                        <MenuItem icon={<TreeIcon />} onClick={onOpenClimate}> <Offset onClose={onCloseClimate} isOpen={isOpenClimate}/></MenuItem>
                                         <MenuItem icon={<WalletIcon />} onClick={openAccountModal}>Disconnect</MenuItem>
                                     </MenuList>
                                 </Menu>
