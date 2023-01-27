@@ -96,7 +96,9 @@ export default function Home() {
         </Flex>
 
         <BottomStats />
+
       </Flex>
+      <Footer/>
     </>
   )
 }
@@ -282,6 +284,7 @@ import RigAction from "@/components/RigAction";
 import BottomStats from "@/components/BottomStats";
 import TableCardSkeleton from "@/components/ExploreTableCardShell";
 import UniversalSearch from "@/components/UniversalSearch";
+import Footer from "@/components/Footer";
 
 const ActionsSection = () => {
 

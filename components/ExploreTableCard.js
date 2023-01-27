@@ -154,7 +154,7 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                         <Text fontSize={{base:'sm' , md:'lg'}} fontWeight={600} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" w="100%">{toProperCase(tableName.split("_").slice(0,-2).join(' '))}</Text>
                         <Text size='sm'  ml={2} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>#{tableId}</Text>
                     </Flex>
-                    <Flex direction='row' alignItems='center'>
+                    <Flex direction='row' alignItems='center' mt={{base: "10px", md: 0}}>
                         <Tooltip label={!address ? 'Connect Wallet' : `Remix Table Schema`} placement='top'>
                             <Button
                                 isDisabled={true}

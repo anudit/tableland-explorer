@@ -25,7 +25,7 @@ export const WalletProvider = ({children}) => {
     );
 
     const { connectors } = getDefaultWallets({
-        appName: 'Tablescan',
+        appName: 'Tablescan.io',
         chains
     });
 
