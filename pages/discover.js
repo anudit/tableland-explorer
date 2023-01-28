@@ -72,7 +72,7 @@ export default function DiscoverPage() {
                                                 borderColor: colorMode === 'light' ? '#0004': '#ffffffaa'
                                             }}
                                         >
-                                            <Image src={project.poster === "" ? `https://tablescan.io/api/og?title=${encodeURIComponent(project?.name)}` : project.poster} height='300px' width="100%" borderTopRadius="38px" />
+                                            <Image src={project.poster === "" ? `https://tablescan.io/api/og?title=${encodeURIComponent(project?.name.toLowerCase())}` : project.poster} height='300px' width="100%" borderTopRadius="38px" />
                                             <Flex direction='column' p={6} justifyContent='space-between' h="100%">
                                                 <Flex direction='column'>
                                                     <Heading size='lg' pb={2} noOfLines={1} fontWeight={600}>{project.name}</Heading>
