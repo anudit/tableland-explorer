@@ -151,13 +151,11 @@ const TableSection = () => {
 
     if (error) return <div>failed to load, {error}</div>;
 
-    let {tableId, chainId} = parseTableData(tableName);
-
-    const url = `https://render.tableland.xyz/${chainId}/${tableId}`;
+    let { tableId } = parseTableData(tableName);
 
     return (
         <div>
-            <Meta url={url} />
+            <Meta url={`/api/og?title=${tableName}`} title={tableName ? `${tableName} - Tablescan.io`: undefined} />
 
             <Drawer
                 isOpen={isOpenHistory}

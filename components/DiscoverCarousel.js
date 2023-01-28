@@ -50,7 +50,9 @@ export default function DiscoverCarousel({projects: slides}){
     >
       <Flex w="full" pos="relative" overflow="hidden">
         <Flex h={{base: "500px", md:"600px"}} w="full" {...carouselStyle}>
-          {slides.map((slide, sid) => (
+          {slides.slice(0).sort((a, b)=>{
+            return a?.name.toLowerCase().charCodeAt(0) - b?.name.toLowerCase().charCodeAt(0)
+          }).map((slide, sid) => (
             <Flex key={`slide-${sid}`} flexDirection="column" w="100%" shadow="md" flex="none" align="center">
                 <Image src={slide.poster} m={10} borderRadius='30px' height={{base: "auto", md:"560px"}} />
               <Stack
@@ -63,8 +65,8 @@ export default function DiscoverCarousel({projects: slides}){
                 color="white"
                 alignItems='center'
               >
-                <Heading fontSize="4xl">{slide.name}</Heading>
-                <Text fontSize="lg" w="80%" align="center">
+                <Heading fontSize="4xl" color="black">{slide.name}</Heading>
+                <Text fontSize="lg" w="80%" align="center" color="black">
                     <Balancer>
                         {slide.description}
                     </Balancer>
