@@ -12,7 +12,7 @@ const handler = (req) => {
     // ?title=<title>
     const hasTitle = searchParams.has('title');
     const title = hasTitle
-      ? searchParams.get('title')?.slice(0, 100)
+      ? decodeURIComponent(searchParams.get('title')?.slice(0, 100))
       : 'My default title';
 
     return new ImageResponse(
