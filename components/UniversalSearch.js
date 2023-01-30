@@ -196,6 +196,30 @@ export default function UniversalSearch({children, defaultValue}) {
         </Flex>
         <Flex direction="row" alignItems="center">
             {children && children}
+            <Link href="/discover">
+                {isLargerThanMd ? (
+                    // <Button
+                    //     variant='outline'
+                    //     borderRadius='100px'
+                    //     size='lg'
+                    //     leftIcon={}
+                    //     mx={2}
+                    //     fontWeight="100"
+                    // >
+                    // </Button>
+                    <Text align="center" mx={4} fontSize="md">
+                        Discover
+                    </Text>
+                ) : (
+                    <IconButton
+                        variant='outline'
+                        borderRadius='100%'
+                        size='lg'
+                        icon={<AppsIcon />}
+                        mx={2}
+                    />
+                )}
+            </Link>
             <ConnectButton.Custom>
             {({
                 account,
@@ -295,28 +319,7 @@ export default function UniversalSearch({children, defaultValue}) {
                 );
             }}
             </ConnectButton.Custom>
-            <Link href="/discover">
-                {isLargerThanMd ? (
-                    <Button
-                        variant='outline'
-                        borderRadius='100px'
-                        size='lg'
-                        leftIcon={<AppsIcon />}
-                        mx={2}
-                        fontWeight="100"
-                    >
-                        Discover
-                    </Button>
-                ) : (
-                    <IconButton
-                        variant='outline'
-                        borderRadius='100%'
-                        size='lg'
-                        icon={<AppsIcon />}
-                        mx={2}
-                    />
-                )}
-            </Link>
+            
             <IconButton
                 variant='outline'
                 borderRadius='100%'

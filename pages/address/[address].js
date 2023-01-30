@@ -18,6 +18,8 @@ import AddressOrEns from '@/components/AddressOrEns';
 import { EnsCacheContext } from '@/contexts/EnsCache';
 import UniversalSearch from '@/components/UniversalSearch';
 import { avatar, getImageDataURL } from '@/utils/stringUtils';
+import { TreeIcon } from '@/public/icons';
+import Footer from "@/components/Footer";
 
 const UserSection = () => {
 
@@ -136,6 +138,10 @@ const UserSection = () => {
                                 </Box>
                                 Rigs {userRigs && (<Tag ml={2} variant='outline' boxShadow='none'>{userRigs.length}</Tag>)}
                             </Tab>
+                            <Tab>
+                                <Box as='span' mr='2'> <TreeIcon /> </Box>
+                                Climate
+                            </Tab>
                         </Flex>
                     </TabList>
 
@@ -232,11 +238,7 @@ const UserSection = () => {
                                                     <WrapItem key={rig?.name} scrollSnapAlign='start'>
                                                         <RigCard
                                                             id={rig?.token_id}
-                                                            image={rig?.thumb_alpha}
-                                                            w={{base: '100%', md:'500px'}}
-                                                            mb={0}
-                                                            borderRadius={0}
-                                                            h={{base: 'calc(100vh - 100px)', md:'auto'}}
+                                                           
                                                         />
                                                     </WrapItem>
                                                 )
@@ -262,10 +264,14 @@ const UserSection = () => {
                                 )
                             }
                         </TabPanel>
+                        <TabPanel>
+                          Climate  
+                        </TabPanel>
 
                     </TabPanels>
                 </Tabs>
                 <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
+                <Footer />
             </Flex>
         </>
     )
