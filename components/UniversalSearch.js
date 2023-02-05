@@ -253,6 +253,7 @@ export default function UniversalSearch({children, defaultValue}) {
                                     size='lg'
                                     icon={<WalletIcon />}
                                     onClick={openConnectModal}
+                                    mr={2}
                                 />
                             )
                         }
@@ -293,6 +294,7 @@ export default function UniversalSearch({children, defaultValue}) {
                                                 borderRadius='100px'
                                                 size='lg'
                                                 fontWeight="100"
+                                                mr={2}
                                             >
                                                 {account.displayName}
                                             </MenuButton>
@@ -303,6 +305,7 @@ export default function UniversalSearch({children, defaultValue}) {
                                                 variant='outline'
                                                 borderRadius='100%'
                                                 size='lg'
+                                                mr={2}
                                             />
                                         )
                                     }

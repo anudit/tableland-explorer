@@ -1,44 +1,16 @@
-import React, { useState } from "react";
-import { Heading, Box, Flex, HStack, Image, Stack, Text } from "@chakra-ui/react";
+import React from "react";
+import { useMediaQuery, Box, Flex, Image, Text, useColorMode } from "@chakra-ui/react";
 import Balancer from 'react-wrap-balancer';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCoverflow, Pagination } from "swiper";
+import 'swiper/css';
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+
 
 export default function DiscoverCarousel({projects: slides}){
-  const arrowStyles = {
-    cursor: "pointer",
-    pos: "absolute",
-    top: "50%",
-    w: "auto",
-    mt: "-22px",
-    p: "16px",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "18px",
-    transition: "0.6s ease",
-    borderRadius: "0 3px 3px 0",
-    userSelect: "none",
-    _hover: {
-      opacity: 0.8,
-      bg: "black",
-    },
-  };
 
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  const slidesCount = slides.length;
-
-  const prevSlide = () => {
-    setCurrentSlide((s) => (s === 0 ? slidesCount - 1 : s - 1));
-  };
-  const nextSlide = () => {slidesCount
-    setCurrentSlide((s) => (s === slidesCount - 1 ? 0 : s + 1));
-  };
-  const setSlide = (slide) => {
-    setCurrentSlide(slide);
-  };
-  const carouselStyle = {
-    transition: "all .5s",
-    ml: `-${currentSlide * 100}%`,
-  };
+  const [isLargerThanMd] = useMediaQuery('(min-width: 1280px)')
 
   return (
     <Flex
@@ -49,55 +21,82 @@ export default function DiscoverCarousel({projects: slides}){
       mt={8}
     >
       <Flex w="full" pos="relative" overflow="hidden">
-        <Flex h={{base: "500px", md:"600px"}} w="full" {...carouselStyle}>
-          {slides.slice(0).sort((a, b)=>{
-            return a?.name.toLowerCase().charCodeAt(0) - b?.name.toLowerCase().charCodeAt(0)
-          }).map((slide, sid) => (
-            <Flex key={`slide-${sid}`} flexDirection="column" w="100%" shadow="md" flex="none" align="center">
-                <Image src={slide.poster} m={10} borderRadius='30px' height={{base: "auto", md:"560px"}} />
-              <Stack
-                p="8px 12px"
-                pos="absolute"
-                bottom="24px"
-                textAlign="center"
-                w="full"
-                mb="8"
-                color="white"
-                alignItems='center'
-              >
-                <Heading fontSize="4xl" color="black">{slide.name}</Heading>
-                <Text fontSize="lg" w="80%" align="center" color="black">
-                    <Balancer>
-                        {slide.description}
-                    </Balancer>
-                </Text>
-              </Stack>
-            </Flex>
-          ))}
-        </Flex>
-        <Text {...arrowStyles} left="0" onClick={prevSlide}>
-          &#10094;
-        </Text>
-        <Text {...arrowStyles} right="0" onClick={nextSlide}>
-          &#10095;
-        </Text>
-        <HStack justify="center" pos="absolute" bottom="8px" w="full">
-          {Array.from({ length: slidesCount }).map((_, slide) => (
-            <Box
-              key={`dots-${slide}`}
-              cursor="pointer"
-              boxSize={["7px", null, "15px"]}
-              m="0 2px"
-              bg={currentSlide === slide ? "blackAlpha.800" : "blackAlpha.500"}
-              rounded="50%"
-              display="inline-block"
-              transition="background-color 0.6s ease"
-              _hover={{ bg: "blackAlpha.800" }}
-              onClick={() => setSlide(slide)}
-            ></Box>
-          ))}
-        </HStack>
+      <Swiper effect={"coverflow"}
+        grabCursor={true}
+        centeredSlides={true}
+        slidesPerView={isLargerThanMd ? 3 : 1}
+        coverflowEffect={{
+          rotate: 50,
+          stretch: 0,
+          depth: 100,
+          modifier: 1,
+          slideShadows: true,
+        }}
+        index
+        pagination={true}
+        modules={[EffectCoverflow, Pagination]} 
+        style={{
+          paddingTop: '50px',
+          paddingBottom: '50px'
+        }}
+       >
+        {
+            slides.slice(0).sort((a, b)=>{
+              return a?.name.toLowerCase().charCodeAt(0) - b?.name.toLowerCase().charCodeAt(0)
+            }).map((slide, sid) => (
+              <SwiperSlide key={`slide-${sid}`}>
+                <ProjectSlide slide={slide} />
+              </SwiperSlide>
+            ))}
+        </Swiper>
       </Flex>
     </Flex>
   );
+}
+
+
+const ProjectSlide = ({slide}) => {
+  const { colorMode } = useColorMode();
+  return(
+    <Box
+      flexDirection="column" w="100%" shadow="md" flex="none" alignItems="center"
+      borderRadius='20px' 
+      height="auto"
+      position='relative'
+      overflow="hidden"
+      maxWidth="800px"
+      _hover={{
+        '> img': {
+            transform: 'scale(1.1)',
+            transition: '0.3s ease'
+        }
+      }}
+    >
+      <Image
+          src={slide.poster}
+          borderRadius='20px'
+          alt={`Poster Image`}
+      />
+      <Flex 
+          className='overlay-text'
+          h="-webkit-fill-available"
+          position="absolute"
+          flexDirection='column'
+          alignItems='flex-start' 
+          justifyContent='space-between'
+          top={0}
+          w="full"
+          background={colorMode === 'light' ? 'none' : 'linear-gradient(#ffffff00, #000000c9 90%)'}
+      >
+        <Flex direction='column-reverse' alignItems='center' align="center" w="full" h="full" mb={4}>
+            <Balancer align="center" >
+              <Text fontSize={{base:'sm' ,md:'md'}} width="100%">
+              {slide.description}
+              </Text>
+            </Balancer>
+            <Text fontSize={{base:'xl' ,md:'2xl'}} fontWeight={600}>{slide.name}</Text>
+        </Flex>
+      </Flex>
+    </Box>
+  )
 }

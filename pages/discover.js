@@ -83,7 +83,7 @@ export default function DiscoverPage() {
                                                     </Text>
                                                 </Flex>
                                                 <Flex direction='row' mt={2} justifyContent="space-between">
-                                                    <Link href={project.url} target="_blank" w="100%">
+                                                    <Link href={`${project.url}?ref=tablescan.io`} target="_blank" w="100%">
                                                         <Button borderRadius='40px' w="100%" variant="outline" leftIcon={<ExternalLinkIcon/>}>
                                                             {new URL(project.url).hostname.replace('www.','')}
                                                         </Button>

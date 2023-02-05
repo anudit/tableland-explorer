@@ -27,7 +27,7 @@ const RigCard = ({id, ...props}) => {
                     _hover={{
                         '> img': {
                             transform: 'scale(1.1)',
-                            transition: '0.5s ease'
+                            transition: '0.5s ease-in-out'
                         }
                     }}
                 >
@@ -56,9 +56,10 @@ const RigCard = ({id, ...props}) => {
                         justifyContent='space-between' 
                         w="100%"
                         top={0}
+                        background={colorMode === 'light' ? 'none' : 'linear-gradient(#ffffff00, #000000c9 90%)'}
                     >
                         <Flex direction='row' alignItems='center'>
-                            <Text fontSize='2xl' fontWeight={600} mixBlendMode="difference">Rig #{id}</Text>
+                            <Text fontSize='2xl' fontWeight={600}>Rig #{id}</Text>
                         </Flex>
                         <Link href={`/rig/${id}`}>
                             <Button size='md' borderRadius="100px" color={colorMode === 'light' ? 'white' : 'black'}
