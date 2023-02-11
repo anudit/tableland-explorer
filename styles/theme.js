@@ -13,8 +13,8 @@ const theme = extendTheme({
       body: "'Inter', Segoe UI",
     },
     fontWeights: {
-      normal: 400,
-      medium: 600,
+      normal: 200,
+      medium: 500,
       bold: 900
     },
     config: {

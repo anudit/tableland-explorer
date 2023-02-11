@@ -5,17 +5,11 @@ import customTheme from '@/styles/theme';
 import {EnsCacheProvider} from '@/contexts/EnsCache';
 import { LivepeerConfig, createReactClient, studioProvider } from '@livepeer/react';
 import Script from "next/script";
-import { Inter } from '@next/font/google'
 import '../components/interactive/SplitView.css'
 import { WalletProvider } from "@/contexts/Wallet";
 
 const client = createReactClient({
   provider: studioProvider({ apiKey: 'cec3b877-1c4d-4773-a06a-7785ea58f4b3' }),
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
 });
 
 const App = ({ Component, pageProps }) => {
@@ -33,7 +27,7 @@ const App = ({ Component, pageProps }) => {
             <Head>
               <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
-            <Component {...pageProps} className={inter.className} />
+            <Component {...pageProps}/>
           </LivepeerConfig>
         </EnsCacheProvider>
       </ChakraProvider>

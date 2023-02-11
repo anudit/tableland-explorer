@@ -6,6 +6,7 @@ import { isMainnetTable, nameToAvatar, nameToChainName, nameToExplorer, parseTab
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Stat, StatLabel, StatNumber, StatHelpText, StatGroup } from '@chakra-ui/react';
 import AddressOrEns from './AddressOrEns';
 import EnsAvatar from './EnsAvatar';
+import timeAgo from '@/utils/stringUtils';
 
 const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
     const { colorMode } = useColorMode();
@@ -29,11 +30,18 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                     <StatNumber display='flex' alignItems="center"> <Avatar size='xs' src={nameToAvatar(tableMetadata?.name)} mr={2} />{parseTableData(tableMetadata?.name).chainId}</StatNumber>
                     <StatHelpText>{nameToChainName(tableMetadata?.name)}</StatHelpText>
                     </Stat>
+                </StatGroup>
+                <StatGroup>
 
+                    <Stat>
+                    <StatLabel>Last Updated On</StatLabel>
+                    <StatNumber>{new Date(parseInt(tableMetadata?.lastUpdated)*1000).toLocaleDateString()}</StatNumber>
+                    <StatHelpText>{new Date(parseInt(tableMetadata?.lastUpdated)*1000).toLocaleTimeString()} ({timeAgo(new Date(parseInt(tableMetadata?.lastUpdated)*1000))})</StatHelpText>
+                    </Stat>
                     <Stat>
                     <StatLabel>Created On</StatLabel>
                     <StatNumber>{new Date(parseInt(tableMetadata?.created)*1000).toLocaleDateString()}</StatNumber>
-                    <StatHelpText>{new Date(parseInt(tableMetadata?.created)*1000).toLocaleTimeString()}</StatHelpText>
+                    <StatHelpText>{new Date(parseInt(tableMetadata?.created)*1000).toLocaleTimeString()} ({timeAgo(new Date(parseInt(tableMetadata?.created)*1000))})</StatHelpText>
                     </Stat>
 
                 </StatGroup>

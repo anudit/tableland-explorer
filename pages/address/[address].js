@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Tooltip, IconButton, useColorMode, Box, Tag, Button, Text, useDisclosure, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
-import { ExternalLinkIcon, RepeatIcon } from '@chakra-ui/icons';
+import { RepeatIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import useSWR from "swr";
 
@@ -9,8 +9,8 @@ import { multifetch } from '@/utils/fetcher';
 import TableCard from '@/components/ExploreTableCard';
 import Meta from '@/components/Meta';
 import DetailsModal from '@/components/DetailsModal';
-import { EtherscanIcon, FeedIcon, OpenseaIcon, TableIcon, TablelandSmallIcon } from '@/public/icons';
-import { getFeed, getUserRigs } from '@/utils/rigs';
+import { EtherscanIcon, ExternalIcon, FeedIcon, OpenseaIcon, TableIcon, TablelandSmallIcon } from '@/public/icons';
+import { getFeed, getUserRigs, isTablescanSupporter } from '@/utils/rigs';
 import RigCard from '@/components/RigCard';
 import RigAction from '@/components/RigAction';
 import EnsAvatar from '@/components/EnsAvatar';
@@ -44,6 +44,7 @@ const UserSection = () => {
             statement
             tokenURI
             created
+            lastUpdated
             txnHash
             controller {
                 id
@@ -107,8 +108,8 @@ const UserSection = () => {
                     />
                     <Flex w={{base: "95%", md:"80%" }} mt={{base:'-50px', md:'-70px'}} justifyContent='space-between'>
                         <Flex direction='column'>
-                            <EnsAvatar size={{base: "xl", md:"2xl"}} address={address} borderWidth='6px' borderColor={colorMode === 'dark' ? "black" : "white"}/>
-                            <AddressOrEns address={address} fontWeight={900} fontSize="2xl" />
+                            <EnsAvatar size={{base: "xl", md:"2xl"}} address={address} borderWidth='6px' borderColor={isTablescanSupporter(address) ? 'gold' : colorMode === 'dark' ? "black" : "white"}/>
+                            <AddressOrEns address={address} fontWeight={900} fontSize="2xl" my={4} />
                         </Flex>
                         <Flex direction='row' mt={24}>
                             <Link href={`https://blockscan.com/address/${address}`} target="_blank">
@@ -138,7 +139,7 @@ const UserSection = () => {
                                 </Box>
                                 Rigs {userRigs && (<Tag ml={2} variant='outline' boxShadow='none'>{userRigs.length}</Tag>)}
                             </Tab>
-                            <Tab>
+                            <Tab isDisabled={true}>
                                 <Box as='span' mr='2'> <TreeIcon /> </Box>
                                 Climate
                             </Tab>
@@ -204,7 +205,7 @@ const UserSection = () => {
                                             </Text>
                                             <br/>
                                             <Link href='https://docs.tableland.xyz/build-a-dynamic-nft-in-solidity' target="_blank">
-                                                <Button variant="ghost" leftIcon={<TablelandSmallIcon/>} rightIcon={<ExternalLinkIcon />}>
+                                                <Button variant="ghost" leftIcon={<TablelandSmallIcon/>} rightIcon={<ExternalIcon />}>
                                                     Tableland Docs
                                                 </Button>
                                             </Link>
@@ -252,7 +253,7 @@ const UserSection = () => {
                                         </Text>
                                         <br/>
                                         <Link href="https://opensea.io/collection/tableland-rigs" target="_blank">
-                                            <Button variant="ghost" leftIcon={<OpenseaIcon />} rightIcon={<ExternalLinkIcon />}>
+                                            <Button variant="ghost" leftIcon={<OpenseaIcon />} rightIcon={<ExternalIcon />}>
                                                 Get on Opensea
                                             </Button>
                                         </Link>

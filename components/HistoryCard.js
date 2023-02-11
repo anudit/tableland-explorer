@@ -1,9 +1,9 @@
 import React from "react";
 import { useColorMode, Code, Flex, Text, useClipboard } from "@chakra-ui/react";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { nameToExplorer, prettyTime, stringSize } from "@/utils/stringUtils";
 import AddressOrEns from "./AddressOrEns";
 import Link from "next/link";
+import { ExternalIcon } from "@/public/icons";
 
 const HistoryCard = ({tableName, hist, ...props}) => {
     const { hasCopied, onCopy } = useClipboard(hist?.statement);
@@ -35,7 +35,7 @@ const HistoryCard = ({tableName, hist, ...props}) => {
                 <Flex direction='row' alignItems="center">
                     <Text fontSize={{base: '2xs', md:'sm'}}>{prettyTime(parseInt(hist.time)*1000)}</Text>
                     <Link href={`${nameToExplorer(tableName)}/tx/${hist.id}`} target="_blank">
-                        <ExternalLinkIcon ml={2} cursor="pointer" name="Open in New-Tab" mb='5px'/>
+                        <ExternalIcon ml={2} cursor="pointer" name="Open in New-Tab" mb='5px'/>
                     </Link>
                 </Flex>
             </Flex>

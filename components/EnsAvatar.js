@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { isAddress } from 'ethers/lib/utils';
 import { EnsCacheContext } from '@/contexts/EnsCache';
 import { avatar, getImageDataURL } from '@/utils/stringUtils';
+import { isTablescanSupporter } from '@/utils/rigs';
 
 const EnsAvatar = ({address, ...props}) => {
 
@@ -21,13 +22,15 @@ const EnsAvatar = ({address, ...props}) => {
 
     return (
         <Avatar
-            p="1px"
+            p="2px"
             size="sm"
             src={link}
             title={address}
             name={address ? address.slice(2) : "0x"}
             alt="Avatar"
             {...props}
+            borderWidth={isTablescanSupporter(address) ? '3px': 'none'}
+            borderColor={isTablescanSupporter(address) ? 'gold !important': 'none'}
         />
     )
 }

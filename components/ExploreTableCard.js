@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { Input, Textarea, useDisclosure, Tooltip, useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Spinner, Button } from "@chakra-ui/react";
+import { ButtonGroup, Input, Textarea, useDisclosure, Tooltip, useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Spinner, Button } from "@chakra-ui/react";
 import timeAgo, { nameToAvatar, nameToChainName, parseTableData, toProperCase } from '@/utils/stringUtils';
 import Link from 'next/link';
 import AddressOrEns from './AddressOrEns';
-import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { ChatIcon, InfoOutlineIcon } from '@chakra-ui/icons';
 import Image from 'next/image';
 import EnsAvatar from './EnsAvatar';
-import { ShuffleIcon } from '@/public/icons';
+import { LikeIcon, ShuffleIcon } from '@/public/icons';
 import { useAccount } from 'wagmi';
 import { WalletContext } from '@/contexts/Wallet';
 
@@ -149,44 +149,58 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
 
                     </Flex>
                 </Flex>
-                <Flex direction={{base: 'column', md: 'row'}} m={4} alignItems='center' justifyContent='space-between'>
+                <Flex direction='column' m={4} justifyContent='space-between'>
                     <Flex direction='row' alignItems='center'>
                         <Text fontSize={{base:'sm' , md:'lg'}} fontWeight={600} whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" w="100%">{toProperCase(tableName.split("_").slice(0,-2).join(' '))}</Text>
                         <Text size='sm'  ml={2} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>#{tableId}</Text>
                     </Flex>
-                    <Flex direction='row' alignItems='center' mt={{base: "10px", md: 0}}>
-                        <Tooltip label={!address ? 'Connect Wallet' : `Remix Table Schema`} placement='top'>
-                            <Button
-                                isDisabled={true}
-                                leftIcon={<ShuffleIcon />}
-                                size='sm'
-                                borderRadius="100px"
-                                color={colorMode === 'light' ? 'white' : 'black'}
-                                backgroundColor={colorMode === 'light' ? 'black' : 'white'}
-                                _hover={{
-                                    backgroundColor: colorMode === 'light' ? 'black' : 'white'
-                                }}
-                                mr={2}
-                                onClick={()=>{
-                                    createTableProcess(table.id, tableName, table.statement);
-                                }}
-                            >
-                                Remix
-                            </Button>
-                        </Tooltip>
-                        <Link href={`/${tableName}`}>
-                            <Button
-                                size='sm'
-                                borderRadius="100px"
-                                color={colorMode === 'light' ? 'white' : 'black'}
-                                backgroundColor={colorMode === 'light' ? 'black' : 'white'}
-                                _hover={{
-                                    backgroundColor: colorMode === 'light' ? 'black' : 'white'
-                                }}
-                            >
-                                    Explore Table
-                            </Button>
-                        </Link>
+                    
+                    <Flex direction='row' alignItems='center' mt={{base: "10px", md: 0}} justifyContent={'space-between'}>
+                        <div>
+                            <ButtonGroup>
+                                <Button leftIcon={<LikeIcon/>} isDisabled variant='ghost'>
+                                    0
+                                </Button>
+                                <Button leftIcon={<ChatIcon/>} isDisabled variant='ghost'>
+                                    0
+                                </Button>
+                            </ButtonGroup>
+                        </div>
+                        <div>
+                            <Tooltip label={!address ? 'Connect Wallet' : `Remix Table Schema`} placement='top'>
+                                <Button
+                                    isDisabled={true}
+                                    leftIcon={<ShuffleIcon />}
+                                    size='sm'
+                                    borderRadius="100px"
+                                    color={colorMode === 'light' ? 'white' : 'black'}
+                                    backgroundColor={colorMode === 'light' ? 'black' : 'white'}
+                                    _hover={{
+                                        backgroundColor: colorMode === 'light' ? 'black' : 'white'
+                                    }}
+                                    mr={2}
+                                    onClick={()=>{
+                                        createTableProcess(table.id, tableName, table.statement);
+                                    }}
+                                >
+                                    Remix
+                                </Button>
+                            </Tooltip>
+                            <Link href={`/${tableName}`}>
+                                <Button
+                                    size='sm'
+                                    borderRadius="100px"
+                                    color={colorMode === 'light' ? 'white' : 'black'}
+                                    backgroundColor={colorMode === 'light' ? 'black' : 'white'}
+                                    _hover={{
+                                        backgroundColor: colorMode === 'light' ? 'black' : 'white'
+                                    }}
+                                >
+                                        Explore Table
+                                </Button>
+                            </Link>
+                        </div>
+                        
                     </Flex>
                 </Flex>
             </Flex>

@@ -1,11 +1,10 @@
 import React from "react";
 import { Stack, Skeleton, useColorMode, Avatar, Flex, Text, IconButton } from "@chakra-ui/react";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { prettyTime } from "@/utils/stringUtils";
 import AddressOrEns from "./AddressOrEns";
 import Link from "next/link";
 import EnsAvatar from "./EnsAvatar";
-import { OpenseaIcon2 } from "@/public/icons";
+import { ExternalIcon, OpenseaIcon2 } from "@/public/icons";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 
 const RigAction = ({data, ...props}) => {
@@ -63,7 +62,7 @@ const RigAction = ({data, ...props}) => {
                         </Flex>
 
                     </Flex>
-                    <IconButton variant='ghost' icon={<ExternalLinkIcon/>} onClick={()=>{
+                    <IconButton variant='ghost' icon={<ExternalIcon/>} onClick={()=>{
                         window.open(`https://etherscan.io/tx/${data?.transaction_hash}`, '_target')
                     }}/>
                 </Flex>
@@ -103,7 +102,7 @@ const RigAction = ({data, ...props}) => {
                             />
                         )}
                     </Flex>
-                    <IconButton variant='ghost' icon={<ExternalLinkIcon/>} onClick={()=>{
+                    <IconButton variant='ghost' icon={<ExternalIcon/>} onClick={()=>{
                         window.open(`https://etherscan.io/tx/${data?.transaction_hash}`, '_blank')
                     }}/>
                 </Flex>
@@ -131,7 +130,7 @@ const RigAction = ({data, ...props}) => {
                         <EnsAvatar address={data?.owner_address} />
                         <AddressOrEns ml={2} mr={2} address={data?.owner_address} tooltip={false}/>
                     </Flex>
-                    <IconButton variant='ghost' icon={<ExternalLinkIcon/>} onClick={()=>{
+                    <IconButton variant='ghost' icon={<ExternalIcon/>} onClick={()=>{
                         window.open(`https://etherscan.io/tx/${data?.transaction_hash}`, '_blank')
                     }}/>
                 </Flex>
@@ -173,7 +172,7 @@ const RigAction = ({data, ...props}) => {
                         </Flex>
 
                     </Flex>
-                    <IconButton variant='ghost' icon={<ExternalLinkIcon/>} onClick={()=>{
+                    <IconButton variant='ghost' icon={<ExternalIcon/>} onClick={()=>{
                         window.open(`https://etherscan.io/tx/${data?.transaction_hash}`, '_target')
                     }}/>
                 </Flex>

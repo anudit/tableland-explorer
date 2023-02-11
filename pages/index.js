@@ -33,6 +33,7 @@ export default function Home() {
         tableId
         statement
         tokenURI
+        lastUpdated
         created
         txnHash
         controller {

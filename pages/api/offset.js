@@ -1,4 +1,4 @@
-import { isAddress } from "ethers/lib/utils.js"
+import { isAddress } from "ethers/lib/utils"
 import withCors from "middleware/withCors";
 
 const handler = async (req, res) => {

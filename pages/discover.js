@@ -5,10 +5,11 @@ import Balancer from 'react-wrap-balancer';
 import UniversalSearch from "@/components/UniversalSearch";
 import Link from "next/link";
 import { TwitterIcon } from "@/public/icons";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalIcon } from "@/public/icons";
 import { getProjects } from "@/utils/rigs";
 import Footer from "@/components/Footer";
 import DiscoverCarousel from "@/components/DiscoverCarousel";
+import Meta from "@/components/Meta";
 
 const chooseRandom = (arr, num = 5) => {
     const res = [];
@@ -42,6 +43,7 @@ export default function DiscoverPage() {
             backgroundPosition="top right"
             backgroundAttachment="fixed"
         >
+            <Meta/> 
             <UniversalSearch />
             {
                 projectList != false ? (
@@ -84,7 +86,7 @@ export default function DiscoverPage() {
                                                 </Flex>
                                                 <Flex direction='row' mt={2} justifyContent="space-between">
                                                     <Link href={`${project.url}?ref=tablescan.io`} target="_blank" w="100%">
-                                                        <Button borderRadius='40px' w="100%" variant="outline" leftIcon={<ExternalLinkIcon/>}>
+                                                        <Button borderRadius='40px' w="100%" variant="outline" leftIcon={<ExternalIcon/>}>
                                                             {new URL(project.url).hostname.replace('www.','')}
                                                         </Button>
                                                     </Link>

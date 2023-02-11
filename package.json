@@ -26,7 +26,7 @@
     "@vercel/og": "^0.0.27",
     "critters": "^0.0.16",
     "ethers": "^5.7.2",
-    "framer-motion": "^8.5.5",
+    "framer-motion": "^9.0.2",
     "hsl-rgb": "^1.0.0",
     "hsl-triad": "^1.0.0",
     "next": "13.1.6",
@@ -41,13 +41,13 @@
     "react-split": "^2.0.14",
     "react-wrap-balancer": "^0.4.0",
     "string-hash": "^1.1.3",
-    "swiper": "^8.4.7",
+    "swiper": "^9.0.4",
     "swr": "^2.0.3",
     "wagmi": "^0.11.5"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "13.1.6",
-    "eslint": "8.33.0",
+    "eslint": "8.34.0",
     "eslint-config-next": "13.1.6"
   }
 }

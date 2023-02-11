@@ -22,7 +22,7 @@ const AddressOrEns = ({address, tooltip, ...props}) => {
         return(
             <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Address"} placement='bottom'>
                 <Link href={`/address/${address}`}>
-                    <Text fontFamily='monospace' fontSize='md' fontWeight={100} title={address} onClick={onCopy} cursor="pointer" ml="4" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
+                    <Text fontFamily={ens ? 'sans-serif' : 'monospace'} fontSize='md' fontWeight={100} title={address} onClick={onCopy} cursor="pointer" ml="4" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
                         { ens || truncateAddress(address) }
                     </Text>
                 </Link>
@@ -32,7 +32,7 @@ const AddressOrEns = ({address, tooltip, ...props}) => {
     else {
         return (
             <Link href={`/address/${address}`}>
-                <Text fontFamily='monospace' fontSize='md' fontWeight={100} title={address} cursor="pointer" ml="4" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
+                <Text fontFamily={ens ? 'sans-serif' : 'monospace'} fontSize='md' fontWeight={100} title={address} cursor="pointer" ml="4" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" {...props}>
                     { ens || truncateAddress(address) }
                 </Text>
             </Link>

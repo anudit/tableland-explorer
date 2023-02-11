@@ -24,6 +24,10 @@ const Meta = ({url, title}) => {
             <meta property="twitter:image" content={url || 'https://res.cloudinary.com/anudit/image/upload/v1674573911/convo/tablescan.png'} />
 
             <meta name="theme-color" content="#000" />
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;500;800&display=swap" rel="stylesheet"></link>
+
         </Head>
     )
 }

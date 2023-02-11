@@ -67,6 +67,7 @@ const TableSection = () => {
                                     tokenURI
                                     created
                                     txnHash
+                                    lastUpdated
                                     controller {
                                         id
                                     }
