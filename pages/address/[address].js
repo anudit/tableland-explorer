@@ -9,7 +9,7 @@ import { multifetch } from '@/utils/fetcher';
 import TableCard from '@/components/ExploreTableCard';
 import Meta from '@/components/Meta';
 import DetailsModal from '@/components/DetailsModal';
-import { EtherscanIcon, ExternalIcon, FeedIcon, OpenseaIcon, TableIcon, TablelandSmallIcon } from '@/public/icons';
+import { EtherscanIcon, ExternalIcon, FeedIcon, LikeIcon, OpenseaIcon, TableIcon, TablelandSmallIcon } from '@/public/icons';
 import { getFeed, getUserRigs, isTablescanSupporter } from '@/utils/rigs';
 import RigCard from '@/components/RigCard';
 import RigAction from '@/components/RigAction';
@@ -20,6 +20,7 @@ import UniversalSearch from '@/components/UniversalSearch';
 import { avatar, getImageDataURL } from '@/utils/stringUtils';
 import { TreeIcon } from '@/public/icons';
 import Footer from "@/components/Footer";
+import { getUserLikes } from '@/utils/ops';
 
 const UserSection = () => {
 
@@ -27,6 +28,7 @@ const UserSection = () => {
     const { address } = router.query;
     const [activeModalData, setActiveModalData] = useState({});
     const [userRigs, setUserRigs] = useState(false);
+    const [likedTables, setLikedTables] = useState(false);
     const [feed, setFeed] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { colorMode } = useColorMode();
@@ -56,6 +58,7 @@ const UserSection = () => {
     useEffect(()=>{
         if(address) {
             getUserRigs(address).then(setUserRigs);
+            getUserLikes(address).then(setLikedTables)
             getFeed(address).then((f)=>{
                 if (f && f?.filter){
                     let needed = f.filter(d=>{
@@ -138,6 +141,10 @@ const UserSection = () => {
                                     />
                                 </Box>
                                 Rigs {userRigs && (<Tag ml={2} variant='outline' boxShadow='none'>{userRigs.length}</Tag>)}
+                            </Tab>
+                            <Tab>
+                                <Box as='span' mr='2'> <LikeIcon /> </Box>
+                                Liked {likedTables && (<Tag ml={2} variant='outline' boxShadow='none'>{likedTables.length}</Tag>)}
                             </Tab>
                             <Tab isDisabled={true}>
                                 <Box as='span' mr='2'> <TreeIcon /> </Box>
@@ -259,6 +266,49 @@ const UserSection = () => {
                                         </Link>
                                     </Flex>
                                 ) : (
+                                    <Flex w="100%" h="100vh" justifyContent='center' alignItems='center'>
+                                        <Spinner />
+                                    </Flex>
+                                )
+                            }
+                        </TabPanel>
+                        <TabPanel p={0}>
+                            {
+                                likedTables ? likedTables.length > 0 ? (
+                                        <Wrap
+                                            spacing={{base: 0, md:3}}
+                                            align='center'
+                                            justify='center'
+                                            m={{base: 0, md:8}}
+                                            mt={{base: 0, md:8}}
+                                        >
+                                            {
+                                                likedTables
+                                                    .sort(function(a, b){return parseInt(b.timestamp) - parseInt(a.timestamp)})
+                                                    .map((table, oid) => (
+                                                            <WrapItem key={oid}>
+                                                                <TableCard tableName={table?.name} table={table} w={{base: '100%', md:'500px'}} infoClick={()=>{
+                                                                    infoClick(oid)
+                                                                }}/>
+                                                            </WrapItem>
+                                                        )
+                                                    )
+                                            }
+                                        </Wrap>
+                                    ) : (
+                                        <Flex direction='column' alignItems='center' h="calc(100vh - 160px)" p={2} w="100%" justifyContent='center'>
+                                            <Text fontSize='xl' align='center'>
+                                                You seem to have found a land with no Tables. <br/>Learn how to Create one on Tableland Docs.
+                                            </Text>
+                                            <br/>
+                                            <Link href='https://docs.tableland.xyz/build-a-dynamic-nft-in-solidity' target="_blank">
+                                                <Button variant="ghost" leftIcon={<TablelandSmallIcon/>} rightIcon={<ExternalIcon />}>
+                                                    Tableland Docs
+                                                </Button>
+                                            </Link>
+                                        </Flex>
+                                    )
+                                : (
                                     <Flex w="100%" h="100vh" justifyContent='center' alignItems='center'>
                                         <Spinner />
                                     </Flex>

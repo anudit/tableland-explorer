@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { ButtonGroup, Input, Textarea, useDisclosure, Tooltip, useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Spinner, Button } from "@chakra-ui/react";
 import timeAgo, { nameToAvatar, nameToChainName, parseTableData, toProperCase } from '@/utils/stringUtils';
 import Link from 'next/link';
@@ -6,14 +6,22 @@ import AddressOrEns from './AddressOrEns';
 import { ChatIcon, InfoOutlineIcon } from '@chakra-ui/icons';
 import Image from 'next/image';
 import EnsAvatar from './EnsAvatar';
-import { LikeIcon, ShuffleIcon } from '@/public/icons';
+import { LikedIcon, LikeIcon, ShuffleIcon } from '@/public/icons';
 import { useAccount } from 'wagmi';
 import { WalletContext } from '@/contexts/Wallet';
 
 import { AlertDialog, AlertDialogBody, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay } from '@chakra-ui/react'
 import { Database } from '@tableland/sdk';
+import { getLikes } from '@/utils/ops';
+import { ethers } from 'ethers';
+import { useNetwork } from 'wagmi';
+import { useSigner } from 'wagmi';
 
 const loaderProp = ({ src }) => { return src }
+
+const LIKES_ADDRESS = "0x7fdf9fce06bdc3ee7702b2051ba21322d8c93326";
+const LIKES_ABI = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"string","name":"fullTableNameHash","type":"string"},{"indexed":false,"internalType":"string","name":"fullTableName","type":"string"},{"indexed":true,"internalType":"address","name":"user","type":"address"}],"name":"Like","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"string","name":"fullTableNameHash","type":"string"},{"indexed":false,"internalType":"string","name":"fullTableName","type":"string"},{"indexed":true,"internalType":"address","name":"user","type":"address"}],"name":"Unlike","type":"event"},{"inputs":[{"internalType":"string","name":"fullTableName","type":"string"}],"name":"like","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"fullTableName","type":"string"}],"name":"unlike","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+
 
 const TableCard = ({tableName, infoClick, table, ...props}) => {
 
@@ -22,6 +30,14 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
     const { address } = useAccount();
     const { cleanStatement } = useContext(WalletContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { chain } = useNetwork();
+    const { data: signer } = useSigner();
+    
+    const [likes, setLikes] = useState(false);
+
+    useEffect(()=>{
+        console.log(address, likes)
+    }, [address, likes])
 
     async function createTableProcess(tableId="", tableName="", statement = ""){
 
@@ -48,6 +64,50 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
         }
 
     }
+
+    async function likeTable() {
+        if (chain.id === 80001){
+
+            try {
+                const likesInstance = new ethers.Contract(LIKES_ADDRESS, LIKES_ABI, signer);
+                await likesInstance.like(tableName);
+                getLikes(tableName).then(setLikes)
+                
+
+            } catch (error) {
+                alert(error?.message);
+                console.log('error', error);
+            }
+
+        }
+        else {
+            alert(`Switch to Polygon Mumbai Testnet, You're on ${chain.name}`);
+        }
+    }
+
+    async function unlikeTable() {
+        if (chain.id === 80001){
+
+            try {
+                const likesInstance = new ethers.Contract(LIKES_ADDRESS, LIKES_ABI, signer);
+                await likesInstance.unlike(tableName);
+                getLikes(tableName).then(setLikes)
+                
+
+            } catch (error) {
+                alert(error?.message);
+                console.log('error', error);
+            }
+
+        }
+        else {
+            alert(`Switch to Polygon Mumbai Testnet, You're on ${chain.name}`);
+        }
+    }
+
+    useEffect(()=>{
+        getLikes(tableName).then(setLikes)
+    },[tableName])
 
 
     if (tableName){
@@ -131,7 +191,7 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                     </Flex>
                     <IconButton icon={<InfoOutlineIcon />} onClick={infoClick} variant='solid' borderRadius='100%'/>
                 </Flex>
-                <Flex alignItems='center' h="100%">
+                <Flex alignItems='center' h="100%" onDoubleClick={likeTable}>
                     <Image
                         src={`https://render.tableland.xyz/${chainId}/${tableId}`}
                         height={600}
@@ -158,9 +218,42 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                     <Flex direction='row' alignItems='center' mt={{base: "10px", md: 0}} justifyContent={'space-between'}>
                         <div>
                             <ButtonGroup>
-                                <Button leftIcon={<LikeIcon/>} isDisabled variant='ghost'>
-                                    0
-                                </Button>
+                                <Flex alignItems='center'>
+                                    {
+                                        address && likes !=false && likes.map(e=>e?.address.toLowerCase())?.includes(address.toLowerCase()) ? (
+                                            <Tooltip hasArrow label='Remove Like' placement='top-start'>
+                                                <LikedIcon mr={2}
+                                                    onClick={unlikeTable} cursor="pointer"
+                                                />
+                                            </Tooltip>
+                                        ) : (
+                                            <LikeIcon mr={2}
+                                                onClick={likeTable} cursor="pointer"
+                                            />
+                                        )
+                                    }
+                                    
+                                    {
+                                        likes === false ? (<Spinner size="sm"/>) : likes.length === 0 ? (
+                                            <Text colorScheme='gray'>0</Text>
+                                        ) : (
+                                            <Flex direction='row' alignItems='center'>
+                                                <Text mr={1}>Liked by</Text>
+                                                <AvatarGroup size='xs' max={2}>
+                                                    {
+                                                        likes.slice(0, Math.min(3, likes.length)).map((e, oid)=>{
+                                                            return (
+                                                                <Link href={`/address/${e?.address}`} key={oid}>
+                                                                    <EnsAvatar address={e?.address} size="xs" cursor="pointer" mr={0}/>
+                                                                </Link>
+                                                            )
+                                                        })
+                                                    }
+                                                </AvatarGroup>
+                                            </Flex>
+                                        )
+                                    }
+                                </Flex>
                                 <Button leftIcon={<ChatIcon/>} isDisabled variant='ghost'>
                                     0
                                 </Button>

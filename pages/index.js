@@ -183,7 +183,7 @@ const ChainsSection = () => {
           </Flex>
           <Flex direction='column' align="center" key={3} mb={4} alignItems='flex-start'>
             <Flex direction="row" alignItems="center">
-              <Avatar size="xs" src={networkDeets['42161'].avatar} title={networkDeets['42161'].name} mr={2}/>
+              <Avatar size="xs" src={networkDeets['42161'].avatar} title={networkDeets['42161'].name} mr={2} backgroundColor="transparent"/>
               <Text fontWeight={600} fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                 Arbitrum
               </Text>

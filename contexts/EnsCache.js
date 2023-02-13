@@ -1,5 +1,5 @@
 import React, { useState, createContext } from "react";
-import { getAddress } from "ethers";
+import { getAddress } from "ethers/lib/utils";
 
 export const EnsCacheContext = createContext(undefined);
 

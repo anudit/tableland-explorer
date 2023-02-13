@@ -27,7 +27,8 @@ const theme = extendTheme({
         baseStyle: (props) => ({
           list: {
             bg: props.colorMode === "dark" ? "#111111db" : "white",
-            backdropFilter: "blur(24px)"
+            backdropFilter: "blur(24px)",
+            border: 'none'
           },
           item: {
             bg: props.colorMode === "dark" ? "#111111db" : "white",

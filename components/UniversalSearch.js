@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
 import { Menu, MenuButton, MenuList, MenuItem, useDisclosure, useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
-import { AppsIcon, SqlIcon, TablelandSmallIcon, TreeIcon, WalletIcon } from "@/public/icons";
+import { AppsIcon, SqlIcon, TablelandSmallIcon, TreeIcon, UserIconOutline, WalletIcon } from "@/public/icons";
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
 import {multifetch} from "../utils/fetcher";
@@ -14,11 +14,13 @@ import Link from "next/link";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 import Offset from "./Offset";
+import { useAccount } from "wagmi";
 
 export default function UniversalSearch({children, defaultValue}) {
 
   const router = useRouter();
   const searchBox = useRef();
+  const {address} = useAccount();
   const [searchValue, setSearchValue] = useState(defaultValue);
   const { colorMode, toggleColorMode } = useColorMode();
   const [isSqlMode, setSqlMode] = useState(false);
@@ -325,6 +327,9 @@ export default function UniversalSearch({children, defaultValue}) {
                                     }
                                     <MenuList>
                                         <MenuItem icon={<TreeIcon />} onClick={onOpenClimate}> <Offset onClose={onCloseClimate} isOpen={isOpenClimate}/></MenuItem>
+                                        <MenuItem icon={<UserIconOutline />} onClick={()=>{
+                                            router.push(`/address/${address}`)
+                                        }}>My Page</MenuItem>
                                         <MenuItem icon={<WalletIcon />} onClick={openAccountModal}>Disconnect</MenuItem>
                                     </MenuList>
                                 </Menu>
