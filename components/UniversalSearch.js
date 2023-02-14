@@ -329,7 +329,7 @@ export default function UniversalSearch({children, defaultValue}) {
                                         <MenuItem icon={<TreeIcon />} onClick={onOpenClimate}> <Offset onClose={onCloseClimate} isOpen={isOpenClimate}/></MenuItem>
                                         <MenuItem icon={<UserIconOutline />} onClick={()=>{
                                             router.push(`/address/${address}`)
-                                        }}>My Page</MenuItem>
+                                        }}>My Profile</MenuItem>
                                         <MenuItem icon={<WalletIcon />} onClick={openAccountModal}>Disconnect</MenuItem>
                                     </MenuList>
                                 </Menu>

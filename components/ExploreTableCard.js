@@ -215,55 +215,53 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                         <Text size='sm'  ml={2} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>#{tableId}</Text>
                     </Flex>
                     
-                    <Flex direction='row' alignItems='center' mt={{base: "10px", md: 0}} justifyContent={'space-between'}>
-                        <div>
-                            <ButtonGroup>
-                                <Flex alignItems='center'>
-                                    {
-                                        address && likes !=false && likes.map(e=>e?.address.toLowerCase())?.includes(address.toLowerCase()) ? (
-                                            <Tooltip hasArrow label='Remove Like' placement='top-start'>
-                                                <LikedIcon mr={2}
-                                                    onClick={unlikeTable} cursor="pointer"
-                                                />
-                                            </Tooltip>
-                                        ) : (
-                                            <LikeIcon mr={2}
-                                                onClick={likeTable} cursor="pointer"
+                    <Flex direction={{base:'column', md:'row'}} alignItems='center' mt={{base: "10px", md: 0}} justifyContent={'space-between'}>
+                        <Flex direction="row" justifyContent={{base:"space-between", md:"flex-start"}} w="100%">
+                            <Flex alignItems='center'>
+                                {
+                                    address && likes !=false && likes.map(e=>e?.address.toLowerCase())?.includes(address.toLowerCase()) ? (
+                                        <Tooltip hasArrow label='Remove Like' placement='top-start'>
+                                            <LikedIcon mr={2}
+                                                onClick={unlikeTable} cursor="pointer"
                                             />
-                                        )
-                                    }
-                                    
-                                    {
-                                        likes === false ? (<Spinner size="sm"/>) : likes.length === 0 ? (
-                                            <Text colorScheme='gray'>0</Text>
-                                        ) : (
-                                            <Flex direction='row' alignItems='center'>
-                                                <Text mr={1}>Liked by</Text>
-                                                <AvatarGroup size='xs' max={2}>
-                                                    {
-                                                        likes.slice(0, Math.min(3, likes.length)).map((e, oid)=>{
-                                                            return (
-                                                                <Link href={`/address/${e?.address}`} key={oid}>
-                                                                    <EnsAvatar address={e?.address} size="xs" cursor="pointer" mr={0}/>
-                                                                </Link>
-                                                            )
-                                                        })
-                                                    }
-                                                </AvatarGroup>
-                                            </Flex>
-                                        )
-                                    }
-                                </Flex>
-                                <Button leftIcon={<ChatIcon/>} isDisabled variant='ghost'>
-                                    0
-                                </Button>
-                            </ButtonGroup>
-                        </div>
-                        <div>
+                                        </Tooltip>
+                                    ) : (
+                                        <LikeIcon mr={2}
+                                            onClick={likeTable} cursor="pointer"
+                                        />
+                                    )
+                                }
+                                
+                                {
+                                    likes === false ? (<Spinner size="sm"/>) : likes.length === 0 ? (
+                                        <Text colorScheme='gray'>0</Text>
+                                    ) : (
+                                        <Flex direction='row' alignItems='center'>
+                                            <Text mr={1}>Liked by</Text>
+                                            <AvatarGroup size='xs' max={2}>
+                                                {
+                                                    likes.slice(0, Math.min(3, likes.length)).map((e, oid)=>{
+                                                        return (
+                                                            <Link href={`/address/${e?.address}`} key={oid}>
+                                                                <EnsAvatar address={e?.address} size="xs" cursor="pointer" mr={0}/>
+                                                            </Link>
+                                                        )
+                                                    })
+                                                }
+                                            </AvatarGroup>
+                                        </Flex>
+                                    )
+                                }
+                            </Flex>
+                            <Button leftIcon={<ChatIcon/>} isDisabled variant='ghost'>
+                                0
+                            </Button>
+                        </Flex>
+                        <Flex direction="row">
                             <Tooltip label={!address ? 'Connect Wallet' : `Remix Table Schema`} placement='top'>
-                                <Button
+                                <IconButton
                                     isDisabled={true}
-                                    leftIcon={<ShuffleIcon />}
+                                    icon={<ShuffleIcon />}
                                     size='sm'
                                     borderRadius="100px"
                                     color={colorMode === 'light' ? 'white' : 'black'}
@@ -275,9 +273,7 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                                     onClick={()=>{
                                         createTableProcess(table.id, tableName, table.statement);
                                     }}
-                                >
-                                    Remix
-                                </Button>
+                                />
                             </Tooltip>
                             <Link href={`/${tableName}`}>
                                 <Button
@@ -292,7 +288,7 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                                         Explore Table
                                 </Button>
                             </Link>
-                        </div>
+                        </Flex>
                         
                     </Flex>
                 </Flex>

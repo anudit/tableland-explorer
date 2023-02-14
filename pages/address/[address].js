@@ -123,7 +123,7 @@ const UserSection = () => {
                 </Flex>
                 <Tabs  width="100%">
                     <TabList display='flex' justifyContent='center' borderBottomWidth='0.5px' borderBottomColor={colorMode === 'light' ? '#dfdfdf' : '#343333'}>
-                        <Flex w={{base: "100%", md:"80%"}}>
+                        <Flex w={{base: "100%", md:"80%"}} overflow="auto">
                             <Tab>
                                 <Box as='span' mr='2'> <FeedIcon /> </Box>
                                 Feed
