@@ -1,5 +1,9 @@
 import { extendTheme } from "@chakra-ui/react";
 
+import localFont from '@next/font/local'
+const beatrice = localFont({ src: '../public/fonts/BeatriceDisplay-Medium.woff2' })
+
+
 const theme = extendTheme({
     styles: {
         global: (props) => ({
@@ -9,7 +13,7 @@ const theme = extendTheme({
         }),
       },
     fonts: {
-      heading: "'Inter', Segoe UI",
+      heading: `${beatrice.style.fontFamily}, Segoe UI`,
       body: "'Inter', Segoe UI",
     },
     fontWeights: {

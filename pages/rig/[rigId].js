@@ -122,7 +122,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                             <Text fontSize="xs" mr={1} color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>Rarity Rank</Text>
                             <Text fontSize="xs"> {pageData.token.rarityRank} / 3000 ({cleanDecimals(pageData.token.rarityRank/ 30)}%)</Text>
                         </Flex>
-                        <Heading mb={{base: 4, md: 4}} size="3xl" mt={{base: 4, md: 0}} display="flex" alignItems='center'>
+                        <Heading mb={{base: 4, md: 4}} size="2xl" mt={{base: 4, md: 0}} display="flex" alignItems='center'>
                             Rig #{rigId} {pageData.token.isFlagged && <Tooltip label="This Item is reported suspicious and not tradable on OpenSea" placement='top-start' hasArrow backgroundColor='red.500'><WarningIcon color="red.500" boxSize={8} ml={4}/></Tooltip>}
                         </Heading>
                         <Flex direction={{base:'column', lg: 'row'}} align="left" my={4}>

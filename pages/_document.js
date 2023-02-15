@@ -10,7 +10,7 @@ export default class Document extends NextDocument {
         <Head />
         <chakra.body>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-          <Main />
+          <Main/>
           <NextScript />
         </chakra.body>
       </Html>

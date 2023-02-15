@@ -11,6 +11,8 @@ const RigCard = ({id, ...props}) => {
 
     if (id){
         return (
+            
+            <Link href={`/rig/${id}`}>
             <Flex
                 direction='column'
                 borderRadius={{base: 0, md: 20}}
@@ -18,6 +20,7 @@ const RigCard = ({id, ...props}) => {
                 my={{base: 4, md: 2}}
                 mx={{base: 1, md: 2}}
                 scrollSnapAlign="center"
+                cursor='pointer'
                 {...props}
             >
                 <Box
@@ -28,7 +31,11 @@ const RigCard = ({id, ...props}) => {
                         '> img': {
                             transform: 'scale(1.1)',
                             transition: '0.5s ease-in-out'
-                        }
+                        },
+                        '> div > button': {
+                            opacity: 1,
+                            transition: '0.5s ease-in-out'
+                        },
                     }}
                 >
                     <Image
@@ -61,16 +68,15 @@ const RigCard = ({id, ...props}) => {
                         <Flex direction='row' alignItems='center'>
                             <Text fontSize='2xl' fontWeight={600}>Rig #{id}</Text>
                         </Flex>
-                        <Link href={`/rig/${id}`}>
-                            <Button size='md' borderRadius="100px" color={colorMode === 'light' ? 'white' : 'black'}
-                                backgroundColor={colorMode === 'light' ? 'black' : 'white'}
-                                _hover={{
-                                    backgroundColor: colorMode === 'light' ? 'black' : 'white'
-                                }}>View Rig</Button>
-                        </Link>
+                        <Button opacity={0} size='md' borderRadius="100px" color={colorMode === 'light' ? 'white' : 'black'}
+                            backgroundColor={colorMode === 'light' ? 'black' : 'white'}
+                            _hover={{
+                                backgroundColor: colorMode === 'light' ? 'black' : 'white'
+                            }}>View Rig</Button>
                     </Flex>
                 </Box>
-            </Flex>
+                </Flex>
+            </Link>
         )
     }
     else {
