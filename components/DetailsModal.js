@@ -13,7 +13,7 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
 
     return(
         <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
+            <ModalOverlay backdropBlur='2px'/>
                 <ModalContent>
                 <ModalHeader>{tableMetadata?.name} Details</ModalHeader>
                 <ModalCloseButton />

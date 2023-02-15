@@ -35,10 +35,6 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
     
     const [likes, setLikes] = useState(false);
 
-    useEffect(()=>{
-        console.log(address, likes)
-    }, [address, likes])
-
     async function createTableProcess(tableId="", tableName="", statement = ""){
 
         try {

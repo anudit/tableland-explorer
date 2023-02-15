@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect } from "react";
 import { Input } from "@chakra-ui/react";
-import init from 'https://cdn.jsdelivr.net/gh/tablelandnetwork/wasm-sqlparser/main.js';
+import { init } from "@tableland/sqlparser";
 import { Parser } from 'node-sql-parser';
 import fetcher from "@/utils/fetcher";
 import { nameToSubgraph, parseTableData } from "@/utils/stringUtils";
@@ -19,9 +19,9 @@ const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, 
 
   async function test(){
     try {
-        if (Boolean(window?.sqlparser) === true && Boolean(window?.sqlparser?.parse) === true){
+        if (Boolean(sqlparser) === true && Boolean(sqlparser?.normalize) === true){
           if (inputValue.trim() != ""){
-            await window.sqlparser.parse(inputValue);
+            await sqlparser.normalize(inputValue);
             const ast = parser.astify(inputValue);
             const reqTable = ast.from.length;
             let vCount = 0;
@@ -80,7 +80,8 @@ const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, 
       }}
       value={inputValue}
       mb={2}
-      isInvalid={sqlError}
+      isInvalid={Boolean(sqlError)}
+      errorBorderColor='crimson'
       focusBorderColor={sqlError ? 'red' : 'green.300'}
       // defaultValue={global?.window ? Object.fromEntries(new URLSearchParams(window.location.search))?.query?.replaceAll('%25', '%').replaceAll('%2A', '*') : ""}
       {...props}

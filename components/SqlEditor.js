@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect } from "react";
-import init from 'https://cdn.jsdelivr.net/gh/tablelandnetwork/wasm-sqlparser/main.js';
+import { init } from "@tableland/sqlparser";
 import { Parser } from 'node-sql-parser';
 import fetcher from "@/utils/fetcher";
 import { nameToSubgraph, parseTableData } from "@/utils/stringUtils";
@@ -21,9 +21,9 @@ const SqlEditor = ({inputValue, setInputValue, setSqlError, ...props}, ref) => {
 
   async function test(){
     try {
-        if (Boolean(window?.sqlparser) === true && Boolean(window?.sqlparser?.parse) === true){
+        if (Boolean(sqlparser) === true && Boolean(sqlparser?.normalize) === true){
           if (inputValue.trim() != ""){
-            await window.sqlparser.parse(inputValue);
+            await sqlparser.normalize(inputValue);
             const ast = parser.astify(inputValue);
             const reqTable = ast.from.length;
             let vCount = 0;

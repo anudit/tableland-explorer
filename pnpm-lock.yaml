@@ -7,13 +7,14 @@ specifiers:
   '@choc-ui/chakra-autocomplete': ^5.1.4
   '@emotion/react': ^11.10.5
   '@emotion/styled': ^11.10.5
-  '@livepeer/react': ^2.1.5
+  '@livepeer/react': ^2.2.2
   '@livepeer/webrtmp-sdk': ^0.2.3
   '@monaco-editor/react': ^4.4.6
   '@next/eslint-plugin-next': 13.1.6
   '@next/font': ^13.1.6
-  '@rainbow-me/rainbowkit': ^0.9.0
-  '@tableland/sdk': 3.1.7
+  '@rainbow-me/rainbowkit': ^0.10.0
+  '@tableland/sdk': 4.0.0
+  '@tableland/sqlparser': ^1.0.4
   '@valist/sdk': ^2.8.1
   '@vercel/og': ^0.1.0
   critters: ^0.0.16
@@ -46,12 +47,13 @@ dependencies:
   '@choc-ui/chakra-autocomplete': 5.1.4_t73owtwy5smlzlb5j5cpug5xji
   '@emotion/react': 11.10.5_react@18.2.0
   '@emotion/styled': 11.10.5_hp5f5nkljdiwilp4rgxyefcplu
-  '@livepeer/react': 2.2.0_biqbaboplfbrettd7655fr4n2y
+  '@livepeer/react': 2.2.2_biqbaboplfbrettd7655fr4n2y
   '@livepeer/webrtmp-sdk': 0.2.3
   '@monaco-editor/react': 4.4.6_biqbaboplfbrettd7655fr4n2y
   '@next/font': 13.1.6
-  '@rainbow-me/rainbowkit': 0.9.0_hz22jpphfygnxhadnz4hnocau4
-  '@tableland/sdk': 3.1.7
+  '@rainbow-me/rainbowkit': 0.10.0_hz22jpphfygnxhadnz4hnocau4
+  '@tableland/sdk': 4.0.0
+  '@tableland/sqlparser': 1.0.4
   '@valist/sdk': 2.8.2
   '@vercel/og': 0.1.0
   critters: 0.0.16
@@ -3148,12 +3150,12 @@ packages:
       '@lit-labs/ssr-dom-shim': 1.0.0
     dev: false
 
-  /@livepeer/core-react/1.2.0_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-TIOf4b3jmVXiqdiAk1e0TNbcCE7lCvloWEpLov8EBOv2HjytNE5No3VLhquPhuteK8Mw5eOv3DQiPbmOJ6qgMQ==}
+  /@livepeer/core-react/1.2.2_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-9YwSIDNRKFM24JkM3ZZYPDg/cMRDeiQnvAQRGzS55dUFUm+rvLuNTP5i0PTIxhRQQzeXYN6WlCrynYz1iFfR2Q==}
     peerDependencies:
       react: '>=17.0.0'
     dependencies:
-      '@livepeer/core': 1.2.0_react@18.2.0
+      '@livepeer/core': 1.2.1_react@18.2.0
       '@tanstack/query-async-storage-persister': 4.22.4_py7ktjzwvzqamlrely4z226gni
       '@tanstack/query-core': 4.22.4
       '@tanstack/react-query': 4.22.4_biqbaboplfbrettd7655fr4n2y
@@ -3168,8 +3170,8 @@ packages:
       - react-native
     dev: false
 
-  /@livepeer/core/1.2.0_react@18.2.0:
-    resolution: {integrity: sha512-zurZXTJR9KwOs3HMZzYm4alxzLoLtWygfcy6823ERD29TBnqExfUAmWQkoXfm9T02HvtUFZ7kNCAZDaYi99ASQ==}
+  /@livepeer/core/1.2.1_react@18.2.0:
+    resolution: {integrity: sha512-LeKE1h7gxNYtoqzV5nmAIWqWVAfzOgj9wBSbS1jBwTG9ER/c6YwlubNJBRbsIkTPU87rXjXaUJ8McOkQVAWhjQ==}
     peerDependencies:
       react: '>=17.0.0'
     peerDependenciesMeta:
@@ -3187,8 +3189,8 @@ packages:
       - immer
     dev: false
 
-  /@livepeer/react/2.2.0_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-prKcueh8S5+uCqnBowjZFQnIJGEZhTkoM5yU6wus0UuESwCXCrIxNP55Ine4I1MF5qaRveD1m3k4cQbcV64F/w==}
+  /@livepeer/react/2.2.2_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-ZhYRoUOMh14G0I2aFkyjAf+6muQWBTHrzzBMi2n7x4Qh0CrKn0zYa1smymfnd+IDwmwKmsnMDAZZuznIIDqHIw==}
     peerDependencies:
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
@@ -3196,10 +3198,10 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@livepeer/core-react': 1.2.0_biqbaboplfbrettd7655fr4n2y
+      '@livepeer/core-react': 1.2.2_biqbaboplfbrettd7655fr4n2y
       '@stitches/react': 1.2.8_react@18.2.0
       core-js: 3.27.2
-      livepeer: 2.2.0_react@18.2.0
+      livepeer: 2.2.1_react@18.2.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       zustand: 4.3.3_react@18.2.0
@@ -3813,14 +3815,14 @@ packages:
     resolution: {integrity: sha512-8MswNYU/AVxLZxfy2eOqna5piTR+DJoS+miRPCKTJe4MHkp4ZT7nGW/zdyS9LCXwQB8HW2htdP5vKAJYMBVD9Q==}
     dev: false
 
-  /@rainbow-me/rainbowkit/0.9.0_hz22jpphfygnxhadnz4hnocau4:
-    resolution: {integrity: sha512-wKG9vrO3LFehyzv7RAP3iHGeSENueZ8xSkUyszq9xRKRUM+4ANzIsj9lJ3nkXK9Vm6Y+g/pefmcCrIK+PpqO9w==}
+  /@rainbow-me/rainbowkit/0.10.0_hz22jpphfygnxhadnz4hnocau4:
+    resolution: {integrity: sha512-faeGSSy12I17MRHMaLuFnpbdOfGeM3U8WUXV94MLpNyzRkEiFioSLTVNit56SKb8+TMLZzDcBLqCjry+8i3DeA==}
     engines: {node: '>=12.4'}
     peerDependencies:
       ethers: '>=5.5.1'
       react: '>=17'
       react-dom: '>=17'
-      wagmi: 0.9.x
+      wagmi: 0.10.x
     dependencies:
       '@vanilla-extract/css': 1.9.1
       '@vanilla-extract/dynamic': 2.0.2
@@ -4025,21 +4027,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@spruceid/siwe-parser/2.0.2:
-    resolution: {integrity: sha512-9WuA0ios2537cWYu39MMeH0O2KdrMKgKlOBUTWRTXQjCYu5B+mHCA0JkCbFaJ/0EjxoVIcYCXIW/DoPEpw+PqA==}
-    dependencies:
-      '@noble/hashes': 1.2.0
-      apg-js: 4.1.3
-      uri-js: 4.4.1
-      valid-url: 1.0.9
-    dev: false
-
   /@stablelib/aead/1.0.1:
     resolution: {integrity: sha512-q39ik6sxGHewqtO0nP4BuSe3db5G1fEJE8ukvngS2gLkBXyy6E7pLubhbYgnkDFv6V8cWaxcE4Xn0t6LWcJkyg==}
-    dev: false
-
-  /@stablelib/base64/1.0.1:
-    resolution: {integrity: sha512-1bnPQqSxSuc3Ii6MhBysoWCg58j97aUjuCSZrGSmDxNqtytIi0k8utUenAwTZN4V5mXXYGsVUI9zeBqy+jBOSQ==}
     dev: false
 
   /@stablelib/binary/1.0.1:
@@ -4181,23 +4170,24 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@tableland/evm/3.0.3:
-    resolution: {integrity: sha512-Ci8QJubb6Z4ipPANALqAPQ9byh0tsRWZREej8QXGqLfHRqCAJfnMRTy2f47Oqq7IQ6Ajcy5holeUr9EtSmXNXA==}
+  /@tableland/evm/4.0.0:
+    resolution: {integrity: sha512-HftJLfg2x2R/f6l6PasrQ73Za071+2T6vmJV+p5PwPtXjlb5Pl+V7rtNWAIZgWE8cQY14lWUyhzw4P/+rrEcGA==}
     engines: {node: '>=14.0.0'}
     dev: false
 
-  /@tableland/sdk/3.1.7:
-    resolution: {integrity: sha512-d1DkR3It1q+uiBstLPgxEyQKTMAlWSQlzX5sOnnJwkH2udzvC3vfzbZBGjKtaOJUNHB3a7wx3+aWf2pGjjstSw==}
-    engines: {node: '>=12.0.0'}
+  /@tableland/sdk/4.0.0:
+    resolution: {integrity: sha512-Tth2jtRH4hDZnId9yKvYMP071gCmxRh4qWlMidPCsFedt304y9mOprz2uDTXWU+AEhDWq05LGej6wiOvWnK8hw==}
     dependencies:
-      '@stablelib/base64': 1.0.1
-      '@tableland/evm': 3.0.3
-      camelcase: 6.3.0
+      '@tableland/evm': 4.0.0
+      '@tableland/sqlparser': 1.0.4
       ethers: 5.7.2
-      siwe: 2.1.3_ethers@5.7.2
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+    dev: false
+
+  /@tableland/sqlparser/1.0.4:
+    resolution: {integrity: sha512-T9EieFjxLb9327nF5HhL5/bYBt7GFL3CgzxJeyU3tjGaQdi/0FQi6/z/jv3jG9pXkAed65lmntHNSHDhkUPjOQ==}
     dev: false
 
   /@tailwindcss/line-clamp/0.2.2:
@@ -5268,10 +5258,6 @@ packages:
     dependencies:
       normalize-path: 3.0.0
       picomatch: 2.3.1
-    dev: false
-
-  /apg-js/4.1.3:
-    resolution: {integrity: sha512-XYyDcoBho8OpnWPRnedMwyL+76ovCtsESerHZEfY39dO4IrEqN97mdEYkOyHa0XTX5+3+U5FmpqPLttK0f7n6g==}
     dev: false
 
   /arg/4.1.3:
@@ -8681,15 +8667,15 @@ packages:
       lit-html: 2.6.1
     dev: false
 
-  /livepeer/2.2.0_react@18.2.0:
-    resolution: {integrity: sha512-3X4pRSnInSUe0wxv4Fm9NVQJO/duVLmTCwb6i7tYuQJd0WYERWs5oMgDbMQ2kNezV3MJB3UaxxAE+GgssePgbw==}
+  /livepeer/2.2.1_react@18.2.0:
+    resolution: {integrity: sha512-t4vGKTmOyPBsCEuhadYrcIPrn8Y45cB/xd3SXiZur5P/8ISPAaqFAAVlT94bwNi4zsM+AHbN99rYXkUe8GFnjw==}
     peerDependencies:
       react: '>=17.0.0'
     peerDependenciesMeta:
       react:
         optional: true
     dependencies:
-      '@livepeer/core': 1.2.0_react@18.2.0
+      '@livepeer/core': 1.2.1_react@18.2.0
       '@stitches/core': 1.2.8
       core-js: 3.27.2
       cross-fetch: 3.1.5
@@ -10536,18 +10522,6 @@ packages:
       is-arrayish: 0.3.2
     dev: false
 
-  /siwe/2.1.3_ethers@5.7.2:
-    resolution: {integrity: sha512-d20jADr6MI6oWPDHg9bE+CBsUYkQQ2g4+ayCQ3QapAuYeE/dvFWI/7lwOOV21EuqZMmyrLVOSezgVoq0HAn8yw==}
-    peerDependencies:
-      ethers: ^5.5.1
-    dependencies:
-      '@spruceid/siwe-parser': 2.0.2
-      '@stablelib/random': 1.0.2
-      ethers: 5.7.2
-      uri-js: 4.4.1
-      valid-url: 1.0.9
-    dev: false
-
   /slash/3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
@@ -11327,10 +11301,6 @@ packages:
 
   /v8-compile-cache-lib/3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
-    dev: false
-
-  /valid-url/1.0.9:
-    resolution: {integrity: sha512-QQDsV8OnSf5Uc30CKSwG9lnhMPe6exHtTXLRYX8uMwKENy640pU+2BgBL0LRbDh/eYRahNCS7aewCx0wf3NYVA==}
     dev: false
 
   /valtio/1.9.0_react@18.2.0:

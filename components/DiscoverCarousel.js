@@ -88,7 +88,7 @@ const ProjectSlide = ({slide}) => {
           w="full"
           background={colorMode === 'light' ? 'none' : 'linear-gradient(#ffffff00, #000000c9 90%)'}
       >
-        <Flex direction='column-reverse' alignItems='center' align="center" w="full" h="full" mb={4}>
+        <Flex direction='column-reverse' alignItems='center' align="center" w="full" h="full" mb={4} color="white">
             <Balancer align="center" >
               <Text fontSize={{base:'sm' ,md:'md'}} width="100%">
               {slide.description}
