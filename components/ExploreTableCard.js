@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { ButtonGroup, Input, Textarea, useDisclosure, Tooltip, useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Spinner, Button } from "@chakra-ui/react";
+import { Input, Textarea, useDisclosure, Tooltip, useColorMode, AvatarGroup, IconButton, Avatar, Text, Flex, Spinner, Button } from "@chakra-ui/react";
 import timeAgo, { nameToAvatar, nameToChainName, parseTableData, toProperCase } from '@/utils/stringUtils';
 import Link from 'next/link';
 import AddressOrEns from './AddressOrEns';

@@ -19,9 +19,9 @@ const SqlInput = ({inputValue, setInputValue, sqlError, setSqlError, ...props}, 
 
   async function test(){
     try {
-        if (Boolean(sqlparser) === true && Boolean(sqlparser?.normalize) === true){
+        if (Boolean(global.sqlparser) === true && Boolean(global.sqlparser?.normalize) === true){
           if (inputValue.trim() != ""){
-            await sqlparser.normalize(inputValue);
+            await global.sqlparser.normalize(inputValue);
             const ast = parser.astify(inputValue);
             const reqTable = ast.from.length;
             let vCount = 0;
