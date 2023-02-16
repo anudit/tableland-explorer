@@ -34,7 +34,7 @@ const theme = extendTheme({
             border: 'none'
           },
           item: {
-            bg: props.colorMode === "dark" ? "#111111db" : "white",
+            bg: props.colorMode === 'dark' ? 'hsl(0deg 0% 12% / 0%)' : "hsl(0deg 0% 12% / 0%)",
             _hover: {
               bg: props.colorMode === 'dark' ? 'hsl(0deg 0% 12%)' : "hsl(0deg 0% 12% / 9%)",
             },

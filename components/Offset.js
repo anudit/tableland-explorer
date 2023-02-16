@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Alert, AlertIcon, Stat, StatLabel, StatNumber, StatHelpText, StatGroup, Flex, Button, Spinner, Modal, ModalOverlay, ModalContent, ModalHeader, Text, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import { useAccount } from 'wagmi';
 import { prettifyNumber } from '@/utils/stringUtils';
-import Link from 'next/link';
-import { SeedchainIcon, ToucanIcon } from '@/public/icons';
+// import Link from 'next/link';
+import { ToucanIcon } from '@/public/icons';
+// import { SeedchainIcon } from '@/public/icons';
 import { useNetwork } from 'wagmi';
 import { ethers } from 'ethers';
 import { useSigner } from 'wagmi';
@@ -178,9 +179,9 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
                                         }}>
                                             Offset on Toucan for {toucanOffsetCost === false ? '...' : toucanOffsetCost.toString() } MATIC
                                         </Button>
-                                        <Link href="https://www.seedchain.org/mint" target='_blank'>
+                                        {/* <Link href="https://www.seedchain.org/mint" target='_blank'>
                                             <Button mt={1} colorScheme="green" w="100%" leftIcon={<SeedchainIcon/>}>Plant Trees on Seedchain</Button>
-                                        </Link>
+                                        </Link> */}
                                     </Flex>
                                     <br/>
                                 </Flex>

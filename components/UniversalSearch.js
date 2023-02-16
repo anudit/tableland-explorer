@@ -94,7 +94,7 @@ export default function UniversalSearch({children, defaultValue}) {
                         ref={searchBox}
                         onChange={onChangeTest}
                         // defaultValue={defaultValue || null}
-                        placeholder="Search for Tables or ENS Names"
+                        placeholder="Search for Tables / Addresses / ENS Names"
                         autoComplete="off"
 
                         onKeyDown={(e)=>{
@@ -127,19 +127,21 @@ export default function UniversalSearch({children, defaultValue}) {
                         }}
                         />
                         <AutoCompleteList id="setValue">
-                            {/* <AutoCompleteItem
-                                key={`option-${0}`}
-                                value={`${searchValue}.eth`}
-                                align="center"
-                                display='flex'
-                                flexDirection='row'
-                                alignItems="center"
-                            >
-                                <Text ml="4" fontWeight={'medium'}>
-                                {searchValue}.eth
-                                <Tag size='sm' mt="2px">ENS</Tag>
-                                </Text>
-                            </AutoCompleteItem> */}
+                            {/* {searchValue && searchValue.trim() != "" && (
+                                <AutoCompleteItem
+                                    key={`option-${0}`}
+                                    value={`${searchValue.toLowerCase()}.eth`}
+                                    align="center"
+                                    display='flex'
+                                    flexDirection='row'
+                                    alignItems="center"
+                                >
+                                    <Text ml="4" fontWeight={'medium'}>
+                                        {searchValue.toLowerCase()}.eth
+                                        <Tag size='sm' mt="2px" ml={2}>ENS</Tag>
+                                    </Text>
+                                </AutoCompleteItem>
+                            )} */}
                         {data && data
                             .map(e=>e?.data?.tables)
                             .flat()
