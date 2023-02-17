@@ -25,6 +25,7 @@ export default function DiscoverCarousel({projects: slides}){
         grabCursor={true}
         centeredSlides={true}
         slidesPerView={isLargerThanMd ? 3 : 1}
+        loopedSlides={2}
         coverflowEffect={{
           rotate: 50,
           stretch: 0,

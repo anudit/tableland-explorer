@@ -59,22 +59,23 @@ export default function DiscoverPage() {
                             px={{base: "2%", sm: "7%", md: "10%", lg: "15%"}}
                         >
                             {
-                                projectList.map((project, id)=>{
+                                projectList.sort((a, b)=>a.name.toLowerCase().charCodeAt(0) - b.name.toLowerCase().charCodeAt(0)).map((project, id)=>{
                                     return (
                                         <Flex
                                             key={id}
                                             direction='column'
                                             borderStyle="solid"
                                             borderWidth="2px"
-                                            borderRadius="40px"
-                                            borderColor={colorMode === 'light' ? 'gray.200': 'gray.700'}
+                                            borderRadius="20px"
+                                            borderColor='transparent'
+                                            background={colorMode === 'light' ? '#fcfcfcdb' : '#0a0a0a9e'}
                                             _hover={{
                                                 translateX:'-5px',
                                                 transition: 'all 0.5s',
                                                 borderColor: colorMode === 'light' ? '#0004': '#ffffffaa'
                                             }}
                                         >
-                                            <Image src={project.poster === "" ? `https://tablescan.io/api/og?title=${encodeURIComponent(project?.name.toLowerCase())}` : project.poster} height='300px' width="100%" borderTopRadius="38px" />
+                                            <Image src={project.poster === "" ? `https://tablescan.io/api/og?title=${encodeURIComponent(project?.name.toLowerCase())}` : project.poster} height='300px' width="100%" borderTopRadius="18px" />
                                             <Flex direction='column' p={6} justifyContent='space-between' h="100%">
                                                 <Flex direction='column'>
                                                     <Heading size='lg' pb={2} noOfLines={1} fontWeight={600}>{project.name}</Heading>
