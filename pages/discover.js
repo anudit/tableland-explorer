@@ -11,6 +11,8 @@ import Footer from "@/components/Footer";
 import DiscoverCarousel from "@/components/DiscoverCarousel";
 import Meta from "@/components/Meta";
 
+
+
 const chooseRandom = (arr, num = 5) => {
     const res = [];
     for(let i = 0; i < num; ){
@@ -24,7 +26,7 @@ const chooseRandom = (arr, num = 5) => {
     return res;
  };
 
-export default function DiscoverPage() {
+export default function DiscoverPage({}) {
 
     const { colorMode } = useColorMode();
     const [projectList, setProjectList] = useState(false);
