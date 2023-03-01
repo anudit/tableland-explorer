@@ -26,7 +26,7 @@ const chooseRandom = (arr, num = 5) => {
     return res;
  };
 
-export default function DiscoverPage({}) {
+export default function DiscoverPage() {
 
     const { colorMode } = useColorMode();
     const [projectList, setProjectList] = useState(false);

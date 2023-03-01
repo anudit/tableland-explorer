@@ -2,25 +2,20 @@ import React, { useEffect, useState } from 'react';
 import useSWR from "swr";
 import { Grid } from "@anudit/flat-ui";
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import { useMediaQuery, Heading, List, ListItem, chakra, Flex, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, useDisclosure, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Text, Textarea, useColorMode } from '@chakra-ui/react';
 import { CloseIcon, SmallAddIcon, SettingsIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import sdk from 'postman-collection';
-import Split from 'react-split';
 const codegen = require('postman-code-generators')
 
 import Meta from '@/components/Meta';
 import InteractiveEditor from '@/components/interactive/InteractiveEditor';
 import { ActionBar } from "@/components/interactive/ActionBar";
 import fetcher from '@/utils/fetcher';
-import { TablelandSmallIcon, TerminalIcon } from '@/public/icons';
 import { Parser } from 'node-sql-parser';
 import { isMainnetTable } from '@/utils/stringUtils';
 import UniversalSearch from '@/components/UniversalSearch';
 import CustomSandpack from '@/components/interactive/CustomSandpack';
-import { PanelGroup } from 'react-resizable-panels';
-import { Panel } from 'react-resizable-panels';
-import { PanelResizeHandle } from 'react-resizable-panels';
+import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 
 const InteractiveView = () => {
 

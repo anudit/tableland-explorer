@@ -35,7 +35,6 @@ specifiers:
   react-draggable: ^4.4.5
   react-fast-marquee: ^1.3.5
   react-resizable-panels: ^0.0.36
-  react-split: ^2.0.14
   react-wrap-balancer: ^0.4.0
   string-hash: ^1.1.3
   swiper: ^9.1.0
@@ -74,7 +73,6 @@ dependencies:
   react-draggable: 4.4.5_biqbaboplfbrettd7655fr4n2y
   react-fast-marquee: 1.3.5_biqbaboplfbrettd7655fr4n2y
   react-resizable-panels: 0.0.36_biqbaboplfbrettd7655fr4n2y
-  react-split: 2.0.14_react@18.2.0
   react-wrap-balancer: 0.4.0_react@18.2.0
   string-hash: 1.1.3
   swiper: 9.1.0
@@ -10082,16 +10080,6 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /react-split/2.0.14_react@18.2.0:
-    resolution: {integrity: sha512-bKWydgMgaKTg/2JGQnaJPg51T6dmumTWZppFgEbbY0Fbme0F5TuatAScCLaqommbGQQf/ZT1zaejuPDriscISA==}
-    peerDependencies:
-      react: '*'
-    dependencies:
-      prop-types: 15.8.1
-      react: 18.2.0
-      split.js: 1.6.5
-    dev: false
-
   /react-style-singleton/2.2.1_react@18.2.0:
     resolution: {integrity: sha512-ZWj0fHEMyWkHzKYUr2Bs/4zU6XLmq9HsgBURm7g5pAVfyn49DgUiNgY2d4lXRlYSiCif9YBGpQleewkcqddc7g==}
     engines: {node: '>=10'}
@@ -10642,10 +10630,6 @@ packages:
   /split-on-first/1.1.0:
     resolution: {integrity: sha512-43ZssAJaMusuKWL8sKUBQXHWOpq8d6CfN/u1p4gUzfJkM05C8rxTmYrkIPTXapZpORA6LkkzcUulJ8FqA7Uudw==}
     engines: {node: '>=6'}
-    dev: false
-
-  /split.js/1.6.5:
-    resolution: {integrity: sha512-mPTnGCiS/RiuTNsVhCm9De9cCAUsrNFFviRbADdKiiV+Kk8HKp/0fWu7Kr8pi3/yBmsqLFHuXGT9UUZ+CNLwFw==}
     dev: false
 
   /split2/4.1.0:

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ImageResponse } from '@vercel/og';
+import Image from 'next/image';
 
 export const config = {
   runtime: 'edge',
@@ -39,7 +40,7 @@ const handler = (req) => {
               justifyItems: 'center',
             }}
           >
-            <img
+            <Image
               alt="Tableland"
               height={41}
               src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MSA0MSI+CiAgPHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMyAxMmMyLTUgMTIgMCAxNC00IDEtMSAzLTggNi04aDMyYTIgMiAwIDAgMSAyIDJjMSAxNSAzIDI2IDE0IDM2YTIgMiAwIDAgMS0xIDNIMmEyIDIgMCAwIDEtMS0zYzgtNyAxMS0xNiAxMi0yNloiLz4KPC9zdmc+Cg=="
