@@ -5,7 +5,6 @@ import customTheme from '@/styles/theme';
 import {EnsCacheProvider} from '@/contexts/EnsCache';
 import { LivepeerConfig, createReactClient, studioProvider } from '@livepeer/react';
 import Script from "next/script";
-import '../components/interactive/SplitView.css'
 import { WalletProvider } from "@/contexts/Wallet";
 
 const client = createReactClient({

@@ -75,13 +75,18 @@ const SqlEditor = ({inputValue, setInputValue, setSqlError, ...props}, ref) => {
     <Editor
       ref={ref}
       w="100%"
-      h="100%"
       defaultLanguage="sql"
+      options={{
+        minimap:{enabled: false}
+      }}
       theme={colorMode === 'dark' ? "vs-dark" : "light"}
       onChange={(value)=>{
         setInputValue(value.trim())
       }}
       value={inputValue}
+      style={{
+        borderRadius: '32px'
+      }}
       {...props}
     />
   );

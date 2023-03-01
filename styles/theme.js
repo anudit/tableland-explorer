@@ -1,6 +1,6 @@
 import { extendTheme } from "@chakra-ui/react";
 
-import localFont from '@next/font/local'
+import localFont from 'next/font/local'
 const beatrice = localFont({ src: '../public/fonts/BeatriceDisplay-Medium.woff2' })
 
 const theme = extendTheme({

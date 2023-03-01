@@ -180,9 +180,12 @@ export const networkDeets = {
 
 export function nameToAvatar(name){
     let {chainId} = parseTableData(name);
-
-    if(chainId) return networkDeets[chainId].avatar;
+    if (Object.keys(networkDeets).includes(String(chainId))){
+        if(chainId) return networkDeets[chainId].avatar;
+        else return null;
+    }
     else return null;
+   
 }
 
 export function nameToTime(name){

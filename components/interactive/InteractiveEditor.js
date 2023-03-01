@@ -9,7 +9,9 @@ const InteractiveEditor = ({inputValue, setInputValue, sqlError, setSqlError}) =
       justify={{base:null, md:"space-between"}}
       alignItems='center'
       w="100%"
+      h="600px"
       direction="column"
+      borderRadius='25px'
     >
       <SqlEditor
         inputValue={inputValue}
