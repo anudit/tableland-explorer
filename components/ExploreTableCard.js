@@ -39,13 +39,15 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
 
         try {
             let {justName, statementCleaned} = cleanStatement(tableId, tableName, statement);
+            let createStatement  = `CREATE TABLE ${justName} (${statementCleaned})`;
+            console.log('createStatement', createStatement)
 
-            const db = new Database();
+            const db = new Database({signer});
 
             onOpen();
 
             const { meta: create } = await db
-                .prepare(statementCleaned)
+                .prepare(createStatement)
                 .run();
 
             await create.wait;
@@ -256,7 +258,6 @@ const TableCard = ({tableName, infoClick, table, ...props}) => {
                         <Flex direction="row">
                             <Tooltip label={!address ? 'Connect Wallet' : `Remix Table Schema`} placement='top'>
                                 <IconButton
-                                    isDisabled={true}
                                     icon={<ShuffleIcon />}
                                     size='sm'
                                     borderRadius="100px"

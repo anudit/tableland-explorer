@@ -16,7 +16,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Offset from "./Offset";
 import { useAccount } from "wagmi";
 
-export default function UniversalSearch({children, defaultValue}) {
+export default function UniversalSearch({children, defaultValue = ""}) {
 
   const router = useRouter();
   const searchBox = useRef();
@@ -226,7 +226,7 @@ export default function UniversalSearch({children, defaultValue}) {
                     // >
                     // </Button>
                     <Text align="center" mx={4} fontSize="md">
-                        Discover
+                        Discover Apps
                     </Text>
                 ) : (
                     <IconButton
