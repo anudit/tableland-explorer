@@ -40,7 +40,7 @@ const HistoryCard = ({tableName, hist, ...props}) => {
                 </Flex>
             </Flex>
             <Code p={1} onClick={onCopy}>
-                <Text fontSize='xs' lineHeight='20px' noOfLines={4}>{hasCopied? "Copied" : hist.statement}</Text>
+                <Text fontSize='xs' lineHeight='20px'>{hasCopied? "Copied" : hist.statement}</Text>
             </Code>
         </Flex>
     )

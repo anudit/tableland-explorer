@@ -134,7 +134,7 @@ export const networkDeets = {
     80001: {
         name: "Polygon Mumbai",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1667715597/convo/polygon-mumbai.svg",
-        subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland",
+        subgraph: "https://api.studio.thegraph.com/query/1649/tablescan-polygon-mumbai/v1.12",
         explorer: "https://mumbai.polygonscan.com",
         contractAddress: "0x4b48841d4b32C4650E4ABc117A03FE8B51f38F68",
         faucet: "https://faucet.polygon.technology",
@@ -143,7 +143,7 @@ export const networkDeets = {
     420: {
         name: "Optimism Görli",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1667715370/convo/optimism-goerli.svg",
-        subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-optimism-goerli",
+        subgraph: "https://api.studio.thegraph.com/query/1649/tablescan-optimism-goerli/v1.12",
         explorer: "https://goerli-optimism.etherscan.io",
         contractAddress: "0xC72E8a7Be04f2469f8C2dB3F1BdF69A7D516aBbA",
         faucet: "https://app.optimism.io/bridge",
@@ -152,7 +152,7 @@ export const networkDeets = {
     42161: {
         name: "Arbitrum One",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1663577114/convo/Arbitrum.svg",
-        subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-arbitrum",
+        subgraph: "https://api.studio.thegraph.com/query/1649/tablescan-arbitrum/v1.12",
         explorer: "https://arbiscan.io",
         contractAddress: "0x9aBd75E8640871A5a20d3B4eE6330a04c962aFfd",
         faucet: false,
@@ -161,7 +161,7 @@ export const networkDeets = {
     421613: {
         name: "Arbitrum Görli",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1669746109/convo/arb-goerli.svg",
-        subgraph: "https://api.thegraph.com/subgraphs/name/anudit/tableland-arbitrum-goerli",
+        subgraph: "https://api.studio.thegraph.com/query/1649/tablescan-arbitrum-goerli/v1.12",
         explorer: "https://testnet.arbiscan.io",
         contractAddress: "0x033f69e8d119205089Ab15D340F5b797732f646b",
         faucet: "https://bridge.arbitrum.io",
