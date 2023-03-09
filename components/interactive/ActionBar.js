@@ -1,18 +1,18 @@
 import React from "react";
 import { useColorModeValue, useColorMode, Text, Tooltip, Flex, IconButton, Spinner, ButtonGroup, useClipboard } from "@chakra-ui/react";
-import { RepeatIcon } from "@chakra-ui/icons";
-import { CodeIcon } from "@/public/icons";
-import { CheckIcon } from "@chakra-ui/icons";
-import { LinkIcon } from "@chakra-ui/icons";
-import { CopyIcon } from "@chakra-ui/icons";
+import { RepeatIcon, MoonIcon, SunIcon, CopyIcon, CheckIcon} from "@chakra-ui/icons";
+import { CodeIcon, PanelIcon, ShareIcon } from "@/public/icons";
 import { encodeSqlForUrl } from "@/utils/stringUtils";
-import { MoonIcon } from "@chakra-ui/icons";
-import { SunIcon } from "@chakra-ui/icons";
 
-export const ActionBar = ({inputValue, sqlError, isLoading, refresh, onOpen}) => {
+export const ActionBar = ({inputValue, sqlError, isLoading, refresh, onOpen, panelDirection, setPanelDirection}) => {
 
 const { hasCopied, onCopy } = useClipboard(inputValue);
   const { hasCopied: hasCopiedLink, onCopy: onCopyLink, setValue: setShareLink } = useClipboard("");
+
+  const togglePanelDirection = () => {
+    if (panelDirection === 'horizontal') setPanelDirection('vertical')
+    else setPanelDirection('horizontal')
+}
 
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -31,6 +31,9 @@ const { hasCopied, onCopy } = useClipboard(inputValue);
       <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Query"} placement='left'>
         <IconButton onClick={onCopy} icon={hasCopied ? <CheckIcon /> : <CopyIcon />} />
       </Tooltip>
+      <Tooltip hasArrow label={"Toggle Panel Direction"} placement='left'>
+        <IconButton onClick={togglePanelDirection} icon={<PanelIcon />} />
+      </Tooltip>
       <Tooltip hasArrow label={"Copy Code"} placement='left'>
         <IconButton onClick={onOpen} icon={<CodeIcon />} />
       </Tooltip>
@@ -39,7 +42,7 @@ const { hasCopied, onCopy } = useClipboard(inputValue);
           const li = `https://tablescan.io/interactive?query=${encodeSqlForUrl(inputValue)}&name=${name || 'New Query'}`;
           setShareLink(li);
           onCopyLink();
-        }} icon={hasCopiedLink ? <CheckIcon /> : <LinkIcon />} />
+        }} icon={hasCopiedLink ? <CheckIcon /> : <ShareIcon />} />
       </Tooltip>
     </ButtonGroup>
 

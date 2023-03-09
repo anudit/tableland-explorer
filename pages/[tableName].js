@@ -156,7 +156,7 @@ const TableSection = () => {
 
     return (
         <div>
-            <Meta url={`/api/og?title=${tableName}`} title={tableName ? `${tableName} - Tablescan.io`: undefined} />
+            <Meta title={tableName ? `${tableName} - Tablescan.io`: `Discover Table - Tablescan.io`} />
 
             <Drawer
                 isOpen={isOpenHistory}

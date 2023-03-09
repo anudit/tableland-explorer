@@ -78,7 +78,7 @@ const InteractiveView = () => {
             <Meta/>
             <UniversalSearch />
             <Flex direction='column' w="100%" alignItems='center'>
-                <Heading mt="100px" fontSize={{base: "md", md:"lg"}}>Tableland Playground</Heading>
+                <Heading mt="100px" fontSize={{base: "md", md:"3xl"}}>Tableland Playground</Heading>
                 <Tabs variant='soft-rounded' w={{base: "100%", md:"80%"}} minH="80vh" colorScheme='whiteAlpha' >
                     <TabList>
                         <Tab key="sql">SQL</Tab>
@@ -168,6 +168,7 @@ const TabView = ({defaultQuery, name}) => {
     const [snippets, setSnippets] = useState(false);
     const [sqlValue, setSqlValue] = useState(defaultQuery);
     const [sqlError, setSqlError] = useState(false);
+    const [panelDirection, setPanelDirection] = useState('vertical');
     const { colorMode } = useColorMode();
 
     const { data, error, mutate, isValidating } = useSWR(
@@ -234,10 +235,15 @@ const TabView = ({defaultQuery, name}) => {
 
     const [isLargerThan768] = useMediaQuery('(min-width: 768px)')
 
+    useEffect(()=>{
+        if (isLargerThan768) setPanelDirection('horizontal')
+        else setPanelDirection('vertical')
+    }, [isLargerThan768])
+
     if (error) return <div>failed to load, {error}</div>;
     return (
-        <PanelGroup direction={isLargerThan768 ? 'horizontal' : 'vertical'} style={{height: '100vh'}} >
-            <Panel maxSize={75} minSize={20} defaultSize={30}>
+        <PanelGroup direction={panelDirection} style={{height: '100vh'}} >
+            <Panel maxSize={90} minSize={10} defaultSize={30}>
                 <InteractiveEditor
                     inputValue={sqlValue}
                     setInputValue={setSqlValue}
@@ -249,8 +255,8 @@ const TabView = ({defaultQuery, name}) => {
                     name={name}
                 />
             </Panel>
-            <PanelResizeHandle style={{height: isLargerThan768 ? "100%" : "10px", width: isLargerThan768 ? "10px" : "100%"}}/>
-            <Panel maxSize={75} >
+            <PanelResizeHandle style={{height: panelDirection==='horizontal' ? "100%" : "10px", width: panelDirection==='horizontal' ? "10px" : "100%"}}/>
+            <Panel maxSize={90} defaultSize={70}>
                 <chakra.div position="relative" width="100%">
                     <Drawer
                         isOpen={isOpen}
@@ -328,7 +334,7 @@ const TabView = ({defaultQuery, name}) => {
                                 </Flex>
                             </Flex>
                         ) : (
-                            <chakra.div color="black !important" position="relative" width="100%" h="570px">
+                            <chakra.div color="black !important" position="relative" width="100%" h="600px">
                                 <Grid data={data} downloadFilename='custom'/>
                             </chakra.div>
                         ) : (
@@ -343,6 +349,8 @@ const TabView = ({defaultQuery, name}) => {
                         isLoading={refreshing || isValidating}
                         refresh={refresh}
                         onOpen={onOpen}
+                        panelDirection={panelDirection}
+                        setPanelDirection={setPanelDirection}
                     />
                 </chakra.div>
             </Panel>
