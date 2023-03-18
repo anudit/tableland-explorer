@@ -196,7 +196,7 @@ export default function DiscoverPage() {
                             <Button onClick={clear} leftIcon={<RepeatIcon/>} my={4}>Start Over</Button>
                         ) : (
                             <>
-                                <Text>Sample files — YTS Movies Dataset: <Link href="https://bafybeihrfq6hjyoffrxkhxqgx6jfgp5aeobcdomhrxnneie6qtiithzvmm.ipfs.w3s.link/yts-lite.json" target="_blank">Small</Link>, <Link href="https://bafybeihrfq6hjyoffrxkhxqgx6jfgp5aeobcdomhrxnneie6qtiithzvmm.ipfs.w3s.link/yts.json" target="_blank">Large</Link></Text>
+                                <Text>Sample files — YTS Movies Dataset: <Link href="https://bafybeihrfq6hjyoffrxkhxqgx6jfgp5aeobcdomhrxnneie6qtiithzvmm.ipfs.w3s.link/yts-lite.json" target="_blank">Small</Link>, <Link href="https://bafybeign33qvdlfr2jy2di2vjqypr3uqjrqufjmydjoepmn4qacvtzxf6u.ipfs.w3s.link/yts.json" target="_blank">Large</Link></Text>
                                 <br/>
                                 <Dropzone onDrop={onDrop} maxFiles={1} accept={{
                                     'application/json': ['.json'],

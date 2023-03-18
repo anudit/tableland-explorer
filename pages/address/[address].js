@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Tooltip, IconButton, useColorMode, Box, Tag, Button, Text, useDisclosure, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
+import { Badge, Tabs, TabList, TabPanels, Tab, TabPanel, Tooltip, IconButton, useColorMode, Box, Tag, Button, Text, useDisclosure, Flex, Spinner, Wrap, WrapItem } from "@chakra-ui/react";
 import { RepeatIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import useSWR from "swr";
@@ -112,7 +112,14 @@ const UserSection = () => {
                     <Flex w={{base: "95%", md:"80%" }} mt={{base:'-50px', md:'-70px'}} justifyContent='space-between'>
                         <Flex direction='column'>
                             <EnsAvatar size={{base: "xl", md:"2xl"}} address={address} borderWidth='6px' borderColor={isTablescanSupporter(address) ? 'gold' : colorMode === 'dark' ? "black" : "white"}/>
-                            <AddressOrEns address={address} fontWeight={900} fontSize="2xl" my={4} />
+                            <Flex direction='row' alignItems="center">
+                                <AddressOrEns address={address} fontWeight={900} fontSize="2xl" my={4} />
+                                {
+                                    isTablescanSupporter(address) && (
+                                        <Badge ml={2} fontSize={{base:"xx-small", md: "small"}} backgroundColor='gold' color="black" maxH='fit-content'>Tablescan Supporter</Badge>
+                                    )
+                                }
+                            </Flex>
                         </Flex>
                         <Flex direction='row' mt={24}>
                             <Link href={`https://blockscan.com/address/${address}`} target="_blank">
