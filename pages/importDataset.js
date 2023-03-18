@@ -1,18 +1,11 @@
-import React, { useState } from "react";
-import { ButtonGroup, Code, Box, Heading, Button, useColorMode, Flex, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { ButtonGroup, useClipboard, Input, Heading, Button, useColorMode, Flex, Text } from "@chakra-ui/react";
 
 import UniversalSearch from "@/components/UniversalSearch";
 import Footer from "@/components/Footer";
 import Meta from "@/components/Meta";
 import { stringSize } from "@/utils/stringUtils";
-
-
 import Dropzone from 'react-dropzone';
-import dynamic from "next/dynamic";
-const ReactJson = dynamic(() => import('react-json-view'), {
-    ssr: false,
-  })
-
 import {
     Accordion,
     AccordionItem,
@@ -21,6 +14,14 @@ import {
     AccordionIcon,
 } from '@chakra-ui/react'
 
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { atomOneDark } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
+import { RepeatIcon } from "@chakra-ui/icons";
+import Link from "next/link";
+import { useSigner } from "wagmi";
+import { Database } from "@tableland/sdk";
+import init from "@tableland/sqlparser";
+
 const getSize = (st) => { 
     let size = new Blob([st]).size;
     return size;
@@ -28,10 +29,10 @@ const getSize = (st) => {
 
 const formatForSql = (typeName, value) => {
     if (typeName.toUpperCase() == 'INTEGER') {
-        return `${value}`
+        return parseInt(value)
     }
     else {
-        return `'${value.toString()}'` 
+        return `'${value.toString().replaceAll("'", "''").slice(0, 1023)}'`
     }
 }
 
@@ -42,21 +43,28 @@ export default function DiscoverPage() {
     const [columns, setColumns] = useState([]);
     const [chonks, setChonks] = useState([]);
     const [stats, setStats] = useState(false);
+    const [tname, setTname] = useState(false);
+    const [fileData, setFileData] = useState(false);
+    const [parserLoaded, setParserLoaded] = useState(false);
+
     const [loading, setLoading] = useState(false);
     // const { data: signer } = useSigner();
 
+    function getCreateStatement(name, schema){
+        let createStatement  = `CREATE TABLE ${name} (${Object.entries(schema).map(([cname, ctype])=>`${cname} ${ctype}`).toString()});`;
+        return createStatement;
+    }
+
     function convertJsonToChonks(name, schema, completeData){
 
-        let createStatement  = `CREATE TABLE ${name} (${Object.entries(schema).map(([cname, ctype])=>`${cname} ${ctype}`).toString()});`;
-
-        let allStatements = [createStatement];
+        let allStatements = [];
         let currentStatement = null;
         let currentIndex = 0;
     
         while (currentIndex < completeData.length) { 
             
             if (currentStatement === null){
-                currentStatement = `INSERT INTO ${name} VALUES (`
+                currentStatement = `INSERT INTO ${name} VALUES `
             }
     
             let staged = Object
@@ -64,14 +72,17 @@ export default function DiscoverPage() {
                             .filter(e=>{
                                 return Object.keys(schema).includes(e[0])
                             })
-                            .map(([cname, cval])=>`${formatForSql( schema[cname] ,cval)}`).toString();
-            let stageSize = getSize(currentStatement + staged + ');');
+                            .map(([cname, cval])=>`${formatForSql( schema[cname], cval)}`).toString()
+            
+            staged = '('+staged+'),';
+            
+            let stageSize = getSize(currentStatement + staged + ';');
     
             if (stageSize <= 14000){ // 14kb
                 currentStatement += staged;
             }
             else {
-                currentStatement+= ');';
+                currentStatement= currentStatement.slice(0, currentStatement.length-1) + ';';
 
                 allStatements.push(currentStatement); 
 
@@ -81,7 +92,7 @@ export default function DiscoverPage() {
             currentIndex++;
         }
 
-        currentStatement+= ');';
+        currentStatement= currentStatement.slice(0, currentStatement.length-1) + ';';
         allStatements.push(currentStatement); 
 
         return allStatements;  
@@ -91,6 +102,8 @@ export default function DiscoverPage() {
     const clear = () => {
         setColumns({}) 
         setChonks([])
+        setTname(false);
+        setFileData(false);
         setStats(false)
         setLoading(false)
     }
@@ -100,13 +113,17 @@ export default function DiscoverPage() {
         var reader = new FileReader();
         reader.onload = function(e) {
             try {
-                let fname = files[0].name.split('.')[0];
+                let fname = files[0].name.split('.')[0].replaceAll('-', '_');
+                setTname(fname);
+
                 let data = JSON.parse(e.target.result);
+                setFileData(data);
+
                 let cols = Object.keys(data[0]);
                 let colsParsed = {};
                 for (let index = 0; index < Math.min(cols.length, 24); index++) {
                     const element = data[0][cols[index]];
-                    if (typeof element === 'number') {
+                    if (typeof element === 'number' && Number.isInteger(element)) {
                         colsParsed[cols[index]] = 'integer';
                     }
                     else {
@@ -116,14 +133,11 @@ export default function DiscoverPage() {
                 console.log('colsParsed', colsParsed);
                 setColumns(colsParsed);
 
-                let resp = convertJsonToChonks(fname, colsParsed, data);
-                setChonks(resp);
-
+                
                 setStats({
                     fileSize: e.target.size,
                     rows: data.length,
-                    columns: Object.keys(colsParsed).length,
-                    chunks: resp.length 
+                    columns: Object.keys(colsParsed).length
                 })
 
                 setLoading(false)
@@ -135,6 +149,31 @@ export default function DiscoverPage() {
         };
         reader.readAsText(files[0]);
     };
+
+    useEffect(()=>{
+        init().then(()=>{
+            console.log('SQL parser loaded');
+            setParserLoaded(true);
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
+
+    useEffect(()=>{
+        if (parserLoaded === true && tname != false && Boolean(global.sqlparser) === true && Boolean(global.sqlparser?.validateTableName) === true){
+
+            try {
+                global.sqlparser.validateTableName(tname).then((resp) =>{
+                    console.log('validatedTableName', resp);
+                    if (resp.chainId) setChonks(convertJsonToChonks(tname, columns, fileData))
+                })
+                
+            } catch (error) {
+                console.log('validateTableName', error)
+            }
+
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tname, parserLoaded])
 
     return (
         <Flex
@@ -152,61 +191,71 @@ export default function DiscoverPage() {
                 <Flex mt='30px' w={{base: "100%", md: "80%"}} alignItems='center' direction="column">
                     <Heading mt="20px">Import Dataset</Heading>
                     <br/>
-                    <Dropzone onDrop={onDrop} maxFiles={1} accept={{
-                        'application/json': ['.json'],
-                    }}>
-                        {({getRootProps, getInputProps}) => (
-                        < >
-                            <div {...getRootProps({
-                                className: 'dropzone',
-                                style:{
-                                    height: '200px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    borderRadius: '20px',
-                                    borderWidth: '4px',
-                                    borderStyle: 'dashed',
-                                    minWidth: '100%'
-                                }
-                            })}>
-                            <input {...getInputProps()} />
-                            <p>Drag n drop a JSON file here, or click to select a file</p>
-                            </div>
-                        </>
-                        )}
-                    </Dropzone>
-                    <ButtonGroup>
-                        {
-                           chonks.length> 0 && (
-                                <Button onClick={clear}>Clear</Button>
-                           )
-                        }
-                    </ButtonGroup>
+                    {
+                        (chonks.length > 0 || Object.keys(columns).length > 0) ? (
+                            <Button onClick={clear} leftIcon={<RepeatIcon/>} my={4}>Start Over</Button>
+                        ) : (
+                            <>
+                                <Text>Sample files — YTS Movies Dataset: <Link href="https://bafybeihrfq6hjyoffrxkhxqgx6jfgp5aeobcdomhrxnneie6qtiithzvmm.ipfs.w3s.link/yts-lite.json" target="_blank">Small</Link>, <Link href="https://bafybeihrfq6hjyoffrxkhxqgx6jfgp5aeobcdomhrxnneie6qtiithzvmm.ipfs.w3s.link/yts.json" target="_blank">Large</Link></Text>
+                                <br/>
+                                <Dropzone onDrop={onDrop} maxFiles={1} accept={{
+                                    'application/json': ['.json'],
+                                }}>
+                                    {({getRootProps, getInputProps}) => (
+                                    < >
+                                        <div {...getRootProps({
+                                            className: 'dropzone',
+                                            style:{
+                                                height: '200px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                borderRadius: '20px',
+                                                borderWidth: '4px',
+                                                borderStyle: 'dashed',
+                                                minWidth: '100%'
+                                            }
+                                        })}>
+                                        <input {...getInputProps()} />
+                                        <p>Drag n drop a JSON file here, or click to select a file</p>
+                                        </div>
+                                    </>
+                                    )}
+                                </Dropzone>
+                            </>
+                        )    
+                    }
                     {
                         loading && (<>Parsing Data ...</>)
                     }
                     {
                         Object.keys(columns).length > 0 && (
-                            <ReactJson 
-                                src={columns} 
-                                theme={'colors'} 
-                                name={'tableSchema'} 
-                                style={{padding: '5px', borderRadius: '5px', lineBreak:'anywhere', width: "100%"}} 
-                                sortKeys={true}
-                                displayDataTypes={false}
-                            />
+                            <>
+                                <Heading size="md" mt={2}>Let&#39;s start by creating a table</Heading>
+                                <Text fontSize='sm' mb={2} mt={1}>Just hit run.</Text>
+                                <SqlDetails key={'create'} id={0} total={1} sql={getCreateStatement(tname, columns)} />
+                                <br/>
+                                <Input placeholder="Enter your Full Table Name" onChange={(e)=>{
+                                    setTname(e.currentTarget.value);
+                                }}/>
+                                <br/>
+                                <br/>
+                            </>
                         )
                     }
+                    
                     {
-                        chonks && stats && (
-                            <Flex direction="column" w="100%">
-                                <Flex direction="column" w="100%" p={2} >
-                                    {JSON.stringify(stats)}  
-                                </Flex>
+                        chonks.length>0 && stats && (
+                            <>
+                                <Heading size="md" my={2}>Let&#39;s run all the needed SQL</Heading>
+                                <Flex direction="column" w="100%">
+                                    <Flex direction="column" w="100%" p={2} >
+                                        {JSON.stringify(stats)}  
+                                    </Flex>
 
-                                {chonks.map((sql, id)=><SqlDetails key={id} total={chonks.length} sql={sql} />)}
-                            </Flex>
+                                    {chonks.map((sql, id)=><SqlDetails key={id} id={id} total={chonks.length} sql={sql} />)}
+                                </Flex>
+                            </>
                         )
                     }
                 </Flex>
@@ -219,47 +268,57 @@ export default function DiscoverPage() {
 
 }
 
-function SqlDetails({key, total, sql}) {
+function SqlDetails({id, total, sql}) {
     const { colorMode } = useColorMode();
-    return (
-        <Flex direction="column" w="100%" p={2} key={key}>
-            <Flex direction="row" w="100%">
-                <Text>#{key+1} of {total}</Text>
-                <Button>Run</Button>
-            </Flex>
-            <Flex w="100%">
-                <Accordion allowToggle>
-                    <AccordionItem>
-                        <h2>
-                        <AccordionButton
-                            background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'}
-                            _hover={{
-                                'background': colorMode === 'light' ? 'gray.300' : 'whiteAlpha.200'
-                            }}
-                            borderRadius="10px"
-                            _expanded={{
-                                'borderBottomRadius': 0
-                            }}
-                            py={4}
-                            px={6}
-                        >
-                            <Box as="span" flex='1' textAlign='left'>
-                                Preview SQL ({stringSize(sql)})
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-                        </h2>
-                        <AccordionPanel pb={4}>
-                            <Code style={{
-                                lineBreak: 'anywhere'
-                            }}>
-                                {sql}
-                            </Code>
-                        </AccordionPanel>
-                    </AccordionItem>
-                </Accordion>
 
-            </Flex>
+    const { onCopy, hasCopied } = useClipboard(sql);
+    const { data: signer } = useSigner();
+
+    const run = async () => {
+        const db = new Database({signer});
+        const { meta: create } = await db
+                .prepare(sql)
+                .run();
+
+        await create.wait;
+    }
+
+    return (
+        <Flex direction="column" w="100%" p={2}>
+            <Accordion allowToggle>
+                <AccordionItem borderRadius="10px" borderWidth="1px" mt={2} borderColor={colorMode === 'light' ? '#0000001a' : '#ffffff1a'}>
+                    <AccordionButton
+                        as="div"
+                        display='flex'
+                        flexDirection='row'
+                        justifyContent='space-between'
+                        background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'}
+                        _hover={{
+                            'background': colorMode === 'light' ? 'gray.300' : 'whiteAlpha.200'
+                        }}
+                        borderRadius="10px"
+                        _expanded={{
+                            'borderBottomRadius': 0
+                        }}
+                        py={4}
+                        px={6}
+                    >
+                        <Text>#{id+1} of {total} ({stringSize(sql)})</Text>
+                        <Flex alignItems='center'>
+                            <ButtonGroup mr={2}>
+                                <Button variant='solid' onClick={onCopy}>{hasCopied ? 'Copied' : 'Copy'}</Button>
+                                <Button variant='solid' onClick={run}>Run</Button>
+                            </ButtonGroup>
+                            <AccordionIcon />
+                        </Flex>
+                    </AccordionButton>
+                    <AccordionPanel pb={4}>
+                        <SyntaxHighlighter language="sql" style={atomOneDark} wrapLongLines={true} wrapLines={true}>
+                            {sql}
+                        </SyntaxHighlighter>
+                    </AccordionPanel>
+                </AccordionItem>
+            </Accordion>
         </Flex>
     )
 }
