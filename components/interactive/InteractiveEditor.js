@@ -1,6 +1,7 @@
 import React from "react";
 import { Flex } from "@chakra-ui/react";
 import SqlEditor from "../SqlEditor";
+import GptInput from "./GptGen";
 
 const InteractiveEditor = ({inputValue, setInputValue, sqlError, setSqlError}) => {
 
@@ -18,6 +19,8 @@ const InteractiveEditor = ({inputValue, setInputValue, sqlError, setSqlError}) =
         setInputValue={setInputValue}
         sqlError={sqlError} setSqlError={setSqlError} size="sm"
       />
+      <GptInput inputValue={inputValue}
+        setInputValue={setInputValue}/>
     </Flex>
   );
 };
