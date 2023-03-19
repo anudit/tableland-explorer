@@ -88,7 +88,7 @@ const GptInput = ({inputValue, setInputValue}) => {
             setLoading(false)
         }
         else {
-            console.log('First SELECT a valid table. Got :', tn, inputValue)
+            console.log('First SELECT a valid table.')
             setLoading(false)
         }
 
