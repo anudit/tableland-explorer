@@ -290,7 +290,7 @@ const TableSection = () => {
                     </TabPanel>
                     <TabPanel p={2} display='flex' direction="row" w="100%" overflowX='scroll'>
                         <MenuGroup title="Mode">
-                            <MenuButtonShell as="a" href={`/interactive?query=${encodeURIComponent('SELECT * from ')}${tableName}&name=${tableName}`} icon={
+                            <MenuButtonShell as="a" href={`/playground?query=${encodeURIComponent('SELECT * from ')}${tableName}&name=${tableName}`} icon={
                                 <SqlIcon boxSize={6} />
                             } title="SQL Mode" />
                             <MenuButtonShell

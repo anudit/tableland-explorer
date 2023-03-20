@@ -184,12 +184,12 @@ export default function DiscoverPage() {
             backgroundPosition="top right"
             backgroundAttachment="fixed"
         >
-            <Meta title="Import Dataset | Tablescan.io"/> 
+            <Meta title="Import Data | Tablescan.io"/> 
             <UniversalSearch />
             
             <Flex w="100%" direction="column" mt="70px" alignItems="center" minH="100vh">
                 <Flex mt='30px' w={{base: "100%", md: "80%"}} alignItems='center' direction="column">
-                    <Heading mt="20px">Import Dataset</Heading>
+                    <Heading mt="20px">Import Data</Heading>
                     <br/>
                     {
                         (chonks.length > 0 || Object.keys(columns).length > 0) ? (

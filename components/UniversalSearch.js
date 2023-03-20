@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
-import { Menu, MenuButton, MenuList, MenuItem, useDisclosure, useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
-import { AppsIcon, SqlIcon, TablelandSmallIcon, TreeIcon, UserIconOutline, WalletIcon } from "@/public/icons";
+import { HStack, Stack, Img, Menu, MenuButton, MenuList, MenuItem, useDisclosure, useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
+import { SqlIcon, TablelandSmallIcon, TreeIcon, UserIconOutline, WalletIcon } from "@/public/icons";
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
 import {multifetch} from "../utils/fetcher";
@@ -15,6 +15,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 import Offset from "./Offset";
 import { useAccount } from "wagmi";
+import { MotionMenu, MotionMenuItem } from "./menu/Menu";
 
 export default function UniversalSearch({children, defaultValue = ""}) {
 
@@ -185,7 +186,7 @@ export default function UniversalSearch({children, defaultValue = ""}) {
                         onKeyUp={(event)=>{
                             if (event.key == 'Enter' && !sqlError){
                                 event.currentTarget.disabled = true;
-                                router.push(`/interactive?query=${encodeSqlForUrl(event.currentTarget.value)}`);
+                                router.push(`/playground?query=${encodeSqlForUrl(event.currentTarget.value)}`);
                             }
                         }}
                     />
@@ -214,30 +215,124 @@ export default function UniversalSearch({children, defaultValue = ""}) {
         </Flex>
         <Flex direction="row" alignItems="center">
             {children && children}
-            <Link href="/discover">
-                {isLargerThanMd ? (
-                    // <Button
-                    //     variant='outline'
-                    //     borderRadius='100px'
-                    //     size='lg'
-                    //     leftIcon={}
-                    //     mx={2}
-                    //     fontWeight="100"
-                    // >
-                    // </Button>
-                    <Text align="center" mx={4} fontSize="md">
-                        Discover Apps
-                    </Text>
-                ) : (
-                    <IconButton
-                        variant='outline'
-                        borderRadius='100%'
-                        size='lg'
-                        icon={<AppsIcon />}
-                        mx={2}
-                    />
-                )}
-            </Link>
+            <MotionMenu>
+                <MotionMenuItem item="Discover">
+                    <HStack spacing={5} alignItems="start">
+                        <Link href="/discover">
+                            <Stack spacing={2}>
+                                <Img
+                                    h="6.4rem"
+                                    w="8rem"
+                                    bg="whiteAlpha.50"
+                                    src="/images/tableverse.jpeg"
+                                    objectFit="cover"
+                                    rounded="xl"
+                                    cursor="pointer"
+                                    alt="Apps built on Tableland"
+                                />
+                                <Flex direction="column">
+                                    <Text fontWeight={600}>Tableverse</Text>
+                                    <Text fontSize='x-small'>Discover apps using <br/>Tableland Network</Text>
+                                </Flex>
+                            </Stack>
+                        </Link>
+
+                        <Link href="/playground">
+                            <Stack spacing={2}>
+                                <Img
+                                    h="6.4rem"
+                                    w="8rem"
+                                    bg="whiteAlpha.50"
+                                    src="/images/playground.jpeg"
+                                    objectFit="cover"
+                                    rounded="xl"
+                                    cursor="pointer"
+                                    alt="Beverage Can"
+                                />
+                                <Flex direction="column">
+                                    <Text fontWeight={600}>Playground</Text>
+                                    <Text fontSize='x-small'>Test out the <br/>Tableland Network</Text>
+                                </Flex>
+                            </Stack>
+                        </Link>
+
+                    </HStack>
+                </MotionMenuItem>
+                <MotionMenuItem item="Create">
+                    <HStack spacing={5} alignItems="start">
+                        <Stack spacing={2}>
+                            <Img
+                                h="6.4rem"
+                                w="8rem"
+                                bg="whiteAlpha.50"
+                                src="/images/tables.jpeg"
+                                objectFit="cover"
+                                rounded="xl"
+                                alt="Apps built on Tableland"
+                                filter="grayscale(1)"
+                            />
+                            <Flex direction="column">
+                                <Text fontWeight={600}>Tables</Text>
+                                <Text fontSize='x-small'>Create Tables on <br/>Tableland Network</Text>
+                            </Flex>
+                        </Stack>
+                        <Stack spacing={2}>
+                            <Img
+                                h="6.4rem"
+                                w="8rem"
+                                bg="whiteAlpha.50"
+                                src="/images/forms.jpeg"
+                                objectFit="cover"
+                                rounded="xl"
+                                alt="Create Forms on Tableland"
+                                filter="grayscale(1)"
+                            />
+                            <Flex direction="column">
+                                <Text fontWeight={600}>Forms</Text>
+                                <Text fontSize='x-small'>Create Forms powered <br/> by Tableland Network</Text>
+                            </Flex>
+                        </Stack>
+                        
+                    </HStack>
+                    <HStack spacing={5} alignItems="start" mt={4}>
+                        <Stack spacing={2}>
+                            <Img
+                                h="6.4rem"
+                                w="8rem"
+                                bg="whiteAlpha.50"
+                                src="/images/dashboards.jpeg"
+                                objectFit="cover"
+                                rounded="xl"
+                                cursor="pointer"
+                                alt="Dashboards"
+                                filter="grayscale(1)"
+                            />
+                            <Flex direction="column">
+                                <Text fontWeight={600}>Dashboards</Text>
+                                <Text fontSize='x-small'>SQL powered Data <br/> Dashboards</Text>
+                            </Flex>
+                        </Stack>
+                        <Link href="/import">
+                            <Stack spacing={2}>
+                                <Img
+                                    h="6.4rem"
+                                    w="8rem"
+                                    bg="whiteAlpha.50"
+                                    src="/images/import.jpeg"
+                                    objectFit="cover"
+                                    rounded="xl"
+                                    cursor="pointer"
+                                    alt="Import"
+                                />
+                                <Flex direction="column">
+                                    <Text fontWeight={600}>Import</Text>
+                                    <Text fontSize='x-small'>Quickly bring your Data <br/> into Tableland Network</Text>
+                                </Flex>
+                            </Stack>
+                        </Link>
+                    </HStack>
+                </MotionMenuItem>
+            </MotionMenu>
             <ConnectButton.Custom>
             {({
                 account,
@@ -332,6 +427,7 @@ export default function UniversalSearch({children, defaultValue = ""}) {
                                         <MenuItem icon={<UserIconOutline />} onClick={()=>{
                                             router.push(`/address/${address}`)
                                         }}>My Profile</MenuItem>
+                                        <MenuItem icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} onClick={toggleColorMode}>Toggle Theme</MenuItem>
                                         <MenuItem icon={<WalletIcon />} onClick={openAccountModal}>Disconnect</MenuItem>
                                     </MenuList>
                                 </Menu>
@@ -343,16 +439,6 @@ export default function UniversalSearch({children, defaultValue = ""}) {
                 );
             }}
             </ConnectButton.Custom>
-            
-            <IconButton
-                variant='outline'
-                borderRadius='100%'
-                size='lg'
-                icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />}
-                onClick={toggleColorMode}
-                mr={2}
-                name="Switch Theme"
-            />
         </Flex>
     </Flex>
   )
