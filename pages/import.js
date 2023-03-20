@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ButtonGroup, useClipboard, Input, Heading, Button, useColorMode, Flex, Text } from "@chakra-ui/react";
 
-import UniversalSearch from "@/components/UniversalSearch";
-import Footer from "@/components/Footer";
-import Meta from "@/components/Meta";
-import { stringSize } from "@/utils/stringUtils";
+import { networkDeets, parseTableData, stringSize } from "@/utils/stringUtils";
 import Dropzone from 'react-dropzone';
 import {
     Accordion,
@@ -21,6 +18,7 @@ import Link from "next/link";
 import { useSigner } from "wagmi";
 import { Database } from "@tableland/sdk";
 import init from "@tableland/sqlparser";
+import PageShell from "@/components/PageShell";
 
 const getSize = (st) => { 
     let size = new Blob([st]).size;
@@ -32,11 +30,9 @@ const formatForSql = (typeName, value) => {
         return parseInt(value)
     }
     else {
-        return `'${value.toString().replaceAll("'", "''").slice(0, 1023)}'`
+        return `'${value.toString().replaceAll("'", "''").trim().slice(0, 1000)}'`
     }
 }
-
-
 
 export default function DiscoverPage() {
 
@@ -56,6 +52,9 @@ export default function DiscoverPage() {
     }
 
     function convertJsonToChonks(name, schema, completeData){
+
+        let {chainId} = parseTableData(name);
+        let maxChonkSizeInKb = networkDeets[chainId].chonkLimit;
 
         let allStatements = [];
         let currentStatement = null;
@@ -78,7 +77,7 @@ export default function DiscoverPage() {
             
             let stageSize = getSize(currentStatement + staged + ';');
     
-            if (stageSize <= 14000){ // 14kb
+            if (stageSize <= maxChonkSizeInKb*1000){
                 currentStatement += staged;
             }
             else {
@@ -176,17 +175,7 @@ export default function DiscoverPage() {
     }, [tname, parserLoaded])
 
     return (
-        <Flex
-            direction='column'
-            fontFamily='inherit'
-            backgroundImage="url(/lightbackground.png)"
-            backgroundRepeat="no-repeat"
-            backgroundPosition="top right"
-            backgroundAttachment="fixed"
-        >
-            <Meta title="Import Data | Tablescan.io"/> 
-            <UniversalSearch />
-            
+        <PageShell title="Import Data | Tablescan.io">
             <Flex w="100%" direction="column" mt="70px" alignItems="center" minH="100vh">
                 <Flex mt='30px' w={{base: "100%", md: "80%"}} alignItems='center' direction="column">
                     <Heading mt="20px">Import Data</Heading>
@@ -259,11 +248,8 @@ export default function DiscoverPage() {
                         )
                     }
                 </Flex>
-
             </Flex> 
-
-            <Footer/>
-        </Flex>
+        </PageShell>
     )
 
 }

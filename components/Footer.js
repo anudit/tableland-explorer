@@ -18,6 +18,7 @@ const Footer = ({ ...props}) => {
             _hover={{
                 borderColor: 'gray.500'
             }}
+            w="100%"
             {...props}
         >
             <Flex direction={{base:'column', md:'row'}} w="100%" justifyContent='space-around'>

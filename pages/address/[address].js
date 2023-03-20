@@ -7,7 +7,6 @@ import useSWR from "swr";
 
 import { multifetch } from '@/utils/fetcher';
 import TableCard from '@/components/ExploreTableCard';
-import Meta from '@/components/Meta';
 import DetailsModal from '@/components/DetailsModal';
 import { EtherscanIcon, ExternalIcon, FeedIcon, LikeIcon, OpenseaIcon, TableIcon, TablelandSmallIcon } from '@/public/icons';
 import { getFeed, getUserRigs, isTablescanSupporter } from '@/utils/rigs';
@@ -16,11 +15,10 @@ import RigAction from '@/components/RigAction';
 import EnsAvatar from '@/components/EnsAvatar';
 import AddressOrEns from '@/components/AddressOrEns';
 import { EnsCacheContext } from '@/contexts/EnsCache';
-import UniversalSearch from '@/components/UniversalSearch';
 import { avatar, getImageDataURL } from '@/utils/stringUtils';
 import { TreeIcon } from '@/public/icons';
-import Footer from "@/components/Footer";
 import { getUserLikes } from '@/utils/ops';
+import PageShell from '@/components/PageShell';
 
 const UserSection = () => {
 
@@ -85,19 +83,17 @@ const UserSection = () => {
     }
 
     return (
-        <>
-            <Meta title={localEns ? `${localEns} - Tablescan` : false} />
-            <UniversalSearch defaultValue={localEns || address }>
-                <Tooltip hasArrow label={isValidating ? "Refreshing Data" : "Refresh Data"} placement='left'>
-                    <IconButton
-                        borderRadius='100%'
-                        variant={'ghost'}
-                        icon={isValidating ? <Spinner size="xs"/> : <RepeatIcon />}
-                        disabled={isValidating}
-                    />
-                </Tooltip>
-            </UniversalSearch>
-            <Flex position="relative" height="calc(100vh - 50px)" width="100%" direction='column'>
+        <PageShell title={localEns ? `${localEns} - Tablescan` : false} searchProps={{"children": (
+            <Tooltip hasArrow label={isValidating ? "Refreshing Data" : "Refresh Data"} placement='left'>
+                <IconButton
+                    borderRadius='100%'
+                    variant={'ghost'}
+                    icon={isValidating ? <Spinner size="xs"/> : <RepeatIcon />}
+                    disabled={isValidating}
+                />
+            </Tooltip>
+        )}}>
+            <Flex minHeight="calc(100vh - 50px)" width="100%" direction='column'>
                 <Flex w="100%" direction='column' alignItems='center' mt='70px'>
                     <Flex
                         w={{base: "100%", md:"90%" }}
@@ -329,9 +325,8 @@ const UserSection = () => {
                     </TabPanels>
                 </Tabs>
                 <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
-                <Footer />
             </Flex>
-        </>
+        </PageShell>
     )
 
 }

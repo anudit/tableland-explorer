@@ -83,7 +83,7 @@ export default function UniversalSearch({children, defaultValue = ""}) {
         <Link href="/">
             <TablelandSmallIcon boxSize={10} _hover={{fill: 'royalBlue'}}/>
         </Link>
-        <Flex direction="row" width="100%" ml={2} alignItems='center'>
+        <Flex direction="row" width="100%" ml={2} alignItems='center' display={isLargerThanMd? 'flex': 'none'}>
             {
                 !isSqlMode ? (
                     <FormControl id="table-name" w="100%">
@@ -95,7 +95,7 @@ export default function UniversalSearch({children, defaultValue = ""}) {
                         ref={searchBox}
                         onChange={onChangeTest}
                         // defaultValue={defaultValue || null}
-                        placeholder="Search for Tables / Addresses / ENS Names"
+                        placeholder="Search for Tables / #Rigs / Addresses / ENS Names"
                         autoComplete="off"
 
                         onKeyDown={(e)=>{
@@ -303,7 +303,6 @@ export default function UniversalSearch({children, defaultValue = ""}) {
                                 src="/images/dashboards.jpeg"
                                 objectFit="cover"
                                 rounded="xl"
-                                cursor="pointer"
                                 alt="Dashboards"
                                 filter="grayscale(1)"
                             />

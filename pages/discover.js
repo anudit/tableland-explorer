@@ -2,16 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Spinner, Image, Heading, SimpleGrid , Button, useColorMode, Flex, Text, IconButton } from "@chakra-ui/react";
 
 import Balancer from 'react-wrap-balancer';
-import UniversalSearch from "@/components/UniversalSearch";
 import Link from "next/link";
 import { TwitterIcon } from "@/public/icons";
 import { ExternalIcon } from "@/public/icons";
 import { getProjects } from "@/utils/rigs";
-import Footer from "@/components/Footer";
 import DiscoverCarousel from "@/components/DiscoverCarousel";
-import Meta from "@/components/Meta";
-
-
+import PageShell from "@/components/PageShell";
 
 const chooseRandom = (arr, num = 5) => {
     const res = [];
@@ -37,16 +33,7 @@ export default function DiscoverPage() {
 
 
     return (
-        <Flex
-            direction='column'
-            fontFamily='inherit'
-            backgroundImage="url(/lightbackground.png)"
-            backgroundRepeat="no-repeat"
-            backgroundPosition="top right"
-            backgroundAttachment="fixed"
-        >
-            <Meta/> 
-            <UniversalSearch />
+        <PageShell title="Discover the Tableverse - Tablescan.io">
             {
                 projectList != false ? (
                     <>
@@ -127,9 +114,7 @@ export default function DiscoverPage() {
                     </Flex>
                 )
             }
-
-            <Footer/>
-        </Flex>
+        </PageShell>
     )
 
 }

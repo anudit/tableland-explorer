@@ -3,7 +3,6 @@ import { SimpleGrid, Stack, Skeleton, Heading, useDisclosure, useColorMode, Flex
 import useSWR from "swr";
 import { multifetch } from "../utils/fetcher";
 import { networkDeets } from "../utils/stringUtils";
-import Meta from "@/components/Meta";
 import DetailsModal from '@/components/DetailsModal';
 import TableCard from "@/components/ExploreTableCard";
 
@@ -44,63 +43,47 @@ export default function Home() {
   }`, multifetch);
 
   return (
-    <>
-      <Meta />
-
-      <Flex
-        direction='column'
-        m="0"
-        h="max-content"
-        alignItems='center'
-        backgroundImage="url(/lightbackground.png)"
-        backgroundRepeat="no-repeat"
-        backgroundPosition="top right"
-        backgroundAttachment="fixed"
-      >
-
-        <UniversalSearch />
+    <PageShell>
+      <>
         <Flex direction="row" justifyContent="space-around" mt="70px" w={{base: "100%", md: "80%"}}>
-            <Flex direction="column" >
-                <Flex direction="column" width={{base: '100%', md: '600px'}}>
-                  <br/>
-                  <Heading ml={2}>Explore</Heading>
-                  <br/>
-                  <ActionsSection />
-                  <br/>
-                  <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
-                  {
-                      exploreData ? exploreData
-                        .map(e=>e?.data?.tables)
-                        .flat()
-                        .sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})
-                        .map((table, oid) => {
-                          return (
-                            <TableCard
-                              key={oid}
-                              tableName={table?.name}
-                              table={table}
-                              infoClick={()=>{
-                                infoClick(oid)
-                              }}
-                              mb={{base:0, md:2}}
-                            />
-                          )
-                      }) : (
-                        <TableCardSkeleton />
-                      )
-                  }
-                </Flex>
-            </Flex>
-            <Flex direction="column" display={{base: 'none', lg: 'flex'}} position="relative">
-              <ChainsSection />
-            </Flex>
+              <Flex direction="column" >
+                  <Flex direction="column" width={{base: '100%', md: '600px'}}>
+                    <br/>
+                    <Heading ml={2}>Explore</Heading>
+                    <br/>
+                    <ActionsSection />
+                    <br/>
+                    <DetailsModal tableMetadata={activeModalData} onClose={onClose} isOpen={isOpen}/>
+                    {
+                        exploreData ? exploreData
+                          .map(e=>e?.data?.tables)
+                          .flat()
+                          .sort(function(a, b){return parseInt(b.created) - parseInt(a.created)})
+                          .map((table, oid) => {
+                            return (
+                              <TableCard
+                                key={oid}
+                                tableName={table?.name}
+                                table={table}
+                                infoClick={()=>{
+                                  infoClick(oid)
+                                }}
+                                mb={{base:0, md:2}}
+                              />
+                            )
+                        }) : (
+                          <TableCardSkeleton />
+                        )
+                    }
+                  </Flex>
+              </Flex>
+              <Flex direction="column" display={{base: 'none', lg: 'flex'}} position="relative">
+                <ChainsSection />
+              </Flex>
         </Flex>
-
-        <BottomStats />
-
-      </Flex>
-      <Footer/>
-    </>
+        <BottomStats/>
+      </>
+    </PageShell>
   )
 }
 
@@ -284,8 +267,7 @@ import 'swiper/css';
 import RigAction from "@/components/RigAction";
 import BottomStats from "@/components/BottomStats";
 import TableCardSkeleton from "@/components/ExploreTableCardShell";
-import UniversalSearch from "@/components/UniversalSearch";
-import Footer from "@/components/Footer";
+import PageShell from "@/components/PageShell";
 
 const ActionsSection = () => {
 

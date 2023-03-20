@@ -7,15 +7,14 @@ import { CloseIcon, SmallAddIcon, SettingsIcon, WarningTwoIcon } from "@chakra-u
 import sdk from 'postman-collection';
 const codegen = require('postman-code-generators')
 
-import Meta from '@/components/Meta';
 import InteractiveEditor from '@/components/interactive/InteractiveEditor';
 import { ActionBar } from "@/components/interactive/ActionBar";
 import fetcher from '@/utils/fetcher';
 import { Parser } from 'node-sql-parser';
 import { isMainnetTable } from '@/utils/stringUtils';
-import UniversalSearch from '@/components/UniversalSearch';
 import CustomSandpack from '@/components/interactive/CustomSandpack';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
+import PageShell from '@/components/PageShell';
 
 const InteractiveView = () => {
 
@@ -74,9 +73,7 @@ const InteractiveView = () => {
     }
 
     return (
-        <>
-            <Meta/>
-            <UniversalSearch />
+        <PageShell title="Playground - Tablescan.io">
             <Flex direction='column' w="100%" alignItems='center'>
                 <Heading mt="100px" fontSize={{base: "md", md:"3xl"}}>Tableland Playground</Heading>
                 <Tabs variant='soft-rounded' w={{base: "100%", md:"80%"}} minH="80vh" colorScheme='whiteAlpha' >
@@ -145,7 +142,7 @@ const InteractiveView = () => {
                     </TabPanels>
                 </Tabs>
             </Flex>
-        </>
+        </PageShell>
     )
 
 }

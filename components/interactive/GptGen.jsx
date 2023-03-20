@@ -3,6 +3,7 @@ import { Button, Textarea, InputGroup, InputRightElement } from "@chakra-ui/reac
 import { Parser } from "node-sql-parser";
 import { nameToSubgraph } from "@/utils/stringUtils";
 import fetcher from "@/utils/fetcher";
+import { format } from 'sql-formatter';
 
 const getTableFromQuery = (query) => {
     try {
@@ -79,7 +80,7 @@ const GptInput = ({inputValue, setInputValue}) => {
             let resp = await fetch(`/api/gpt?inputText=${encodeURIComponent(gptQuery.current.value)}&tableSchema=${creationStatement}`).then(e=>e.json());
     
             if (resp?.outputText) {
-                setInputValue(resp?.outputText.slice(0, resp?.outputText.length-1))
+                setInputValue(format(resp?.outputText.slice(0, resp?.outputText.length-1), { language: 'mysql'}))
             }
             else {
                 console.error('Gpt error', resp);

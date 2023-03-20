@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, AlertIcon, Stat, StatLabel, StatNumber, StatHelpText, StatGroup, Flex, Button, Spinner, Modal, ModalOverlay, ModalContent, ModalHeader, Text, ModalBody, ModalCloseButton } from '@chakra-ui/react';
+import { Stat, StatLabel, StatNumber, StatHelpText, StatGroup, Flex, Button, Spinner, Modal, ModalOverlay, ModalContent, ModalHeader, Text, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import { useAccount } from 'wagmi';
 import { prettifyNumber } from '@/utils/stringUtils';
 // import Link from 'next/link';
@@ -38,7 +38,12 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
         if (isAddress(address) == true && carbon === false) {
             fetch(`/api/offset?address=${address}`).then(e=>e.json()).then(ca=>{
                 setCarbon(ca);
-                getToucanOffsetAmount((ca['powData']['impact'] + ca['posData']['impact']).toFixed(3));
+                if ((ca['powData']['impact'] + ca['posData']['impact']) > 0){
+                    getToucanOffsetAmount((ca['powData']['impact'] + ca['posData']['impact']).toFixed(3));
+                }
+                else {
+                    setToucanOffsetCost(0);
+                }
             })
             fetch(`https://api.thegraph.com/subgraphs/name/anudit/klima-retirements`, {
                 method:"POST",
@@ -126,12 +131,6 @@ const Offset = ({ isOpen, onOpen, onClose }) => {
                                 <Spinner/>
                             ) : (
                                 <Flex direction="column">
-
-                                    <Alert status='warning'>
-                                        <AlertIcon />
-                                        Experimental
-                                    </Alert>
-                                    <br/>
 
                                     <Text my={2} fontSize="lg">Your Carbon Emissions</Text>
 

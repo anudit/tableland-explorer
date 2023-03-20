@@ -1,5 +1,5 @@
 import React from 'react';
-import { useColorMode, Avatar, chakra, Flex, Textarea, Text } from "@chakra-ui/react";
+import { useColorMode, Avatar, chakra, Flex, Text } from "@chakra-ui/react";
 import { ArrowUpIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { isMainnetTable, nameToAvatar, nameToChainName, nameToExplorer, parseTableData } from "@/utils/stringUtils";
@@ -7,6 +7,9 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseBu
 import AddressOrEns from './AddressOrEns';
 import EnsAvatar from './EnsAvatar';
 import timeAgo from '@/utils/stringUtils';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { atomOneDark } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
+import { format } from 'sql-formatter';
 
 const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
     const { colorMode } = useColorMode();
@@ -91,12 +94,13 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                 <br/>
 
                 <Text fontWeight={'medium'} fontSize='sm' mb={1}>Creation Statement</Text>
-                <Textarea
-                    value={tableMetadata?.statement}
-                    size='sm'
-                    readOnly
-                />
-                <br/><br/>
+                <SyntaxHighlighter language="sql" style={atomOneDark} wrapLongLines={true} wrapLines={true} customStyle={{
+                    borderRadius: '10px',
+                    fontSize: '12px'
+                }}>
+                    {format(tableMetadata?.statement || "", { language: 'mysql'})}
+                </SyntaxHighlighter>
+                <br/>
 
                 <Flex direction='row' justifyContent='space-between'>
                     <Link href={tableMetadata?.tokenURI} target="_blank">
