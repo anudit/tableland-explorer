@@ -26,7 +26,7 @@ const Footer = ({ ...props}) => {
                     <VStack align="left" spacing={0} alignItems={{base: "center", md:"start"}}>
                         <TablelandSmallIcon boxSize='80px'/>
                         <Text><b>Tablescan.io</b></Text>
-                        <Text>An Explorer for the Tableland Network.</Text>
+                        <Text>An Explorer for the Tableland Network</Text>
                     </VStack>
                 </Flex>
                 <Flex direction="row" w="100%" justifyContent='space-around' mt={{base: 8, md: 0}}>

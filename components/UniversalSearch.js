@@ -75,7 +75,7 @@ export default function UniversalSearch({children, defaultValue = ""}) {
     >
         <Flex
             direction="row"
-            justifyContent="center"
+            justifyContent="flex-start"
             alignItems="center"
             w={{base:"100vw", md:"50vw", lg: "40vw"}}
             p={2}

@@ -7,7 +7,7 @@ import {
     SandpackLayout,
 } from "@codesandbox/sandpack-react";
 import { SandpackFileExplorer } from "@codesandbox/sandpack-react";
-import { sandpackDark } from "@codesandbox/sandpack-themes";
+import { amethyst } from "@codesandbox/sandpack-themes";
 import {useMediaQuery} from "@chakra-ui/react";
 
 const CustomSandpack = (props) => {
@@ -16,21 +16,21 @@ const CustomSandpack = (props) => {
 
     return (
         <SandpackProvider template='nextjs' customSetup={props.customSetup} files={props.files}>
-            <SandpackThemeProvider theme={sandpackDark}>
+            <SandpackThemeProvider theme={amethyst}>
                 <SandpackLayout>
                     <SandpackFileExplorer style={{
-                        height: isLargerThan768 ? "600px" : "200px",
+                        height: isLargerThan768 ? "800px" : "200px",
                     }}/>
                     <SandpackPreview
                         style={{
                             width: "100%",
-                            height: "600px",
+                            height: isLargerThan768 ? "800px" : "500px",
                         }}
                     />
                     <SandpackCodeEditor
                         style={{
                             width: "100%",
-                            height: "600px",
+                            height: "800px",
                         }}
                         showLineNumbers={true}
                     />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useSWR from "swr";
 import { Grid } from "@anudit/flat-ui";
 import { useRouter } from 'next/router';
-import { useMediaQuery, Heading, List, ListItem, chakra, Flex, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, useDisclosure, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Text, Textarea, useColorMode } from '@chakra-ui/react';
+import { useMediaQuery, List, ListItem, chakra, Flex, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, useDisclosure, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Text, Textarea, useColorMode } from '@chakra-ui/react';
 import { CloseIcon, SmallAddIcon, SettingsIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import sdk from 'postman-collection';
 const codegen = require('postman-code-generators')
@@ -75,15 +75,14 @@ const InteractiveView = () => {
     return (
         <PageShell title="Playground - Tablescan.io">
             <Flex direction='column' w="100%" alignItems='center'>
-                <Heading mt="100px" fontSize={{base: "md", md:"3xl"}}>Tableland Playground</Heading>
-                <Tabs variant='soft-rounded' w={{base: "100%", md:"80%"}} minH="80vh" colorScheme='whiteAlpha' >
-                    <TabList>
+                <Tabs variant='soft-rounded' w={{base: "100%", md:"95%"}} minH="95vh" colorScheme='whiteAlpha' mt={16} >
+                    <TabList justifyContent='center' as="div" display='flex' flexDirection='row'>
                         <Tab key="sql">SQL</Tab>
                         <Tab key="sdk">SDK</Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel p={0}>
-                            <Tabs defaultIndex={0} variant='soft-rounded' w="100%" minH="80vh" colorScheme='whiteAlpha'>
+                            <Tabs defaultIndex={0} variant='soft-rounded' w="100%" minH="95vh" colorScheme='whiteAlpha'>
                                 <TabList display='flex'  alignItems='center' direction="row" w="100%" overflowX='auto' h="50px" borderBottom='none'>
                                     {
                                         tabsData.map((val)=>
@@ -127,16 +126,16 @@ const InteractiveView = () => {
                             </Tabs>
                             
                         </TabPanel>
-                        <TabPanel h="500px">
+                        <TabPanel>
                             <CustomSandpack customSetup={{ 
                                 dependencies: { 
-                                    "@tableland/sdk": "4.0.0",
-                                    "ethers": "5.7.2" 
-                                }
-                            }} 
-                            files={{
-                                "pages/index.js": APP_CODE
-                            }}
+                                        "@tableland/sdk": "4.0.0",
+                                        "ethers": "5.7.2" 
+                                    }
+                                }} 
+                                files={{
+                                    "pages/index.js": APP_CODE
+                                }}
                             />
                         </TabPanel>
                     </TabPanels>
@@ -302,7 +301,7 @@ const TabView = ({defaultQuery, name}) => {
                     </Drawer>
                     {
                         data ? data?.message ? (
-                            <Flex alignItems='center' justifyContent="center" width="100%" h="600px">
+                            <Flex alignItems='center' justifyContent="center" width="100%" h="800px">
                                 <Flex direction="row" justifyContent="space-evenly" alignItems="center" w={{base: "100%", md:"340px"}} borderRadius={1} py={4} px={8}
                                     background={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.100'}
                                     _hover={{
@@ -331,11 +330,13 @@ const TabView = ({defaultQuery, name}) => {
                                 </Flex>
                             </Flex>
                         ) : (
-                            <chakra.div color="black !important" position="relative" width="100%" h="600px">
-                                <Grid data={data} downloadFilename='custom'/>
+                            <chakra.div color="black !important" position="relative" width="100%" h="800px">
+                                <chakra.div color="black !important" position="relative" width="100%" h="770px">
+                                    <Grid data={data} downloadFilename='custom'/>
+                                </chakra.div>
                             </chakra.div>
                         ) : (
-                            <Flex w="100%" h="600px" justifyContent='center' alignItems='center'>
+                            <Flex w="100%" h="800px" justifyContent='center' alignItems='center'>
                                 <Spinner />
                             </Flex>
                         )

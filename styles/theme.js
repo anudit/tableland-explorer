@@ -21,7 +21,7 @@ const theme = extendTheme({
       bold: 900
     },
     config: {
-      cssVarPrefix: "c",
+      cssVarPrefix: "ts",
       initialColorMode: "dark",
       useSystemColorMode: false
     },

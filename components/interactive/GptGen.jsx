@@ -102,7 +102,7 @@ const GptInput = ({inputValue, setInputValue}) => {
         ref={gptQuery}
         pr='4.5rem'
         mx={2}
-        borderColor="grey"
+        borderColor="#eee5"
         placeholder='Describe your query to GPT.'
       />
       <InputRightElement width='5rem'>
