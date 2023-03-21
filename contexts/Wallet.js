@@ -85,7 +85,7 @@ export const WalletProvider = ({children}) => {
 
     return (
         <WagmiConfig client={wagmiClient}>
-            <RainbowKitProvider chains={chains} theme={darkTheme()} modalSize="compact" coolMode >
+            <RainbowKitProvider chains={chains} theme={darkTheme()} modalSize="compact" coolMode showRecentTransactions={true}>
                 <WalletContext.Provider value={{
                     cleanStatement,
                     setupSdk,

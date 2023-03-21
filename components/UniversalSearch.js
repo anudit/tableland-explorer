@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
-import { HStack, Stack, Img, Menu, MenuButton, MenuList, MenuItem, useDisclosure, useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
+import { Heading, HStack, Stack, Img, Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup, useDisclosure, useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
 import { SqlIcon, TablelandSmallIcon, TreeIcon, UserIconOutline, WalletIcon } from "@/public/icons";
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
@@ -17,7 +17,7 @@ import Offset from "./Offset";
 import { useAccount } from "wagmi";
 import { MotionMenu, MotionMenuItem } from "./menu/Menu";
 
-export default function UniversalSearch({children, defaultValue = ""}) {
+export default function UniversalSearch({children, defaultValue = "", customTitle = false}) {
 
   const router = useRouter();
   const searchBox = useRef();
@@ -83,6 +83,11 @@ export default function UniversalSearch({children, defaultValue = ""}) {
         <Link href="/">
             <TablelandSmallIcon boxSize={10} _hover={{fill: 'royalBlue'}}/>
         </Link>
+        {
+            customTitle && (
+                <Heading size={{base:"xs", md:"sm"}} ml={2} minW="120px">{customTitle}</Heading>
+            )
+        }
         <Flex direction="row" width="100%" ml={2} alignItems='center' display={isLargerThanMd? 'flex': 'none'}>
             {
                 !isSqlMode ? (
@@ -260,22 +265,23 @@ export default function UniversalSearch({children, defaultValue = ""}) {
                 </MotionMenuItem>
                 <MotionMenuItem item="Create">
                     <HStack spacing={5} alignItems="start">
-                        <Stack spacing={2}>
-                            <Img
-                                h="6.4rem"
-                                w="8rem"
-                                bg="whiteAlpha.50"
-                                src="/images/tables.jpeg"
-                                objectFit="cover"
-                                rounded="xl"
-                                alt="Apps built on Tableland"
-                                filter="grayscale(1)"
-                            />
-                            <Flex direction="column">
-                                <Text fontWeight={600}>Tables</Text>
-                                <Text fontSize='x-small'>Create Tables on <br/>Tableland Network</Text>
-                            </Flex>
-                        </Stack>
+                        <Link href="/create/table">
+                            <Stack spacing={2}>
+                                <Img
+                                    h="6.4rem"
+                                    w="8rem"
+                                    bg="whiteAlpha.50"
+                                    src="/images/tables.jpeg"
+                                    objectFit="cover"
+                                    rounded="xl"
+                                    alt="Create Table"
+                                />
+                                <Flex direction="column">
+                                    <Text fontWeight={600}>Tables</Text>
+                                    <Text fontSize='x-small'>Create Tables on <br/>Tableland Network</Text>
+                                </Flex>
+                            </Stack>
+                        </Link>
                         <Stack spacing={2}>
                             <Img
                                 h="6.4rem"
@@ -422,12 +428,17 @@ export default function UniversalSearch({children, defaultValue = ""}) {
                                         )
                                     }
                                     <MenuList>
-                                        <MenuItem icon={<TreeIcon />} onClick={onOpenClimate}> <Offset onClose={onCloseClimate} isOpen={isOpenClimate}/></MenuItem>
-                                        <MenuItem icon={<UserIconOutline />} onClick={()=>{
-                                            router.push(`/address/${address}`)
-                                        }}>My Profile</MenuItem>
-                                        <MenuItem icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} onClick={toggleColorMode}>Toggle Theme</MenuItem>
-                                        <MenuItem icon={<WalletIcon />} onClick={openAccountModal}>Disconnect</MenuItem>
+                                        <MenuGroup title="Tablescan">
+                                            <MenuItem icon={<TreeIcon />} onClick={onOpenClimate}> <Offset onClose={onCloseClimate} isOpen={isOpenClimate}/></MenuItem>
+                                            <MenuItem icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} onClick={toggleColorMode}>Toggle Theme</MenuItem>
+                                        </MenuGroup>
+                                        <MenuDivider />
+                                        <MenuGroup title='Account'>
+                                            <MenuItem icon={<UserIconOutline />} onClick={()=>{
+                                                router.push(`/address/${address}`)
+                                            }}>My Profile</MenuItem>
+                                            <MenuItem icon={<WalletIcon />} onClick={openAccountModal}>Disconnect</MenuItem>
+                                        </MenuGroup>
                                     </MenuList>
                                 </Menu>
                             }

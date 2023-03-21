@@ -19,6 +19,8 @@ import { useSigner } from "wagmi";
 import { Database } from "@tableland/sdk";
 import init from "@tableland/sqlparser";
 import PageShell from "@/components/PageShell";
+import { format } from "sql-formatter";
+import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 
 const getSize = (st) => { 
     let size = new Blob([st]).size;
@@ -175,11 +177,9 @@ export default function DiscoverPage() {
     }, [tname, parserLoaded])
 
     return (
-        <PageShell title="Import Data | Tablescan.io">
+        <PageShell title="Import Data | Tablescan.io" searchProps={{customTitle: "Import Data"}}>
             <Flex w="100%" direction="column" mt="70px" alignItems="center" minH="100vh">
-                <Flex mt='30px' w={{base: "100%", md: "80%"}} alignItems='center' direction="column">
-                    <Heading mt="20px">Import Data</Heading>
-                    <br/>
+                <Flex mt='10px' w={{base: "100%", md: "80%"}} alignItems='center' direction="column" p={2}>
                     {
                         (chonks.length > 0 || Object.keys(columns).length > 0) ? (
                             <Button onClick={clear} leftIcon={<RepeatIcon/>} my={4}>Start Over</Button>
@@ -206,7 +206,7 @@ export default function DiscoverPage() {
                                             }
                                         })}>
                                         <input {...getInputProps()} />
-                                        <p>Drag n drop a JSON file here, or click to select a file</p>
+                                        <p style={{textAlign:"center"}}>Drag n drop a JSON file here, or click to select a file</p>
                                         </div>
                                     </>
                                     )}
@@ -259,14 +259,20 @@ function SqlDetails({id, total, sql}) {
 
     const { onCopy, hasCopied } = useClipboard(sql);
     const { data: signer } = useSigner();
+    const addRecentTransaction = useAddRecentTransaction();
 
     const run = async () => {
         const db = new Database({signer});
-        const { meta: create } = await db
+        const { meta } = await db
                 .prepare(sql)
                 .run();
 
-        await create.wait;
+        console.log(meta)
+
+        addRecentTransaction({
+            hash: meta.txn.transactionHash,
+            description: `Run SQL #${id+1} of ${total}`,
+        });
     }
 
     return (
@@ -299,8 +305,12 @@ function SqlDetails({id, total, sql}) {
                         </Flex>
                     </AccordionButton>
                     <AccordionPanel pb={4}>
-                        <SyntaxHighlighter language="sql" style={atomOneDark} wrapLongLines={true} wrapLines={true}>
-                            {sql}
+                        <SyntaxHighlighter language="sql" style={atomOneDark} wrapLongLines={true} wrapLines={true} customStyle={{
+                            borderRadius: '10px',
+                            fontSize: '12px',
+                            padding: '10px'
+                        }}>
+                            {format(sql || "", { language: 'mysql'})}
                         </SyntaxHighlighter>
                     </AccordionPanel>
                 </AccordionItem>

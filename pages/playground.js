@@ -73,7 +73,7 @@ const InteractiveView = () => {
     }
 
     return (
-        <PageShell title="Playground - Tablescan.io">
+        <PageShell title="Playground | Tablescan.io" searchProps={{customTitle: "Playground"}}>
             <Flex direction='column' w="100%" alignItems='center'>
                 <Tabs variant='soft-rounded' w={{base: "100%", md:"95%"}} minH="95vh" colorScheme='whiteAlpha' mt={16} >
                     <TabList justifyContent='center' as="div" display='flex' flexDirection='row'>
