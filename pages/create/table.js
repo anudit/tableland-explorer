@@ -150,6 +150,7 @@ export default function CreateTable() {
                                             tableDetails.map((tableDetail, colInd)=>{
                                                 return (
                                                     <Flex 
+                                                        key={colInd}
                                                         w={{base: "100%", md:"300px"}} 
                                                         direction="column"
                                                         borderRadius='10px'
@@ -166,7 +167,7 @@ export default function CreateTable() {
                                                                     updateTableDetails(colInd, 'name', e.currentTarget.value.replace(' ', '_'))
                                                                 }}/>
                                                                 <InputGroup size="sm">
-                                                                    <InputLeftAddon children='Type' />
+                                                                    <InputLeftAddon>Type</InputLeftAddon>
                                                                     <Select minWidth='70px' value={tableDetail.type} onChange={(e)=>{
                                                                         updateTableDetails(colInd, 'type', e.currentTarget.value)
                                                                     }}
