@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
 import { Heading, HStack, Stack, Img, Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup, useDisclosure, useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
-import { SqlIcon, TablelandSmallIcon, TreeIcon, UserIconOutline, WalletIcon } from "@/public/icons";
+import { SqlIcon, TablelandSmallIcon, TreeIcon, UserIconOutline, WalletIcon, MoonIcon } from "@/public/icons";
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
 import {multifetch} from "../utils/fetcher";
 import {encodeSqlForUrl, nameToAvatar, toProperCase} from "../utils/stringUtils";
 import SqlInput from "@/components/RunSql";
 import { isAddress } from "ethers/lib/utils";
-import { SearchIcon, SunIcon, MoonIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { SearchIcon, SunIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { EnsCacheContext } from "@/contexts/EnsCache";
 import Link from "next/link";
 import { ConnectButton } from '@rainbow-me/rainbowkit';

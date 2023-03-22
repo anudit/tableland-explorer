@@ -74,7 +74,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                 </Tooltip>
             ) }}
         >
-            <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt={{base:"70px", md:"50px"}}>
+            <Flex flexDirection={{base: "column", md: "row"}} height="calc(100vh - 50px)" mt={{base:"70px", md:"50px"}} w="100%">
                 <Flex position='relative' ref={imageRef} h="100%" w={{base: '100%', md: '50%'}} alignItems="center" justifyContent='center' background='#80808014'>
                     <Flex direction="row" position='absolute' bottom='20px' right='20px' >
                         {parseInt(rigId) !=1 && (

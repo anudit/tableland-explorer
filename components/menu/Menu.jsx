@@ -82,8 +82,8 @@ export const MotionMenu = ({ children }) => {
       <Flex
         as="nav"
         display="inline-flex"
-        p={8}
-        gap={8}
+        p={{base:2, md:8}}
+        gap={{base:2, md:8}}
         onMouseLeave={() => setActiveItem(null)}
       >
         {children}
