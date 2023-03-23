@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Flex, FormControl, FormLabel, Heading, IconButton, Input, InputGroup, InputLeftAddon, InputRightAddon, Select, Switch, Text, VStack, useColorMode, useDisclosure } from "@chakra-ui/react";
+import { Code, useToast, Button, ButtonGroup, Flex, FormControl, FormLabel, Heading, IconButton, Input, InputGroup, InputLeftAddon, InputRightAddon, Select, Switch, Text, VStack, useColorMode, useDisclosure } from "@chakra-ui/react";
 import { CheckCircleIcon, DeleteIcon } from "@chakra-ui/icons";
 import { EraserIcon, PlusIcon, TerminalIcon, WalletIcon } from "@/public/icons";
 import {
@@ -8,6 +8,7 @@ import {
     ModalContent,
     ModalHeader,
     ModalOverlay,
+    ModalFooter
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from "react";
 import { useAccount, useSigner } from "wagmi";
@@ -22,6 +23,8 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
 import { format } from "sql-formatter";
 import { useChainId } from "wagmi";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function CreateTable() {
 
@@ -39,8 +42,18 @@ export default function CreateTable() {
     }
     const [tableDetails, setTableDetails] = useState([emptyRow]);
     const [tableName, setTableName] = useState('New Table');
+    const [isCreatingTable, setIsCreatingTable] = useState(false);
+    const [newTableName, setNewTableName] = useState('');
     const [sql, setSql] = useState('');
     const chainId = useChainId();
+    const { data: signer } = useSigner();
+    const { isConnected } = useAccount();
+    const { colorMode } = useColorMode();
+    const { openConnectModal } = useConnectModal();
+    const addRecentTransaction = useAddRecentTransaction();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isOpenTC, onOpen: onOpenTC, onClose: onCloseTC } = useDisclosure();
+    const toast = useToast()
 
     function updateTableDetails(colInd, key, value){
         setTableDetails((currTableDetails)=>{
@@ -81,26 +94,57 @@ export default function CreateTable() {
         setTableDetails([emptyRow])
     }
 
-    const { data: signer } = useSigner();
-    const { isConnected } = useAccount();
-    const { colorMode } = useColorMode();
-    const { openConnectModal } = useConnectModal();
-    const addRecentTransaction = useAddRecentTransaction();
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    
 
     const run = async () => {
-        const db = new Database({signer});
-        const { meta, name } = await db
-                .prepare(sql)
-                .run();
 
-        addRecentTransaction({
-            hash: meta.txn.transactionHash,
-            description: `Create Table ${name}`,
-        });
+        setIsCreatingTable(true);
 
-        await meta.txn.wait();
+        try {
+            const db = new Database({signer});
+            const { meta } = await db
+                    .prepare(sql)
+                    .run();
 
+            const name = meta.txn.prefix + '_' + meta.txn.tableId ;
+            console.log(meta)
+
+            setNewTableName(name);
+    
+            addRecentTransaction({
+                hash: meta.txn.transactionHash,
+                description: `Create Table ${name}`,
+            });
+    
+            await meta.txn.wait();
+
+            onOpenTC();
+
+            
+        } catch (error) {
+            console.log(error);
+            if (error?.message.includes('user rejected transaction')){
+                toast({
+                    title: 'Oops!',
+                    description: 'Transaction Rejected by the user',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true
+                })
+            }
+            else {
+                toast({
+                    title: 'Oops!',
+                    description: error?.message,
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true
+                })
+            }
+        }
+
+
+        setIsCreatingTable(false);
         
 
     }
@@ -133,13 +177,13 @@ export default function CreateTable() {
                             <Button rightIcon={<WalletIcon/>} mt={2} onClick={openConnectModal}>Connect Wallet</Button>  
                         </Flex>
                     ) : (
-                        <Flex mt='10px' w={{base: "100%", md: "80%"}} direction="column" p={2}>
-                            <InputGroup size='sm' >
-                                <InputLeftAddon>Table Name</InputLeftAddon>
+                        <Flex mt='10px' w={{base: "100%", xl: "80%"}} direction="column" p={2}>
+                            <InputGroup size='lg' >
+                                <InputLeftAddon borderLeftRadius='30px'>Table Name</InputLeftAddon>
                                 <Input placeholder="Table Name" defaultValue='New Table' maxW="300px" onChange={(e)=>{
                                     setTableName(e.currentTarget.value);
                                 }} mb={2}/>
-                                <InputRightAddon>
+                                <InputRightAddon borderRightRadius='30px'>
                                     _{chainId}
                                 </InputRightAddon>
                             </InputGroup>
@@ -255,12 +299,29 @@ export default function CreateTable() {
                                 </ModalBody>
                                 </ModalContent>
                             </Modal>
+                            <Modal isOpen={isOpenTC} onClose={onCloseTC} size="sm">
+                                <ModalOverlay backdropFilter='blur(10px)' />
+                                <ModalContent>
+                                <ModalHeader>🥳 Table Created</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody display='flex' justifyContent='center' alignItems='center' flexDirection="column">
+                                    <Text>Your freshly minted table <Code>{newTableName}</Code> is all ready</Text>
+                                    <br/>
+                                    <Image alt="success" src="https://media0.giphy.com/media/S9iMXx6Lqrr5mJoMxC/giphy.gif?cid=ecf05e47mbp2vqfbda6f8njv814szlwki61r3ydlyvudal6s&rid=giphy.gif&ct=g" height={300} width={300}/>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Link href={`/${newTableName}`}>
+                                        <Button>Explore Table</Button>
+                                    </Link>
+                                </ModalFooter>
+                                </ModalContent>
+                            </Modal>
                             <Flex mt={2}>
                                 <ButtonGroup size="lg" isAttached>
                                     <IconButton icon={<EraserIcon/>} onClick={eraseTable}>Reset Columns</IconButton>
                                     <IconButton icon={<TerminalIcon/>} onClick={onOpen}>Preview SQL</IconButton>
-                                    <Button leftIcon={<CheckCircleIcon/>} onClick={run}>Create Table</Button>
                                 </ButtonGroup>
+                                <Button size="lg" ml={2} leftIcon={<CheckCircleIcon/>} onClick={run} isLoading={isCreatingTable}>Create Table</Button>
                             </Flex>
                         </Flex>
                     )
