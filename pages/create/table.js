@@ -1,16 +1,8 @@
-import { Code, useToast, Button, ButtonGroup, Flex, FormControl, FormLabel, Heading, IconButton, Input, InputGroup, InputLeftAddon, InputRightAddon, Select, Switch, Text, VStack, useColorMode, useDisclosure } from "@chakra-ui/react";
+import { Tooltip, Code, useToast, Button, ButtonGroup, Flex, FormControl, FormLabel, Heading, IconButton, Input, InputGroup, InputLeftAddon, InputRightAddon, Select, Switch, Text, VStack, useColorMode, useDisclosure, Textarea } from "@chakra-ui/react";
 import { CheckCircleIcon, DeleteIcon } from "@chakra-ui/icons";
-import { EraserIcon, PlusIcon, TerminalIcon, WalletIcon } from "@/public/icons";
-import {
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalHeader,
-    ModalOverlay,
-    ModalFooter
-} from '@chakra-ui/react'
-import React, { useEffect, useState } from "react";
+import { EraserIcon, ImportIcon, OpenaiIcon, PlusIcon, TerminalIcon, WalletIcon } from "@/public/icons";
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, ModalFooter, Alert, AlertIcon, AlertDescription } from '@chakra-ui/react'
+import React, { useEffect, useRef, useState } from "react";
 import { useAccount, useSigner } from "wagmi";
 import { useAddRecentTransaction, useConnectModal } from "@rainbow-me/rainbowkit";
 
@@ -41,7 +33,7 @@ export default function CreateTable() {
         defaultValue: '',
     }
     const [tableDetails, setTableDetails] = useState([emptyRow]);
-    const [tableName, setTableName] = useState('New Table');
+    const [tableName, setTableName] = useState('Tablescan');
     const [isCreatingTable, setIsCreatingTable] = useState(false);
     const [newTableName, setNewTableName] = useState('');
     const [sql, setSql] = useState('');
@@ -53,6 +45,10 @@ export default function CreateTable() {
     const addRecentTransaction = useAddRecentTransaction();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isOpenTC, onOpen: onOpenTC, onClose: onCloseTC } = useDisclosure();
+
+    const importDataRef = useRef(null);
+    const { isOpen: isOpenImport, onOpen: onOpenImport, onClose: onCloseImport } = useDisclosure();
+
     const toast = useToast()
 
     function updateTableDetails(colInd, key, value){
@@ -92,6 +88,33 @@ export default function CreateTable() {
     }
     function eraseTable(){
         setTableDetails([emptyRow])
+    }
+
+    function importColumns(){
+        let data = JSON.parse(importDataRef.current.value);
+        let obj = false;
+        if (data.length > 0 && Object.keys(data[0]).length > 0 ){
+            obj = data[0]
+        }
+        else if (Object.keys(data).length > 0) {
+            obj = data;
+        }
+
+        let newSchema = [];
+        let keys = Object.keys(obj).slice(0, 24);
+        if (obj){
+            for (let index = 0; index < keys.length; index++) {
+                const value = obj[keys[index]];
+                let row = structuredClone(emptyRow);
+                row.name = keys[index]
+                
+                if (Number.isInteger(value)) row.type = columnTypes.INTEGER;
+                else row.type = columnTypes.TEXT;
+
+                newSchema.push(row);
+            }
+        }
+        setTableDetails(newSchema);
     }
 
     
@@ -178,15 +201,36 @@ export default function CreateTable() {
                         </Flex>
                     ) : (
                         <Flex mt='10px' w={{base: "100%", xl: "80%"}} direction="column" p={2}>
-                            <InputGroup size='lg' >
-                                <InputLeftAddon borderLeftRadius='30px'>Table Name</InputLeftAddon>
-                                <Input placeholder="Table Name" defaultValue='New Table' maxW="300px" onChange={(e)=>{
-                                    setTableName(e.currentTarget.value);
-                                }} mb={2}/>
-                                <InputRightAddon borderRightRadius='30px'>
-                                    _{chainId}
-                                </InputRightAddon>
-                            </InputGroup>
+                            <Flex direction={{base: "column", md: "row"}}>
+                                <InputGroup size='lg' >
+                                    <InputLeftAddon borderLeftRadius='30px'>Table Name</InputLeftAddon>
+                                    <Input placeholder="Table Name" defaultValue='Tablescan' maxW="300px" onChange={(e)=>{
+                                        setTableName(e.currentTarget.value);
+                                    }} mb={2}/>
+                                    <InputRightAddon borderRightRadius='30px'>
+                                        _{chainId}
+                                    </InputRightAddon>
+                                </InputGroup>
+                                <Flex direction="row" justifyContent={{base: "center", md:"flex-start"}}>
+                                    <ButtonGroup size="lg" isAttached>
+                                        <Tooltip label='Use ChatGPT to describe Schema' hasArrow placement='left'>
+                                            <IconButton icon={<OpenaiIcon/>} disabled={true}/>
+                                        </Tooltip>
+                                        <Tooltip label='Data to Schema' hasArrow placement='left'>
+                                            <IconButton icon={<ImportIcon/>} onClick={onOpenImport}/>
+                                        </Tooltip>
+                                        <Tooltip label='Preview SQL' hasArrow placement='left'>
+                                            <IconButton icon={<TerminalIcon/>} onClick={onOpen}/>
+                                        </Tooltip>
+                                        <Tooltip label='Reset Schema' hasArrow placement='left'>
+                                            <IconButton icon={<EraserIcon/>} onClick={eraseTable}/>
+                                        </Tooltip>
+                                        <Tooltip label='Create Table' hasArrow placement='left'>
+                                            <IconButton icon={<CheckCircleIcon/>} onClick={run} isLoading={isCreatingTable}/>
+                                        </Tooltip>
+                                    </ButtonGroup>
+                                </Flex>
+                            </Flex>
 
 
                             <SimpleGrid columns={{base: 1, sm: 1, md: 2, lg: 3, xl: 4}} spacing={4} justifyContent="center" my={4}>
@@ -296,6 +340,7 @@ export default function CreateTable() {
                                     }}>
                                         {format(sql || "", { language: 'mysql'})}
                                     </SyntaxHighlighter>
+                                    <br/>
                                 </ModalBody>
                                 </ModalContent>
                             </Modal>
@@ -316,11 +361,33 @@ export default function CreateTable() {
                                 </ModalFooter>
                                 </ModalContent>
                             </Modal>
+                            <Modal isOpen={isOpenImport} onClose={onCloseImport} size="sm">
+                                <ModalOverlay backdropFilter='blur(10px)' />
+                                <ModalContent>
+                                <ModalHeader><ImportIcon boxSize={4} mr={2}/> Import Schema</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody display='flex' justifyContent='center' alignItems='center' flexDirection="column">
+                                    <Text>Enter a sample JSON Object representing your data and we will automatically convert it into it&apos;s schema.</Text>
+                                    <br/>
+                                    <Textarea ref={importDataRef} noOfLines={10} minH="200px"/>
+                                    <br/>
+                                    <Alert status='warning'>
+                                        <AlertIcon />
+                                        <AlertDescription>This will reset your existing changes.</AlertDescription>
+                                    </Alert>
+                                </ModalBody>
+                                <ModalFooter display='flex' flexDirection='row' justifyContent='space-between'>
+                                    <Button variant='ghost' onClick={()=>{
+                                        importDataRef.current.value = `{"id": 49863, "url": "https://yts.mx/movies/caught-out-crime-corruption-cricket-2023", "imdb_code": "tt27055390", "title": "Caught Out: Crime. Corruption. Cricket", "title_english": "Caught Out: Crime. Corruption. Cricket", "title_long": "Caught Out: Crime. Corruption. Cricket (2023)", "slug": "caught-out-crime-corruption-cricket-2023", "year": 2023, "rating": 0, "runtime": 0, "genres": ["Documentary", "Sport"], "summary": "India's biggest match-fixing scandal, the icons caught in its web and the journalists who uncovered the corruption.", "description_full": "India's biggest match-fixing scandal, the icons caught in its web and the journalists who uncovered the corruption.", "synopsis": "India's biggest match-fixing scandal, the icons caught in its web and the journalists who uncovered the corruption.", "yt_trailer_code": "ZT2P__EQqUE", "language": "en", "mpa_rating": "", "background_image": "https://yts.mx/assets/images/movies/caught_out_crime_corruption_cricket_2023/background.jpg", "background_image_original": "https://yts.mx/assets/images/movies/caught_out_crime_corruption_cricket_2023/background.jpg", "small_cover_image": "https://yts.mx/assets/images/movies/caught_out_crime_corruption_cricket_2023/small-cover.jpg", "medium_cover_image": "https://yts.mx/assets/images/movies/caught_out_crime_corruption_cricket_2023/medium-cover.jpg", "large_cover_image": "https://yts.mx/assets/images/movies/caught_out_crime_corruption_cricket_2023/large-cover.jpg", "state": "ok", "date_uploaded": "2023-03-17 09:43:52", "date_uploaded_unix": 1679042632}`
+                                    }}>Example</Button>
+                                    <Button onClick={()=>{
+                                        importColumns()
+                                        onCloseImport()
+                                    }}>Convert to Schema</Button>
+                                </ModalFooter>
+                                </ModalContent>
+                            </Modal>
                             <Flex mt={2}>
-                                <ButtonGroup size="lg" isAttached>
-                                    <IconButton icon={<EraserIcon/>} onClick={eraseTable}>Reset Columns</IconButton>
-                                    <IconButton icon={<TerminalIcon/>} onClick={onOpen}>Preview SQL</IconButton>
-                                </ButtonGroup>
                                 <Button size="lg" ml={2} leftIcon={<CheckCircleIcon/>} onClick={run} isLoading={isCreatingTable}>Create Table</Button>
                             </Flex>
                         </Flex>
