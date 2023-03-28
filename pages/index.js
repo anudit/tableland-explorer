@@ -205,53 +205,53 @@ const GarageStatsSection = () => {
       <Heading size='lg'>🏗️ Garage</Heading>
       <br/>
       <SimpleGrid columns={2} spacingX='40px' spacingY='4px' top="0px" direction="column">
-        <Flex direction='column' align="left" key='num_rigs_in_flight' mb={2} w="120px">
+        <Flex direction='column' align="left" key='numRigsInFlight' mb={2} w="120px">
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Rigs In-flight
           </Text>
           <Skeleton isLoaded={Boolean(data)}>
             <Text>
-              {parseInt(data['num_rigs_in_flight'])}
+              {parseInt(data['numRigsInFlight'])}
             </Text>
           </Skeleton>
         </Flex>
-        <Flex direction='column' align="left" key='num_rigs_parked' mb={2} w="120px">
+        <Flex direction='column' align="left" key='numRigsParked' mb={2} w="120px">
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Rigs Parked
           </Text>
           <Skeleton isLoaded={Boolean(data)}>
             <Text>
-              {3000-parseInt(data['num_rigs_in_flight'])}
+              {3000-parseInt(data['numRigsInFlight'])}
             </Text>
           </Skeleton>
         </Flex>
-        <Flex direction='column' align="left" key='total_flight_time' mb={2} w="120px">
+        <Flex direction='column' align="left" key='totalFlightTime' mb={2} w="120px">
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Total Flight Time
           </Text>
           <Skeleton isLoaded={Boolean(data)}>
             <Text>
-              {(parseInt(data['total_flight_time']*12.07)/(60*60*24*365)).toFixed(2)} years
+              {(parseInt(data['totalFlightTime']*12.07)/(60*60*24*365)).toFixed(2)} years
             </Text>
           </Skeleton>
         </Flex>
-        <Flex direction='column' align="left" key='avg_flight_time' mb={2} w="120px">
+        <Flex direction='column' align="left" key='avgFlightTime' mb={2} w="120px">
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Avg. Flight Time
           </Text>
           <Skeleton isLoaded={Boolean(data)}>
             <Text>
-              {(parseInt(data['avg_flight_time']*12.07)/(60*60*24)).toFixed(2)} days
+              {(parseInt(data['avgFlightTime']*12.07)/(60*60*24)).toFixed(2)} days
             </Text>
           </Skeleton>
         </Flex>
-        <Flex direction='column' align="left" key='num_pilots' mb={2} w="120px">
+        <Flex direction='column' align="left" key='numPilots' mb={2} w="120px">
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Number of Pilots
           </Text>
           <Skeleton isLoaded={Boolean(data)}>
             <Text>
-              {parseInt(data['num_pilots'])}
+              {parseInt(data['numPilots'])}
             </Text>
           </Skeleton>
         </Flex>

@@ -3,7 +3,6 @@ import { Button, Textarea, InputGroup, InputRightElement } from "@chakra-ui/reac
 import { Parser } from "node-sql-parser";
 import { nameToSubgraph } from "@/utils/stringUtils";
 import fetcher from "@/utils/fetcher";
-import { format } from 'sql-formatter';
 
 const getTableFromQuery = (query) => {
     try {
@@ -77,10 +76,19 @@ const GptInput = ({inputValue, setInputValue}) => {
             creationStatement = creationStatement.replace(partialTableName, completeTableName)
             
 
-            let resp = await fetch(`/api/gpt?inputText=${encodeURIComponent(gptQuery.current.value)}&tableSchema=${creationStatement}`).then(e=>e.json());
+            let resp = await fetch(`/api/gpt3`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    query: gptQuery.current.value,
+                    schema: creationStatement
+                })
+            }).then(e=>e.json());
     
-            if (resp?.outputText) {
-                setInputValue(format(resp?.outputText.slice(0, resp?.outputText.length-1), { language: 'mysql'}))
+            if (resp?.generatedSQL) {
+                setInputValue(resp?.generatedSQL.replace(';', ''))
             }
             else {
                 console.error('Gpt error', resp);
@@ -103,7 +111,7 @@ const GptInput = ({inputValue, setInputValue}) => {
         pr='4.5rem'
         mx={2}
         borderColor="#eee5"
-        placeholder='Describe your query to GPT.'
+        placeholder='Describe your query to ChatGPT'
       />
       <InputRightElement width='5rem'>
         <Button h='1.75rem' size='sm' mr={4} mt={4} onClick={getGptResult} isLoading={loading}>

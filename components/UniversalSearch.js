@@ -260,7 +260,24 @@ export default function UniversalSearch({children, defaultValue = "", customTitl
                                 </Flex>
                             </Stack>
                         </Link>
-
+                    </HStack>
+                    <HStack spacing={5} alignItems="start" mt={4}>
+                        <Stack spacing={2}>
+                            <Img
+                                h="6.4rem"
+                                w="8rem"
+                                bg="whiteAlpha.50"
+                                src="/images/rigs.jpeg"
+                                objectFit="cover"
+                                rounded="xl"
+                                alt="Rigs"
+                                filter="grayscale(1)"
+                            />
+                            <Flex direction="column">
+                                <Text fontWeight={600}>Rigs</Text>
+                                <Text fontSize='x-small'>Discover Rigs in the <br/> Tableland Network.</Text>
+                            </Flex>
+                        </Stack>
                     </HStack>
                 </MotionMenuItem>
                 <MotionMenuItem item="Create">

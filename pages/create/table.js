@@ -213,7 +213,7 @@ export default function CreateTable() {
                                 </InputGroup>
                                 <Flex direction="row" justifyContent={{base: "center", md:"flex-start"}}>
                                     <ButtonGroup size="lg" isAttached>
-                                        <Tooltip label='Use ChatGPT to describe Schema' hasArrow placement='left'>
+                                        <Tooltip label='Ask ChatGPT to do it for you' hasArrow placement='left'>
                                             <IconButton icon={<OpenaiIcon/>} disabled={true}/>
                                         </Tooltip>
                                         <Tooltip label='Data to Schema' hasArrow placement='left'>

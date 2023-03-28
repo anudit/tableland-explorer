@@ -8,35 +8,10 @@ export function constructTokenURIQuery(tokenId = 1){
 }
 
 export async function garageStatsQuery(){
-    let blkNumber = await fetch(ethereumRpcUrl, {
-        "headers": {
-          "accept": "*/*",
-          "content-type": "application/json",
-        },
-        "body": "{\"method\":\"eth_blockNumber\",\"params\":[],\"id\":42,\"jsonrpc\":\"2.0\"}",
-        "method": "POST",
-    }).then(r=>r.json());
-    blkNumber = parseInt(blkNumber['result']);
 
-    let data = await fetch("https://tableland.network/rpc", {
-        "headers": {
-            "accept": "*/*",
-            "accept-language": "en-US,en;q=0.6",
-            "content-type": "application/json",
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "cross-site",
-            "sec-gpc": "1"
-        },
-        "referrer": "https://garage.tableland.xyz/",
-        "referrerPolicy": "strict-origin-when-cross-origin",
-        "body": JSON.stringify({"jsonrpc":"2.0","method":"tableland_runReadQuery","id":1,"params":[{"statement":`\n  SELECT\n  (\n    SELECT count(distinct(rig_id)) FROM\n    rig_attributes_42161_15\n  ) AS num_rigs,\n  (\n    SELECT count(*) FROM (\n      SELECT DISTINCT(rig_id)\n      FROM pilot_sessions_1_7\n      WHERE end_time IS NULL\n    )\n  ) AS num_rigs_in_flight,\n  (\n    SELECT count(*) FROM (\n      SELECT DISTINCT pilot_contract, pilot_id\n      FROM pilot_sessions_1_7\n    )\n  ) AS num_pilots,\n  (\n    SELECT coalesce(sum(coalesce(end_time, ${blkNumber}) - start_time), 0)\n    FROM pilot_sessions_1_7\n  ) AS total_flight_time,\n  (\n    SELECT coalesce(avg(coalesce(end_time, ${blkNumber}) - start_time), 0)\n    FROM pilot_sessions_1_7\n  ) AS avg_flight_time\n  FROM rig_attributes_42161_15\n  LIMIT 1;`,"output":"table"}]}),
-        "method": "POST",
-        "mode": "cors",
-        "credentials": "omit"
-    });
+    let data = await fetch("https://tableland.network/api/v1/query?statement=select%20(select%20count(distinct%20(rig_id))%20from%20rig_attributes_42161_15)%20as%20numRigs%2C%20(select%20count(*)%20from%20(select%20distinct%20(rig_id)%20from%20pilot_sessions_1_7%20where%20end_time%20is%20null))%20as%20numRigsInFlight%2C%20(select%20count(*)%20from%20(select%20distinct%20pilot_contract%2C%20pilot_id%20from%20pilot_sessions_1_7))%20as%20numPilots%2C%20(select%20coalesce(sum(coalesce(end_time%2C%20block_num(1))%20-%20start_time)%2C%200)%20from%20pilot_sessions_1_7)%20as%20totalFlightTime%2C%20(select%20coalesce(avg(coalesce(end_time%2C%20block_num(1))%20-%20start_time)%2C%200)%20from%20pilot_sessions_1_7)%20as%20avgFlightTime%20from%20rig_attributes_42161_15%20limit%201&format=objects");
     let json = await data.json();
-    return mergeKeyValue(json['result']['data']['columns'].map(e=>e['name']), json['result']['data']['rows'][0]);
+    return json[0];
 }
 
 export async function getMetadata(tokenIds = []){
