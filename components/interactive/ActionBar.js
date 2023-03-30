@@ -1,10 +1,11 @@
 import React from "react";
 import { useColorModeValue, useColorMode, Text, Tooltip, Flex, IconButton, Spinner, ButtonGroup, useClipboard } from "@chakra-ui/react";
 import { RepeatIcon, MoonIcon, SunIcon, CopyIcon, CheckIcon} from "@chakra-ui/icons";
-import { CodeIcon, PanelIcon, ShareIcon } from "@/public/icons";
+import { CodeIcon, PanelIcon, ShareIcon, SparklesIcon } from "@/public/icons";
 import { encodeSqlForUrl } from "@/utils/stringUtils";
+import { format } from 'sql-formatter';
 
-export const ActionBar = ({inputValue, sqlError, isLoading, refresh, onOpen, panelDirection, setPanelDirection}) => {
+export const ActionBar = ({inputValue, sqlError, isLoading, refresh, onOpen, panelDirection, setPanelDirection, setInputValue}) => {
 
 const { hasCopied, onCopy } = useClipboard(inputValue);
   const { hasCopied: hasCopiedLink, onCopy: onCopyLink, setValue: setShareLink } = useClipboard("");
@@ -27,6 +28,11 @@ const { hasCopied, onCopy } = useClipboard(inputValue);
     <ButtonGroup size='sm' isAttached variant='ghost'>
       <Tooltip hasArrow label={isLoading ? "Refreshing Data" : "Refresh Data"} placement='left'>
         <IconButton colorScheme='facebook' onClick={refresh} icon={isLoading ? <Spinner size="xs"/> : <RepeatIcon />} disabled={isLoading}/>
+      </Tooltip>
+      <Tooltip hasArrow label={"Beautify SQL"} placement='left'>
+        <IconButton onClick={()=>{
+          setInputValue(format(inputValue, { language: 'mysql'}))
+        }} icon={<SparklesIcon />} />
       </Tooltip>
       <Tooltip hasArrow label={hasCopied ? "Copied" : "Copy Query"} placement='left'>
         <IconButton onClick={onCopy} icon={hasCopied ? <CheckIcon /> : <CopyIcon />} />

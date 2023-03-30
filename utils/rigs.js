@@ -4,12 +4,12 @@ import { mergeKeyValue, sleep } from "./stringUtils";
 const ethereumRpcUrl = 'https://eth.llamarpc.com/rpc/01GN04VPE4RTRF8NH87ZP86K24';
 
 export function constructTokenURIQuery(tokenId = 1){
-    return `https://tableland.network/query?extract=true&unwrap=true&s=select%20json_object('name'%2C'Rig%20%23'%7C%7Crig_id%2C'external_url'%2C'https%3A%2F%2Fgarage.tableland.xyz%2Frigs%2F'%7C%7Crig_id%2C'image'%2C'ipfs%3A%2F%2F'%7C%7Crenders_cid%7C%7C'%2F'%7C%7Crig_id%7C%7C'%2F'%7C%7Cimage_full_name%2C'image_alpha'%2C'ipfs%3A%2F%2F'%7C%7Crenders_cid%7C%7C'%2F'%7C%7Crig_id%7C%7C'%2F'%7C%7Cimage_full_alpha_name%2C'image_medium'%2C'ipfs%3A%2F%2F'%7C%7Crenders_cid%7C%7C'%2F'%7C%7Crig_id%7C%7C'%2F'%7C%7Cimage_medium_name%2C'image_medium_alpha'%2C'ipfs%3A%2F%2F'%7C%7Crenders_cid%7C%7C'%2F'%7C%7Crig_id%7C%7C'%2F'%7C%7Cimage_medium_alpha_name%2C'thumb'%2C'ipfs%3A%2F%2F'%7C%7Crenders_cid%7C%7C'%2F'%7C%7Crig_id%7C%7C'%2F'%7C%7Cimage_thumb_name%2C'thumb_alpha'%2C'ipfs%3A%2F%2F'%7C%7Crenders_cid%7C%7C'%2F'%7C%7Crig_id%7C%7C'%2F'%7C%7Cimage_thumb_alpha_name%2C'animation_url'%2Canimation_base_url%7C%7Crig_id%7C%7C'.html'%2C'attributes'%2Cjson_insert((select%20json_group_array(json_object('display_type'%2Cdisplay_type%2C'trait_type'%2Ctrait_type%2C'value'%2Cvalue))from%20rig_attributes_42161_15%20where%20rig_id%3D${tokenId}%20group%20by%20rig_id)%2C'%24%5B%23%5D'%2Cjson_object('display_type'%2C'string'%2C'trait_type'%2C'Garage%20Status'%2C'value'%2Ccoalesce((select%20coalesce(end_time%2C%20'in-flight')%20from%20pilot_sessions_1_7%20where%20rig_id%3D${tokenId}%20and%20end_time%20is%20null)%2C'parked'))))%20from%20rig_attributes_42161_15%20join%20lookups_42161_10%20where%20rig_id%3D${tokenId}%20group%20by%20rig_id%3B`
+    return `https://tableland.network/api/v1/query?mode=objects&statement=select%20json_object('name'%2C%20case%20when%20exists%20(select%20*%20from%20pilot_sessions_1_7%20where%20rig_id%20%3D%20result.rig_id%20and%20end_time%20is%20null)%20then%20'Rig%20%23'%20%7C%7C%20rig_id%20%7C%7C%20'%20%E2%9C%88%EF%B8%8F'%20else%20'Rig%20%23'%20%7C%7C%20rig_id%20end%2C%20'external_url'%2C%20'https%3A%2F%2Fgarage.tableland.xyz%2Frigs%2F'%20%7C%7C%20rig_id%2C%20'image'%2C%20'ipfs%3A%2F%2F'%20%7C%7C%20renders_cid%20%7C%7C%20'%2F'%20%7C%7C%20rig_id%20%7C%7C%20'%2F'%20%7C%7C%20image_full_name%2C%20'image_alpha'%2C%20'ipfs%3A%2F%2F'%20%7C%7C%20renders_cid%20%7C%7C%20'%2F'%20%7C%7C%20rig_id%20%7C%7C%20'%2F'%20%7C%7C%20image_full_alpha_name%2C%20'image_medium'%2C%20'ipfs%3A%2F%2F'%20%7C%7C%20renders_cid%20%7C%7C%20'%2F'%20%7C%7C%20rig_id%20%7C%7C%20'%2F'%20%7C%7C%20image_medium_name%2C%20'image_medium_alpha'%2C%20'ipfs%3A%2F%2F'%20%7C%7C%20renders_cid%20%7C%7C%20'%2F'%20%7C%7C%20rig_id%20%7C%7C%20'%2F'%20%7C%7C%20image_medium_alpha_name%2C%20'thumb'%2C%20'ipfs%3A%2F%2F'%20%7C%7C%20renders_cid%20%7C%7C%20'%2F'%20%7C%7C%20rig_id%20%7C%7C%20'%2F'%20%7C%7C%20image_thumb_name%2C%20'thumb_alpha'%2C%20'ipfs%3A%2F%2F'%20%7C%7C%20renders_cid%20%7C%7C%20'%2F'%20%7C%7C%20rig_id%20%7C%7C%20'%2F'%20%7C%7C%20image_thumb_alpha_name%2C%20'animation_url'%2C%20animation_base_url%20%7C%7C%20rig_id%20%7C%7C%20'.html'%2C%20'attributes'%2C%20json_group_array(json_object('display_type'%2C%20display_type%2C%20'trait_type'%2C%20trait_type%2C%20'value'%2C%20value)))%20from%20(select%20*%20from%20rig_attributes_42161_15%20union%20select%20a.rig_id%2C%20'string'%20as%20display_type%2C%20'Garage%20Status'%20as%20trait_type%2C%20case%20when%20start_time%20is%20null%20then%20'parked'%20else%20'in-flight'%20end%20as%20value%20from%20rig_attributes_42161_15%20as%20a%20left%20join%20(select%20*%20from%20pilot_sessions_1_7%20where%20end_time%20is%20null)%20as%20s%20on%20a.rig_id%20%3D%20s.rig_id)%20as%20result%20join%20lookups_42161_10%20where%20rig_id%20%3D%20${tokenId}%20group%20by%20rig_id`
 }
 
 export async function garageStatsQuery(){
 
-    let data = await fetch("https://tableland.network/api/v1/query?statement=select%20(select%20count(distinct%20(rig_id))%20from%20rig_attributes_42161_15)%20as%20numRigs%2C%20(select%20count(*)%20from%20(select%20distinct%20(rig_id)%20from%20pilot_sessions_1_7%20where%20end_time%20is%20null))%20as%20numRigsInFlight%2C%20(select%20count(*)%20from%20(select%20distinct%20pilot_contract%2C%20pilot_id%20from%20pilot_sessions_1_7))%20as%20numPilots%2C%20(select%20coalesce(sum(coalesce(end_time%2C%20block_num(1))%20-%20start_time)%2C%200)%20from%20pilot_sessions_1_7)%20as%20totalFlightTime%2C%20(select%20coalesce(avg(coalesce(end_time%2C%20block_num(1))%20-%20start_time)%2C%200)%20from%20pilot_sessions_1_7)%20as%20avgFlightTime%20from%20rig_attributes_42161_15%20limit%201&format=objects");
+    let data = await fetch("https://tableland.network/api/v1/query?mode=objects&statement=select%20(select%20count(distinct%20(rig_id))%20from%20rig_attributes_42161_15)%20as%20numRigs%2C%20(select%20count(*)%20from%20(select%20distinct%20(rig_id)%20from%20pilot_sessions_1_7%20where%20end_time%20is%20null))%20as%20numRigsInFlight%2C%20(select%20count(*)%20from%20(select%20distinct%20pilot_contract%2C%20pilot_id%20from%20pilot_sessions_1_7))%20as%20numPilots%2C%20(select%20coalesce(sum(coalesce(end_time%2C%20block_num(1))%20-%20start_time)%2C%200)%20from%20pilot_sessions_1_7)%20as%20totalFlightTime%2C%20(select%20coalesce(avg(coalesce(end_time%2C%20block_num(1))%20-%20start_time)%2C%200)%20from%20pilot_sessions_1_7)%20as%20avgFlightTime%20from%20rig_attributes_42161_15%20limit%201&format=objects");
     let json = await data.json();
     return json[0];
 }
@@ -32,29 +32,27 @@ export async function getFlightData(tokenId = 1){
     }).then(r=>r.json());
     blkNumber = parseInt(blkNumber['result']);
 
-    let query = `SELECT
-        json_group_array(json_object(
-            'contract', pilot_contract,
-            'tokenId', cast(pilot_id as text),
-            'owner', owner,
-            'startTime', start_time,
-            'endTime', end_time
-        ))
-    FROM pilot_sessions_1_7
-    WHERE rig_id = ${tokenId}`;
+    let query = `select 
+      *
+    from 
+      pilot_sessions_1_7 
+    where 
+      rig_id = ${tokenId}`
 
-    let resp = await fetch(`https://tableland.network/api/v1/query?extract=true&unwrap=true&s=${encodeURIComponent(query)}`).then(r=>r.json());
+    let resp = await fetch(`https://tableland.network/api/v1/query?mode=objects&statement=${encodeURIComponent(query)}`).then(r=>r.json());
 
     let metReq = resp.filter(e=>e.contract!=null).map(e=>{
         return {
             'contractAddress': e.contract,
             'tokenId': e.tokenId,
-            'tokenType': "ERC721",
+            'tokenType': "ERC721",  
         }
     })
 
     let nftMetadatas = await getNFTMetadataBatch(metReq);
-    return {flightData: resp, nftMetadatas, latestBlock: blkNumber};
+    let fd = {flightData: resp, nftMetadatas, latestBlock: blkNumber};
+    console.log('fd', fd);
+    return fd;
 }
 
 export async function getReservoirData(tokenId, metadataRefresh=false){
@@ -195,7 +193,7 @@ export async function getProjects(){
 
     let query = `SELECT * FROM tableverse_5_5_1375`;
 
-    let resp = await fetch(`https://testnets.tableland.network/api/v1/query?mode=json&s=${encodeURIComponent(query)}`).then(r=>r.json());
+    let resp = await fetch(`https://testnets.tableland.network/api/v1/query?mode=objects&statement=${encodeURIComponent(query)}`).then(r=>r.json());
 
     return resp;
 }

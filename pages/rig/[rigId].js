@@ -51,9 +51,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
 
     const [flights, setFlights] = useState(false);
     useEffect(()=>{
-        getFlightData(rigId).then(({flightData, nftMetadatas, latestBlock})=>{
-            setFlights({flightData, nftMetadatas, latestBlock})
-        })
+        getFlightData(rigId).then(setFlights)
     }, [rigId]);
 
     async function refresh(){
@@ -106,11 +104,11 @@ const UserSection = ({pageData: propsData, rigId}) => {
                     >
                         <chakra.iframe
                             title={rigId}
-                            src={`https://rigs.tableland.xyz/${rigId}.html`}
                             width="100%"
                             height="100%"
                             scrolling="no"
                             allowtransparency="true"
+                            src={`https://rigs.tableland.xyz/${rigId}`}
                         />
                     </Box>
 
@@ -275,8 +273,8 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                                 </Thead>
                                                 <Tbody>
                                                     {
-                                                        flights.flightData.sort((a, b)=>b.startTime - a.startTime).map(e=>(
-                                                            <Tr key={e.startTime}>
+                                                        flights.flightData.sort((a, b)=>b.start_time - a.start_time).map(e=>(
+                                                            <Tr key={e.start_time}>
                                                                 <Td>{e.contract ? Boolean(getMeta(e.contract)) === true ? (
                                                                     <Link href={'https://opensea.io/assets/ethereum/'+e.contract+'/'+getMeta(e.contract).id.tokenId} target="_blank">
                                                                         <Flex alignItems="center">
@@ -286,8 +284,8 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                                                     </Link>
                                                                 ) : <AddressOrEns address={e.contract} m={0}/> : "Trainer"}</Td>
 
-                                                                <Td>{e.endTime ? "Landed" : "In-flight"}</Td>
-                                                                <Td>{e.endTime ? "~" + countdown(12.07*parseInt(e.endTime - e.startTime)) : countdown(12.07*parseInt(flights.latestBlock - e.startTime))}</Td>
+                                                                <Td>{e.end_time != null ? "Landed" : "In-flight"}</Td>
+                                                                <Td>{e.end_time != null ? "~" + countdown(12.07*parseInt(e.end_time - e.start_time)) : countdown(12.07*parseInt(flights.latestBlock - e.start_time))}</Td>
                                                             </Tr>
                                                         ))
                                                     }

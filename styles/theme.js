@@ -1,4 +1,5 @@
 import { extendTheme } from "@chakra-ui/react";
+import { StepsTheme } from "chakra-ui-steps";
 
 import localFont from 'next/font/local'
 const beatrice = localFont({ src: '../public/fonts/BeatriceDisplay-Medium.woff2' })
@@ -26,6 +27,7 @@ const theme = extendTheme({
       useSystemColorMode: false
     },
     components: {
+      Steps: StepsTheme,
       Menu: {
         baseStyle: (props) => ({
           list: {

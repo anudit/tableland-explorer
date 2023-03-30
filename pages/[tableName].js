@@ -43,7 +43,7 @@ const TableSection = () => {
 
 
     const { data, error, mutate, isValidating } = useSWR(
-        tableName ? [`https://${isMainnetTable(tableName) ? '' : 'testnets.'}tableland.network/api/v1/query?mode=json&s=select%20*%20from%20${tableName}`] : null,
+        tableName ? [`https://${isMainnetTable(tableName) ? '' : 'testnets.'}tableland.network/api/v1/query?mode=objects&statement=select%20*%20from%20${tableName}`] : null,
         fetcher,
         { refreshInterval: tableName? nameToTime(tableName) : 10000, revalidateOnFocus: true }
     );
@@ -100,7 +100,7 @@ const TableSection = () => {
 
     async function refresh(){
         setRefreshing(true);
-        let data = await fetcher(`https://${isMainnetTable(tableName) ? '' : 'testnets.'}tableland.network/api/v1/query?mode=json&s=select%20*%20from%20${tableName}`);
+        let data = await fetcher(`https://${isMainnetTable(tableName) ? '' : 'testnets.'}tableland.network/api/v1/query?mode=objects&statement=select%20*%20from%20${tableName}`);
         mutate(data);
         setRefreshing(false);
     }

@@ -19,6 +19,7 @@ import { avatar, getImageDataURL } from '@/utils/stringUtils';
 import { TreeIcon } from '@/public/icons';
 import { getUserLikes } from '@/utils/ops';
 import PageShell from '@/components/PageShell';
+import { CrownIcon } from '../../public/icons';
 
 const UserSection = () => {
 
@@ -112,7 +113,10 @@ const UserSection = () => {
                                 <AddressOrEns address={address} fontWeight={900} fontSize="2xl" my={4} />
                                 {
                                     isTablescanSupporter(address) && (
-                                        <Badge ml={2} fontSize={{base:"xx-small", md: "small"}} backgroundColor='gold' color="black" maxH='fit-content'>Tablescan Supporter</Badge>
+                                        <Badge ml={2} fontSize={{base:"xx-small", md: "small"}} backgroundColor='gold' color="black" maxH='fit-content'>
+                                            <CrownIcon boxSize={{base: 2, md: 4}} mr={{base:'2px', md:2}} mt={{base: '2px', md:'1px'}}/>
+                                            Tablescan Supporter
+                                        </Badge>
                                     )
                                 }
                             </Flex>

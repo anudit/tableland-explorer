@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ButtonGroup, useClipboard, Input, Heading, Button, useColorMode, Flex, Text } from "@chakra-ui/react";
+import { Divider, useColorModeValue, Box, ButtonGroup, useClipboard, Input, Heading, Button, useColorMode, Flex, Text } from "@chakra-ui/react";
 
 import { networkDeets, parseTableData, stringSize } from "@/utils/stringUtils";
 import Dropzone from 'react-dropzone';
@@ -36,6 +36,14 @@ const formatForSql = (typeName, value) => {
     }
 }
 
+import { Step, Steps, useSteps } from "chakra-ui-steps";
+
+const steps = [
+    { label: "Step 1", description: "Select a File" },
+    { label: "Step 2", description: "Create a Table" },
+    { label: "Step 3", description: "Import Chunks" },
+];
+
 export default function DiscoverPage() {
 
     const [columns, setColumns] = useState([]);
@@ -47,6 +55,12 @@ export default function DiscoverPage() {
 
     const [loading, setLoading] = useState(false);
     // const { data: signer } = useSigner();
+
+    const { nextStep, prevStep, reset, activeStep } = useSteps({
+        initialStep: 0,
+      });
+    const hasCompletedAllSteps = activeStep === steps.length;
+    const bg = useColorModeValue("gray.200", "gray.700");
 
     function getCreateStatement(name, schema){
         let createStatement  = `CREATE TABLE ${name} (${Object.entries(schema).map(([cname, ctype])=>`${cname} ${ctype}`).toString()});`;
@@ -107,6 +121,7 @@ export default function DiscoverPage() {
         setFileData(false);
         setStats(false)
         setLoading(false)
+        reset();
     }
 
     const onDrop = (files) => {
@@ -141,6 +156,7 @@ export default function DiscoverPage() {
                     columns: Object.keys(colsParsed).length
                 })
 
+                nextStep()
                 setLoading(false)
             } catch (error) {
                 alert(error)
@@ -165,7 +181,10 @@ export default function DiscoverPage() {
             try {
                 global.sqlparser.validateTableName(tname).then((resp) =>{
                     console.log('validatedTableName', resp);
-                    if (resp.chainId) setChonks(convertJsonToChonks(tname, columns, fileData))
+                    if (resp.chainId) {
+                        setChonks(convertJsonToChonks(tname, columns, fileData))
+                        nextStep()
+                    }
                 })
                 
             } catch (error) {
@@ -180,73 +199,140 @@ export default function DiscoverPage() {
         <PageShell title="Import Data | Tablescan.io" searchProps={{customTitle: "Import Data"}}>
             <Flex w="100%" direction="column" mt="70px" alignItems="center" minH="100vh">
                 <Flex mt='10px' w={{base: "100%", md: "80%"}} alignItems='center' direction="column" p={2}>
-                    {
-                        (chonks.length > 0 || Object.keys(columns).length > 0) ? (
-                            <Button onClick={clear} leftIcon={<RepeatIcon/>} my={4}>Start Over</Button>
-                        ) : (
-                            <>
-                                <Text>Sample files — YTS Movies Dataset: <Link href="https://bafybeihrfq6hjyoffrxkhxqgx6jfgp5aeobcdomhrxnneie6qtiithzvmm.ipfs.w3s.link/yts-lite.json" target="_blank">Small</Link>, <Link href="https://bafybeign33qvdlfr2jy2di2vjqypr3uqjrqufjmydjoepmn4qacvtzxf6u.ipfs.w3s.link/yts.json" target="_blank">Large</Link></Text>
-                                <br/>
-                                <Dropzone onDrop={onDrop} maxFiles={1} accept={{
-                                    'application/json': ['.json'],
-                                }}>
-                                    {({getRootProps, getInputProps}) => (
-                                    < >
-                                        <div {...getRootProps({
-                                            className: 'dropzone',
-                                            style:{
-                                                height: '200px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                borderRadius: '20px',
-                                                borderWidth: '4px',
-                                                borderStyle: 'dashed',
-                                                minWidth: '100%'
-                                            }
-                                        })}>
-                                        <input {...getInputProps()} />
-                                        <p style={{textAlign:"center"}}>Drag n drop a JSON file here, or click to select a file</p>
-                                        </div>
-                                    </>
-                                    )}
-                                </Dropzone>
-                            </>
-                        )    
-                    }
-                    {
-                        loading && (<>Parsing Data ...</>)
-                    }
-                    {
-                        Object.keys(columns).length > 0 && (
-                            <>
-                                <Heading size="md" mt={2}>Let&#39;s start by creating a table</Heading>
-                                <Text fontSize='sm' mb={2} mt={1}>Just hit run.</Text>
-                                <SqlDetails key={'create'} id={0} total={1} sql={getCreateStatement(tname, columns)} />
-                                <br/>
-                                <Input placeholder="Enter your Full Table Name" onChange={(e)=>{
-                                    setTname(e.currentTarget.value);
-                                }}/>
-                                <br/>
-                                <br/>
-                            </>
-                        )
-                    }
-                    
-                    {
-                        chonks.length>0 && stats && (
-                            <>
-                                <Heading size="md" my={2}>Let&#39;s run all the needed SQL</Heading>
-                                <Flex direction="column" w="100%">
-                                    <Flex direction="column" w="100%" p={2} >
-                                        {JSON.stringify(stats)}  
-                                    </Flex>
 
-                                    {chonks.map((sql, id)=><SqlDetails key={id} id={id} total={chonks.length} sql={sql} />)}
-                                </Flex>
-                            </>
-                        )
-                    }
+                <Flex flexDir="column" width="100%">
+                    <Steps variant='circles' colorScheme="blue" activeStep={activeStep}>
+                        {steps.map(({ label, description }, index) => {
+                            if (index === 0){
+                               return (
+                                    <Step label={label} key={label} description={description}>
+                                        <Box sx={{ p: 8, bg, my: 8, rounded: "md" }}>
+                                            <Text>Sample files — YTS Movies Dataset: <Link href="https://bafybeihrfq6hjyoffrxkhxqgx6jfgp5aeobcdomhrxnneie6qtiithzvmm.ipfs.w3s.link/yts-lite.json" target="_blank">Small</Link>, <Link href="https://bafybeign33qvdlfr2jy2di2vjqypr3uqjrqufjmydjoepmn4qacvtzxf6u.ipfs.w3s.link/yts.json" target="_blank">Large</Link></Text>
+                                            <br/>
+                                            <Dropzone onDrop={onDrop} maxFiles={1} accept={{
+                                                'application/json': ['.json'],
+                                            }}>
+                                                {({getRootProps, getInputProps}) => (
+                                                < >
+                                                    <div {...getRootProps({
+                                                        className: 'dropzone',
+                                                        style:{
+                                                            height: '200px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            borderRadius: '20px',
+                                                            borderWidth: '4px',
+                                                            borderStyle: 'dashed',
+                                                            minWidth: '100%'
+                                                        }
+                                                    })}>
+                                                    <input {...getInputProps()} />
+                                                    <p style={{textAlign:"center"}}>Drag n drop a JSON file here, or click to select a file</p>
+                                                    </div>
+                                                </>
+                                                )}
+                                            </Dropzone>
+                                            {
+                                                loading && (<>Parsing Data ...</>)
+                                            }
+                                        </Box>
+                                    </Step>
+                               )
+                            }
+                            else if (index === 1){
+                                if (Object.keys(columns).length > 0){
+                                    return (
+                                        <Step label={label} key={label} description={description}>
+                                        <Box sx={{ p: 8, bg, my: 8, rounded: "md" }}>
+                                            <Text size="md" mt={2}>Let&#39;s start by creating a table</Text>
+                                            <Text fontSize='sm' mb={2} mt={1}>Just hit run to create the table</Text>
+                                            <SqlDetails key={'create'} id={0} total={1} sql={getCreateStatement(tname, columns)} />
+                                            <br/>
+                                            <Divider />
+                                            <br/>
+                                            <Text fontSize='sm' mb={2} mt={1}>Or Enter the Table Name manually here</Text>
+                                            <Input placeholder="Full Table Name" onChange={(e)=>{
+                                                setTname(e.currentTarget.value);
+                                            }}/>
+                                            <br/>
+                                            <br/>
+                                        </Box>  
+                                        </Step>
+                                    )
+                                }
+                                else {
+                                    return (<Step label={label} key={label} description={description}>
+                                            <Box sx={{ p: 8, bg, my: 8, rounded: "md" }}>
+                                                No Valid Columns Found.
+                                            </Box>
+                                        </Step>
+                                    )
+                                }
+                            }
+                            else if (index === 2){
+                                if (chonks.length>0 && stats){
+                                    return (
+                                        <Step label={label} key={label} description={description}>
+                                            <Box sx={{ p: 8, bg, my: 8, rounded: "md" }}>
+                                                <Text size="md" my={2}>Let&#39;s run all the needed SQL</Text>
+                                                <Flex direction="column" w="100%">
+                                                    <Flex direction="column" w="100%" p={2} >
+                                                        {JSON.stringify(stats)}  
+                                                    </Flex>
+                
+                                                    {chonks.map((sql, id)=><SqlDetails key={id} id={id} total={chonks.length} sql={sql} />)}
+                                                </Flex>
+                                            </Box>
+                                        </Step> 
+                                    )
+                                }
+                                else {
+                                    return (
+                                        <Step label={label} key={label} description={description}>
+                                            <Box sx={{ p: 8, bg, my: 8, rounded: "md" }}>
+                                                No Data Recognized.
+                                            </Box>
+                                        </Step>
+                                    )
+                                }
+                            }
+                            else {
+                                return (
+                                    <Step label={label} key={label} description={description}>
+                                        <Box sx={{ p: 8, bg, my: 8, rounded: "md" }}>
+                                        <Heading fontSize="xl" textAlign="center">
+                                            Step {index + 1}
+                                        </Heading>
+                                        </Box>
+                                    </Step>
+                                )
+                            }
+                        })}
+                    </Steps>
+                    {hasCompletedAllSteps && (
+                        <Box sx={{ bg, my: 8, p: 8, rounded: "md" }}>
+                        <Heading fontSize="xl" textAlign={"center"}>
+                            Woohoo! All steps completed! 🎉
+                        </Heading>
+                        </Box>
+                    )}
+                    <Flex width="100%" justify="flex-end" gap={4}>
+                        <Button size="sm" onClick={clear} variant="ghost" leftIcon={<RepeatIcon/>}>Start Over</Button>
+                        <Button
+                            isDisabled={activeStep === 0}
+                            onClick={prevStep}
+                            size="sm"
+                            variant="ghost"
+                        >
+                            Prev
+                        </Button>
+                        <Button size="sm" onClick={nextStep} isDisabled={activeStep >= steps.length}>
+                            {activeStep >= steps.length ? "Finished" : "Next"}
+                        </Button>
+                    </Flex>
+                    </Flex>
+                    <br/>
                 </Flex>
             </Flex> 
         </PageShell>

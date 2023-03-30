@@ -168,14 +168,14 @@ const TabView = ({defaultQuery, name}) => {
     const { colorMode } = useColorMode();
 
     const { data, error, mutate, isValidating } = useSWR(
-        sqlValue ? [`https://${isMainnetTableFromQuery(sqlValue) ? '' : 'testnets.'}tableland.network/api/v1/query?statement=?mode=json&s=${sqlValue}`] : null,
+        sqlValue ? [`https://${isMainnetTableFromQuery(sqlValue) ? '' : 'testnets.'}tableland.network/api/v1/query?mode=objects&statement=${encodeURIComponent(sqlValue)}`] : null,
         fetcher,
         { refreshInterval: 10000, revalidateOnFocus: true }
     );
 
     async function refresh(){
         setRefreshing(true);
-        let data = await fetcher(`https://${isMainnetTableFromQuery(sqlValue) ? '' : 'testnets.'}tableland.network/api/v1/query?statement=?mode=json&s=${sqlValue}`);
+        let data = await fetcher(`https://${isMainnetTableFromQuery(sqlValue) ? '' : 'testnets.'}tableland.network/api/v1/query?mode=objects&statement=${encodeURIComponent(sqlValue)}`);
         mutate(data);
         setRefreshing(false);
     }
@@ -186,7 +186,7 @@ const TabView = ({defaultQuery, name}) => {
             codegen.convert(
                 lang,
                 variant,
-                new sdk.Request(`https://${isMainnetTableFromQuery(sqlValue) ? '' : 'testnets.'}tableland.network/api/v1/query?statement=?mode=json&s=${encodeURIComponent(sqlValue)}`),
+                new sdk.Request(`https://${isMainnetTableFromQuery(sqlValue) ? '' : 'testnets.'}tableland.network/api/v1/query?mode=objects&statement=${encodeURIComponent(sqlValue)}`),
                 {
                     indentCount: 3,
                     indentType: 'Space',
@@ -343,6 +343,7 @@ const TabView = ({defaultQuery, name}) => {
                     }
                     <ActionBar
                         inputValue={sqlValue}
+                        setInputValue={setSqlValue}
                         sqlError={sqlError}
                         isLoading={refreshing || isValidating}
                         refresh={refresh}
