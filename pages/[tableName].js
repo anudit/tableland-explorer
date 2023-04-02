@@ -254,7 +254,9 @@ const TableSection = () => {
                 <TabPanels>
                     <TabPanel p={2} display='flex' direction="row" w="100%" overflowX='scroll'>
                         <MenuGroup title="Details">
-                            <MenuButtonShell icon={<InfoOutlineIcon boxSize={6}/>} title="Info" onClick={onOpen}/>
+                            {
+                                tableMetadata && (<MenuButtonShell icon={<InfoOutlineIcon boxSize={6}/>} title="Info" onClick={onOpen}/>)
+                            }
                             <MenuButtonShell icon={<HamburgerIcon boxSize={6}/>} title="History" onClick={onOpenHistory}/>
                             <MenuButtonShell icon={hasCopiedLink? <CheckIcon boxSize={6}/> : <LinkIcon boxSize={6}/>} title={hasCopiedLink ? "Copied" : "Copy Link"} onClick={onCopyLink}  mr={0}/>
                         </MenuGroup>

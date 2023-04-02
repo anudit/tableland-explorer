@@ -262,7 +262,7 @@ const UserSection = ({pageData: propsData, rigId}) => {
                                 </AccordionButton>
                                 <AccordionPanel>
                                     <TableContainer>
-                                        {flights ? flights.flightData.length > 0 ? (
+                                        {flights && flights?.flightData ? flights.flightData.length > 0 ? (
                                             <Table size='sm'>
                                                 <Thead>
                                                     <Tr>

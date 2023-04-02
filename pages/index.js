@@ -166,7 +166,7 @@ const ChainsSection = () => {
           </Flex>
           <Flex direction='column' align="center" key={3} mb={4} alignItems='flex-start'>
             <Flex direction="row" alignItems="center">
-              <Avatar size="xs" src={networkDeets['42161'].avatar} title={networkDeets['42161'].name} mr={2} backgroundColor="transparent"/>
+              <Avatar size="xs" src={networkDeets['42161'].avatar} title={networkDeets['42161'].name} mr={2} backgroundColor="red"/>
               <Text fontWeight={600} fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
                 Arbitrum
               </Text>
@@ -181,6 +181,26 @@ const ChainsSection = () => {
               <Text size="sm" mr={1}>Görli : </Text>
               <Skeleton isLoaded={Boolean(data)}>
                 <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[7].tableId} Tables</Text>
+              </Skeleton>
+            </Flex>
+          </Flex>
+          <Flex direction='column' align="center" key={4} mb={4} alignItems='flex-start'>
+            <Flex direction="row" alignItems="center">
+              <Avatar size="xs" src={networkDeets['314'].avatar} title={networkDeets['314'].name} mr={2} backgroundColor="transparent"/>
+              <Text fontWeight={600} fontSize='lg' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+                Filecoin EVM
+              </Text>
+            </Flex>
+            <Flex direction='row' ml={4} mt={1}>
+              <Text size="sm" mr={1}>Mainnet : </Text>
+              <Skeleton isLoaded={Boolean(data)}>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[8]?.tableId} Tables</Text>
+              </Skeleton>
+            </Flex>
+            <Flex direction='row' ml={4} mt={1}>
+              <Text size="sm" mr={1}>Hyperspace : </Text>
+              <Skeleton isLoaded={Boolean(data)}>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[9]?.tableId} Tables</Text>
               </Skeleton>
             </Flex>
           </Flex>

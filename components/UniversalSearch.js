@@ -155,7 +155,7 @@ export default function UniversalSearch({children, defaultValue = "", customTitl
                             .map((table, oid) => (
                             <AutoCompleteItem
                                 key={`option-${oid}`}
-                                value={table.name}
+                                value={table?.name}
                                 align="center"
                                 display='flex'
                                 flexDirection='row'

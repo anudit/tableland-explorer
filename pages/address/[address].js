@@ -114,7 +114,7 @@ const UserSection = () => {
                                 {
                                     isTablescanSupporter(address) && (
                                         <Badge ml={2} fontSize={{base:"xx-small", md: "small"}} backgroundColor='gold' color="black" maxH='fit-content'>
-                                            <CrownIcon boxSize={{base: 2, md: 4}} mr={{base:'2px', md:2}} mt={{base: '2px', md:'1px'}}/>
+                                            <CrownIcon boxSize={{base: 2, md: 4}} mr={{base:'2px', md:2}} mt={{base: '2px', md:'-2px'}}/>
                                             Tablescan Supporter
                                         </Badge>
                                     )

@@ -1,5 +1,5 @@
 import { isAddress } from "ethers/lib/utils";
-import { mergeKeyValue, sleep } from "./stringUtils";
+import { sleep } from "./stringUtils";
 
 const ethereumRpcUrl = 'https://eth.llamarpc.com/rpc/01GN04VPE4RTRF8NH87ZP86K24';
 
@@ -22,37 +22,45 @@ export async function getMetadata(tokenIds = []){
 
 export async function getFlightData(tokenId = 1){
 
-    let blkNumber = await fetch(ethereumRpcUrl, {
-        "headers": {
-          "accept": "*/*",
-          "content-type": "application/json",
-        },
-        "body": "{\"method\":\"eth_blockNumber\",\"params\":[],\"id\":42,\"jsonrpc\":\"2.0\"}",
-        "method": "POST",
-    }).then(r=>r.json());
-    blkNumber = parseInt(blkNumber['result']);
-
-    let query = `select 
-      *
-    from 
-      pilot_sessions_1_7 
-    where 
-      rig_id = ${tokenId}`
-
-    let resp = await fetch(`https://tableland.network/api/v1/query?mode=objects&statement=${encodeURIComponent(query)}`).then(r=>r.json());
-
-    let metReq = resp.filter(e=>e.contract!=null).map(e=>{
-        return {
-            'contractAddress': e.contract,
-            'tokenId': e.tokenId,
-            'tokenType': "ERC721",  
+    try {
+        let blkNumber = await fetch(ethereumRpcUrl, {
+            "headers": {
+              "accept": "*/*",
+              "content-type": "application/json",
+            },
+            "body": "{\"method\":\"eth_blockNumber\",\"params\":[],\"id\":42,\"jsonrpc\":\"2.0\"}",
+            "method": "POST",
+        }).then(r=>r.json());
+        blkNumber = parseInt(blkNumber['result']);
+    
+        let query = `select * from pilot_sessions_1_7 where rig_id = ${tokenId}`
+    
+        let resp = await fetch(`https://tableland.network/api/v1/query?mode=objects&statement=${encodeURIComponent(query)}`).then(r=>r.json());
+    
+    
+        if (resp?.message){
+            return {flightData: false, latestBlock: blkNumber, nftMetadatas: []};
         }
-    })
+        else {
+            let metReq = resp.filter(e=>e.pilot_contract!=null).map(e=>{
+                return {
+                    'contractAddress': e.pilot_contract,
+                    'tokenId': e.id,
+                    'tokenType': "ERC721",  
+                }
+            })
+        
+            let nftMetadatas = await getNFTMetadataBatch(metReq);
+            let fd = {flightData: resp, nftMetadatas, latestBlock: blkNumber};
+            return fd;
+    
+        }
+        
+    } catch (error) {
+        return {flightData: false, latestBlock: 0, nftMetadatas: []};
+    }
 
-    let nftMetadatas = await getNFTMetadataBatch(metReq);
-    let fd = {flightData: resp, nftMetadatas, latestBlock: blkNumber};
-    console.log('fd', fd);
-    return fd;
+
 }
 
 export async function getReservoirData(tokenId, metadataRefresh=false){
