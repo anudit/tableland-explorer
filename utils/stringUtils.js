@@ -190,7 +190,7 @@ export const networkDeets = {
     314: {
         name: "Filecoin",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1680283934/convo/fil.svg",
-        rpc: "https://filecoin.rpc.thirdweb.com",
+        rpc: "https://filecoin-mainnet.chainstacklabs.com/rpc/v1",
         explorer: "https://filfox.info/en",
         contractAddress: "0x59EF8Bf2d6c102B4c42AEf9189e1a9F0ABfD652d",
         fromBlock: 2718630,
@@ -201,7 +201,7 @@ export const networkDeets = {
     3141: {
         name: "Filecoin Hyperspace",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1680283934/convo/fil.svg",
-        rpc: "https://rpc.ankr.com/filecoin_testnet",
+        rpc: "https://filecoin-hyperspace.chainstacklabs.com/rpc/v1",
         explorer: "https://filfox.info/en",
         contractAddress: "0x0B9737ab4B3e5303CB67dB031b509697e31c02d3",
         fromBlock: 200531,

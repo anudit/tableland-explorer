@@ -7,7 +7,7 @@ import {
   darkTheme
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { mainnet, polygon, optimism, arbitrum, goerli, arbitrumGoerli, optimismGoerli, polygonMumbai } from 'wagmi/chains';
+import { mainnet, polygon, optimism, arbitrum, goerli, arbitrumGoerli, optimismGoerli, polygonMumbai, filecoin, filecoinHyperspace } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { useNetwork } from "wagmi";
 
@@ -18,7 +18,7 @@ export const WalletProvider = ({children}) => {
     const [tablelandSdk, setTablelandSdk] = useState(false);
 
     const { chains, provider } = configureChains(
-        [mainnet, goerli, polygon, polygonMumbai, optimism, optimismGoerli, arbitrum, arbitrumGoerli ],
+        [mainnet, goerli, polygon, polygonMumbai, optimism, optimismGoerli, arbitrum, arbitrumGoerli, filecoin, filecoinHyperspace ],
         [
           publicProvider()
         ]
