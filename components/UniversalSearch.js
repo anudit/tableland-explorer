@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
 import { Heading, HStack, Stack, Img, Menu, MenuButton, MenuList, MenuItem, MenuDivider, MenuGroup, useDisclosure, useMediaQuery, Button, useColorModeValue, useColorMode, Flex, Tag, Avatar, FormControl, Text, IconButton, Tooltip  } from "@chakra-ui/react";
-import { SqlIcon, TablelandSmallIcon, TreeIcon, UserIconOutline, WalletIcon, MoonIcon } from "@/public/icons";
+import { SqlIcon, TablelandSmallIcon, TreeIcon, UserIconOutline, WalletIcon, MoonIcon, SwitchIcon } from "@/public/icons";
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from "@choc-ui/chakra-autocomplete";
 import useSWR from "swr";
 import {multifetch} from "../utils/fetcher";
@@ -448,12 +448,11 @@ export default function UniversalSearch({children, defaultValue = "", customTitl
                                         <MenuGroup title="Tablescan">
                                             <MenuItem icon={<TreeIcon />} onClick={onOpenClimate}> <Offset onClose={onCloseClimate} isOpen={isOpenClimate}/></MenuItem>
                                             <MenuItem icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} onClick={toggleColorMode}>Toggle Theme</MenuItem>
+                                            <MenuItem icon={<SwitchIcon/>} onClick={openChainModal}>Switch Chains</MenuItem>
                                         </MenuGroup>
                                         <MenuDivider />
                                         <MenuGroup title='Account'>
-                                            <MenuItem icon={<UserIconOutline />} onClick={()=>{
-                                                router.push(`/address/${address}`)
-                                            }}>My Profile</MenuItem>
+                                            <MenuItem icon={<UserIconOutline />} onClick={()=>{ router.push(`/address/${address}`) }}>My Profile</MenuItem>
                                             <MenuItem icon={<WalletIcon />} onClick={openAccountModal}>Disconnect</MenuItem>
                                         </MenuGroup>
                                     </MenuList>

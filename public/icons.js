@@ -367,3 +367,11 @@ export const CrownIcon = createIcon({
         <path fill="currentColor" d="M21 22H3v-4h18v4zM19 9c-4 2-6-2-7-7-1 5-3 9-7 7L0 5c2 4 3 6 3 11h18c0-5 1-7 3-11l-5 4z"/>
     )
 })
+
+export const SwitchIcon = createIcon({
+    displayName: 'SwitchIcon',
+    viewBox: '0 0 24 24',
+    path: (
+        <path fill="currentColor" fillRule="evenodd" clipRule="evenodd" d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 2c5.519 0 10 4.481 10 10s-4.481 10-10 10-10-4.481-10-10 4.481-10 10-10zm2 12v-3l5 4-5 4v-3h-9v-2h9zm-4-6v-3l-5 4 5 4v-3h9v-2h-9z"/>
+    )
+})

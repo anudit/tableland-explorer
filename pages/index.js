@@ -178,6 +178,12 @@ const ChainsSection = () => {
               </Skeleton>
             </Flex>
             <Flex direction='row' ml={4} mt={1}>
+              <Text size="sm" mr={1}>Nova : </Text>
+              <Skeleton isLoaded={Boolean(data)}>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[10].tableId} Tables</Text>
+              </Skeleton>
+            </Flex>
+            <Flex direction='row' ml={4} mt={1}>
               <Text size="sm" mr={1}>Görli : </Text>
               <Skeleton isLoaded={Boolean(data)}>
                 <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[7].tableId} Tables</Text>

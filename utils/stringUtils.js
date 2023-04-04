@@ -167,6 +167,17 @@ export const networkDeets = {
         faucet: false,
         blocktime: 5,
     },
+    42170: {
+        name: "Arbitrum Nova",
+        avatar: "https://res.cloudinary.com/anudit/image/upload/v1663577114/convo/Arbitrum.svg",
+        rpc: "https://nova.arbitrum.io/rpc",
+        explorer: "https://nova.arbiscan.io/",
+        contractAddress: "0x1a22854c5b1642760a827f20137a67930ae108d2",
+        fromBlock: 3004125,
+        chonkLimit: 35,
+        faucet: false,
+        blocktime: 3,
+    },
     421613: {
         name: "Arbitrum Görli",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1669746109/convo/arb-goerli.svg",

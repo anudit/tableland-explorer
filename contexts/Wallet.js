@@ -6,7 +6,7 @@ import {
   RainbowKitProvider,
   darkTheme
 } from '@rainbow-me/rainbowkit';
-import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import { configureChains, createClient, WagmiConfig, Chain } from 'wagmi';
 import { mainnet, polygon, optimism, arbitrum, goerli, arbitrumGoerli, optimismGoerli, polygonMumbai, filecoin, filecoinHyperspace } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { useNetwork } from "wagmi";
@@ -17,12 +17,32 @@ export const WalletProvider = ({children}) => {
 
     const [tablelandSdk, setTablelandSdk] = useState(false);
 
+    const arbitrumNova = {
+        id: 42170,
+        name: 'Arbitrum Nova',
+        network: 'arbitrumNova',
+        nativeCurrency: {
+          decimals: 18,
+          name: 'Ether',
+          symbol: 'ETH',
+        },
+        rpcUrls: {
+          public: { http: ['https://nova.arbitrum.io/rpc'] },
+          default: { http: ['https://nova.arbitrum.io/rpc'] },
+        },
+        blockExplorers: {
+          etherscan: { name: 'Arbirscan', url: 'https://nova.arbiscan.io' },
+          default: { name: 'Arbiscan', url: 'https://nova.arbiscan.io' },
+        },
+        contracts: {},
+    }
     const { chains, provider } = configureChains(
-        [mainnet, goerli, polygon, polygonMumbai, optimism, optimismGoerli, arbitrum, arbitrumGoerli, filecoin, filecoinHyperspace ],
+        [mainnet, goerli, polygon, polygonMumbai, optimism, optimismGoerli, arbitrum, arbitrumGoerli, arbitrumNova, filecoin, filecoinHyperspace ],
         [
           publicProvider()
         ]
     );
+
 
     const { connectors } = getDefaultWallets({
         appName: 'Tablescan.io',
