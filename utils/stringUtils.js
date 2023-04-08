@@ -160,7 +160,7 @@ export const networkDeets = {
     42161: {
         name: "Arbitrum One",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1663577114/convo/Arbitrum.svg",
-        subgraph: "https://api.studio.thegraph.com/query/1649/tablescan-arbitrum/v1.13.1",
+        subgraph: "https://api.studio.thegraph.com/query/1649/tablescan-arbitrum/v1.13.2",
         explorer: "https://arbiscan.io",
         contractAddress: "0x9aBd75E8640871A5a20d3B4eE6330a04c962aFfd",
         chonkLimit: 35,
