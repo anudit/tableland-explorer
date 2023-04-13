@@ -169,11 +169,10 @@ export const networkDeets = {
     },
     42170: {
         name: "Arbitrum Nova",
-        avatar: "https://res.cloudinary.com/anudit/image/upload/v1663577114/convo/Arbitrum.svg",
-        rpc: "https://nova.arbitrum.io/rpc",
+        avatar: "https://res.cloudinary.com/anudit/image/upload/v1681356753/arb-nova_1_p9ffqv.svg",
+        subgraph: "https://tableland-indexer.onrender.com/graphql",
         explorer: "https://nova.arbiscan.io/",
         contractAddress: "0x1a22854c5b1642760a827f20137a67930ae108d2",
-        fromBlock: 3004125,
         chonkLimit: 35,
         faucet: false,
         blocktime: 3,

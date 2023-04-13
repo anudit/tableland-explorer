@@ -23,7 +23,7 @@ export default function Home() {
 
   // Explore Feed
   const { data: exploreData } = useSWR(`{
-    tables(first: 3, orderBy: created, orderDirection: desc, where: {historyCount_gt: 3}) {
+    tables(first: 3, orderBy: "created", orderDirection: "desc", where: {historyCount_gt: "3"}) {
         id
         name
         owner {
@@ -92,7 +92,7 @@ const ChainsSection = () => {
   const { colorMode } = useColorMode();
 
   const { data } = useSWR(`{
-    tables(first: 1, orderBy: created, orderDirection: desc) {
+    tables(first: 1, orderBy: "created", orderDirection: "desc") {
       tableId
       name
     }
@@ -180,7 +180,7 @@ const ChainsSection = () => {
             <Flex direction='row' ml={4} mt={1}>
               <Text size="sm" mr={1}>Nova : </Text>
               <Skeleton isLoaded={Boolean(data)}>
-                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[10].tableId} Tables</Text>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[8].tableId} Tables</Text>
               </Skeleton>
             </Flex>
             <Flex direction='row' ml={4} mt={1}>
@@ -200,13 +200,13 @@ const ChainsSection = () => {
             <Flex direction='row' ml={4} mt={1}>
               <Text size="sm" mr={1}>Mainnet : </Text>
               <Skeleton isLoaded={Boolean(data)}>
-                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[8]?.tableId} Tables</Text>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[9]?.tableId} Tables</Text>
               </Skeleton>
             </Flex>
             <Flex direction='row' ml={4} mt={1}>
               <Text size="sm" mr={1}>Hyperspace : </Text>
               <Skeleton isLoaded={Boolean(data)}>
-                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[9]?.tableId} Tables</Text>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[10]?.tableId} Tables</Text>
               </Skeleton>
             </Flex>
           </Flex>

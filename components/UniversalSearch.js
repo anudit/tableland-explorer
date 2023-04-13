@@ -38,7 +38,7 @@ export default function UniversalSearch({children, defaultValue = "", customTitl
 
   // Autocomplete Search
   const { data, error } = useSWR(`{
-    tables(where: {name_contains_nocase: "${searchValue}"}, first: 2, orderBy: created, orderDirection: desc) {
+    tables(where: {name_contains_nocase: "${searchValue}"}, first: 2, orderBy: "created", orderDirection: "desc") {
           name
           owner {
               id
@@ -161,7 +161,7 @@ export default function UniversalSearch({children, defaultValue = "", customTitl
                                 flexDirection='row'
                                 alignItems="center"
                             >
-                                <Avatar size="sm" bg='whiteAlpha.500' src={nameToAvatar(table.name)} />
+                                <Avatar size="sm" bg='transparent' src={nameToAvatar(table.name)} />
                                 <Text ml="4" fontWeight={'medium'}>
                                 {toProperCase(table.name.split("_").slice(0,-2).join(' '))}&nbsp;
                                 <Tag size='sm' mt="2px">#{table.tableId}</Tag>

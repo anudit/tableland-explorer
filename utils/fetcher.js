@@ -72,19 +72,19 @@ export const multifetch = async (query) => {
         fetch(networkDeets['420'].subgraph, options),
         fetch(networkDeets['42161'].subgraph, options),
         fetch(networkDeets['421613'].subgraph, options),
+        fetch(networkDeets['42170'].subgraph, options),
         fetcherRpc(314, networkDeets['314'].rpc, options),
         fetcherRpc(3141, networkDeets['3141'].rpc, options),
-        fetcherRpc(42170, networkDeets['42170'].rpc, options),
     ];
     let res = await Promise.allSettled(promiseArray);
     let results = [];
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 9; i++) {
         if (res[i].status === 'fulfilled'){
             const dat = await res[i].value.json();
             results.push(dat);
         }
     }
-    for (let i = 8; i < 11; i++) {
+    for (let i = 9; i < 11; i++) {
         // console.log('res[i]', i, res[i]);
         if (res[i].status === 'fulfilled'){
             results.push(res[i].value);

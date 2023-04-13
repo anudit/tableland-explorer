@@ -35,7 +35,7 @@ const UserSection = () => {
     const [localEns, setLocalEns] = useState(false);
 
     const { data, error, isValidating } = useSWR(address ? `{
-        tables(where: {owner: "${address.toLowerCase()}"}, orderBy: created, orderDirection: desc) {
+        tables(where: {owner: "${address.toLowerCase()}"}, orderBy: "created", orderDirection: "desc") {
             id
             name
             owner {
