@@ -123,6 +123,12 @@ const ChainsSection = () => {
                 <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[1].tableId} Tables</Text>
               </Skeleton>
             </Flex>
+            <Flex direction='row' ml={4} mt={1}>
+              <Text size="sm" mr={1}>Sepolia : </Text>
+              <Skeleton isLoaded={Boolean(data)}>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[9].tableId} Tables</Text>
+              </Skeleton>
+            </Flex>
           </Flex>
           <Flex direction='column' align="center" key={1} mb={4} alignItems='flex-start'>
             <Flex direction="row" alignItems="center">
@@ -200,13 +206,13 @@ const ChainsSection = () => {
             <Flex direction='row' ml={4} mt={1}>
               <Text size="sm" mr={1}>Mainnet : </Text>
               <Skeleton isLoaded={Boolean(data)}>
-                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[9]?.tableId} Tables</Text>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[10]?.tableId} Tables</Text>
               </Skeleton>
             </Flex>
             <Flex direction='row' ml={4} mt={1}>
               <Text size="sm" mr={1}>Hyperspace : </Text>
               <Skeleton isLoaded={Boolean(data)}>
-                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[10]?.tableId} Tables</Text>
+                <Text size="sm">{!data ? "" : data.map(e=>e?.data?.tables).flat()[11]?.tableId} Tables</Text>
               </Skeleton>
             </Flex>
           </Flex>
