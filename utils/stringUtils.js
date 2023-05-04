@@ -200,7 +200,7 @@ export const networkDeets = {
     11155111: {
         name: "Ethereum Sepolia",
         avatar: "https://res.cloudinary.com/anudit/image/upload/v1667714513/convo/ethereum.svg",
-        subgraph: "https://tableland-indexer.onrender.com/graphql",
+        subgraph: "https://api.studio.thegraph.com/query/1649/tablescan-ethereum-sepolia/v1.12",
         explorer: "https://goerli.etherscan.io",
         contractAddress: "0xc50C62498448ACc8dBdE43DA77f8D5D2E2c7597D",
         chonkLimit: 35,
