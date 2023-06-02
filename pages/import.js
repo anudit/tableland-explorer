@@ -15,7 +15,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
 import { RepeatIcon } from "@chakra-ui/icons";
 import Link from "next/link";
-import { useSigner } from "wagmi";
+import { useWalletClient } from "wagmi";
 import { Database } from "@tableland/sdk";
 import init from "@tableland/sqlparser";
 import PageShell from "@/components/PageShell";
@@ -54,7 +54,6 @@ export default function DiscoverPage() {
     const [parserLoaded, setParserLoaded] = useState(false);
 
     const [loading, setLoading] = useState(false);
-    // const { data: signer } = useSigner();
 
     const { nextStep, prevStep, reset, activeStep } = useSteps({
         initialStep: 0,
@@ -344,7 +343,7 @@ function SqlDetails({id, total, sql}) {
     const { colorMode } = useColorMode();
 
     const { onCopy, hasCopied } = useClipboard(sql);
-    const { data: signer } = useSigner();
+    const { data: signer } = useWalletClient();
     const addRecentTransaction = useAddRecentTransaction();
 
     const run = async () => {

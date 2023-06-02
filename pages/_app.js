@@ -2,9 +2,8 @@ import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import Head from 'next/head'
 import customTheme from '@/styles/theme';
-import {EnsCacheProvider} from '@/contexts/EnsCache';
+import { EnsCacheProvider } from '@/contexts/EnsCache';
 import { LivepeerConfig, createReactClient, studioProvider } from '@livepeer/react';
-import Script from "next/script";
 import { WalletProvider } from "@/contexts/Wallet";
 
 const client = createReactClient({
@@ -17,16 +16,10 @@ const App = ({ Component, pageProps }) => {
       <ChakraProvider theme={customTheme} resetCSS>
         <EnsCacheProvider>
           <LivepeerConfig client={client}>
-            <Script
-              async
-              defer
-              data-website-id="3fd38d02-6d5b-4041-ab46-c904808194bf"
-              src="https://umami-stats.vercel.app/umami.js"
-            />
             <Head>
               <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
-            <Component {...pageProps}/>
+            <Component {...pageProps} />
           </LivepeerConfig>
         </EnsCacheProvider>
       </ChakraProvider>

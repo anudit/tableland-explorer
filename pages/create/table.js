@@ -3,7 +3,7 @@ import { CheckCircleIcon, DeleteIcon } from "@chakra-ui/icons";
 import { EraserIcon, ImportIcon, OpenaiIcon, PlusIcon, TerminalIcon, WalletIcon } from "@/public/icons";
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, ModalFooter, Alert, AlertIcon, AlertDescription } from '@chakra-ui/react'
 import React, { useEffect, useRef, useState } from "react";
-import { useAccount, useSigner } from "wagmi";
+import { useAccount, useWalletClient } from "wagmi";
 import { useAddRecentTransaction, useConnectModal } from "@rainbow-me/rainbowkit";
 
 import { Database } from "@tableland/sdk";
@@ -38,7 +38,7 @@ export default function CreateTable() {
     const [newTableName, setNewTableName] = useState('');
     const [sql, setSql] = useState('');
     const chainId = useChainId();
-    const { data: signer } = useSigner();
+    const { data: signer } = useWalletClient();
     const { isConnected } = useAccount();
     const { colorMode } = useColorMode();
     const { openConnectModal } = useConnectModal();
