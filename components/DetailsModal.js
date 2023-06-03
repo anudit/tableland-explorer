@@ -98,7 +98,7 @@ const DetailsModal = ({tableMetadata, isOpen, onClose}) => {
                     borderRadius: '10px',
                     fontSize: '12px'
                 }}>
-                    {format(tableMetadata?.statement || "", { language: 'mysql'})}
+                    {format(String(tableMetadata?.statement).replaceAll('[', '').replaceAll(']', '') || "", { language: 'mysql'})}
                 </SyntaxHighlighter>
                 <br/>
 

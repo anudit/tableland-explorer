@@ -448,7 +448,7 @@ export default function UniversalSearch({children, defaultValue = "", customTitl
                                         <MenuGroup title="Tablescan">
                                             <MenuItem icon={<TreeIcon />} onClick={onOpenClimate}> <Offset onClose={onCloseClimate} isOpen={isOpenClimate}/></MenuItem>
                                             <MenuItem icon={colorMode== 'dark' ? <MoonIcon /> : <SunIcon />} onClick={toggleColorMode}>Toggle Theme</MenuItem>
-                                            <MenuItem icon={<SwitchIcon/>} onClick={openChainModal}>Switch Chains</MenuItem>
+                                            <MenuItem icon={<SwitchIcon/>} onClick={openChainModal}>Switch Networks</MenuItem>
                                         </MenuGroup>
                                         <MenuDivider />
                                         <MenuGroup title='Account'>

@@ -90,6 +90,11 @@ export default function Home() {
 const ChainsSection = () => {
 
   const { colorMode } = useColorMode();
+  const [gdata, setGdata] = useState(false);
+
+  useEffect(() => {
+    garageStatsQuery().then(setGdata);
+  }, [])
 
   const { data } = useSWR(`{
     tables(first: 1, orderBy: "created", orderDirection: "desc") {
@@ -217,22 +222,7 @@ const ChainsSection = () => {
           </Flex>
         </Flex>
       </Flex>
-      <GarageStatsSection />
-    </Flex>
-  )
-}
-
-const GarageStatsSection = () => {
-
-  const { colorMode } = useColorMode();
-  const [data, setData] = useState(false);
-
-  useEffect(() => {
-    garageStatsQuery().then(setData);
-  }, [])
-
-  return (
-    <>
+      <>
       <br />
       <Heading size='lg'>🏗️ Garage</Heading>
       <br />
@@ -241,9 +231,9 @@ const GarageStatsSection = () => {
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Rigs In-flight
           </Text>
-          <Skeleton isLoaded={Boolean(data)}>
+          <Skeleton isLoaded={Boolean(gdata)}>
             <Text>
-              {parseInt(data['numRigsInFlight'])}
+              {parseInt(gdata['numRigsInFlight']) || 0}
             </Text>
           </Skeleton>
         </Flex>
@@ -251,9 +241,9 @@ const GarageStatsSection = () => {
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Rigs Parked
           </Text>
-          <Skeleton isLoaded={Boolean(data)}>
+          <Skeleton isLoaded={Boolean(gdata)}>
             <Text>
-              {3000 - parseInt(data['numRigsInFlight'])}
+              {3000 - parseInt(gdata['numRigsInFlight']) || 0}
             </Text>
           </Skeleton>
         </Flex>
@@ -261,9 +251,9 @@ const GarageStatsSection = () => {
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Total Flight Time
           </Text>
-          <Skeleton isLoaded={Boolean(data)}>
+          <Skeleton isLoaded={Boolean(gdata)}>
             <Text>
-              {(parseInt(data['totalFlightTime'] * 12.07) / (60 * 60 * 24 * 365)).toFixed(2)} years
+              {(parseInt(gdata['totalFlightTime'] * 12.07) / (60 * 60 * 24 * 365)).toFixed(2) || 0} years
             </Text>
           </Skeleton>
         </Flex>
@@ -271,9 +261,9 @@ const GarageStatsSection = () => {
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Avg. Flight Time
           </Text>
-          <Skeleton isLoaded={Boolean(data)}>
+          <Skeleton isLoaded={Boolean(gdata)}>
             <Text>
-              {(parseInt(data['avgFlightTime'] * 12.07) / (60 * 60 * 24)).toFixed(2)} days
+              {(parseInt(gdata['avgFlightTime'] * 12.07) / (60 * 60 * 24)).toFixed(2) || 0} days
             </Text>
           </Skeleton>
         </Flex>
@@ -281,14 +271,15 @@ const GarageStatsSection = () => {
           <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
             Number of Pilots
           </Text>
-          <Skeleton isLoaded={Boolean(data)}>
+          <Skeleton isLoaded={Boolean(gdata)}>
             <Text>
-              {parseInt(data['numPilots'])}
+              {parseInt(gdata['numPilots']) || 0}
             </Text>
           </Skeleton>
         </Flex>
       </SimpleGrid>
     </>
+    </Flex>
   )
 }
 

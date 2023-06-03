@@ -8,10 +8,9 @@ import {
   connectorsForWallets
 } from '@rainbow-me/rainbowkit';
 import { configureChains, WagmiConfig } from 'wagmi';
-import { mainnet, polygon, optimism, arbitrum, goerli, arbitrumGoerli, optimismGoerli, polygonMumbai, filecoin, filecoinHyperspace } from 'wagmi/chains';
+import { mainnet, polygon, optimism, arbitrum, goerli, arbitrumGoerli, optimismGoerli, polygonMumbai, filecoin, filecoinCalibration } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { useNetwork } from "wagmi";
-import { filecoinCalibration } from "viem/chains";
 import { createConfig } from "wagmi";
 
 export const WalletContext = createContext(undefined);
@@ -41,7 +40,7 @@ export const WalletProvider = ({ children }) => {
     contracts: {},
   }
   const { chains, publicClient, webSocketPublicClient } = configureChains(
-    [mainnet, goerli, polygon, polygonMumbai, optimism, optimismGoerli, arbitrum, arbitrumGoerli, arbitrumNova, filecoin, filecoinHyperspace],
+    [mainnet, goerli, polygon, polygonMumbai, optimism, optimismGoerli, arbitrum, arbitrumGoerli, arbitrumNova, filecoin, filecoinCalibration],
     [
       publicProvider()
     ]

@@ -1,5 +1,6 @@
 import React, {useRef, useState} from "react";
-import { Button, Textarea, InputGroup, InputRightElement } from "@chakra-ui/react";
+import { Box, Button, Textarea, InputGroup, InputRightElement } from "@chakra-ui/react";
+import {MoonIcon} from "@chakra-ui/icons";
 import { Parser } from "node-sql-parser";
 import { nameToSubgraph } from "@/utils/stringUtils";
 import fetcher from "@/utils/fetcher";
@@ -111,11 +112,11 @@ const GptInput = ({inputValue, setInputValue}) => {
         pr='4.5rem'
         mx={2}
         borderColor="#eee5"
-        placeholder='Describe your query to ChatGPT'
+        placeholder='Describe your query to ChatGPT and get back SQL'
       />
-      <InputRightElement width='5rem'>
-        <Button h='1.75rem' size='sm' mr={4} mt={4} onClick={getGptResult} isLoading={loading}>
-          Get SQL
+      <InputRightElement width='7rem'>
+        <Button h='1.75rem' size='sm' mr={4} mt={4} onClick={getGptResult} isLoading={loading} leftIcon={<Box>✨</Box>} fontWeight={400}>
+          Ask AI
         </Button>
       </InputRightElement>
     </InputGroup>
