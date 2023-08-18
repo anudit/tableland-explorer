@@ -1,24 +1,19 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, { createContext } from "react";
 
-import '@rainbow-me/rainbowkit/styles.css';
 import {
-  getDefaultWallets,
   RainbowKitProvider,
   darkTheme,
-  connectorsForWallets
+  getDefaultWallets
 } from '@rainbow-me/rainbowkit';
-import { configureChains, WagmiConfig } from 'wagmi';
-import { mainnet, polygon, optimism, arbitrum, goerli, arbitrumGoerli, optimismGoerli, polygonMumbai, filecoin, filecoinCalibration } from 'wagmi/chains';
+import '@rainbow-me/rainbowkit/styles.css';
+import { WagmiConfig, configureChains, createConfig } from 'wagmi';
+import { arbitrum, arbitrumGoerli, filecoin, filecoinCalibration, goerli, mainnet, optimism, optimismGoerli, polygon, polygonMumbai } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
-import { useNetwork } from "wagmi";
-import { createConfig } from "wagmi";
 
 export const WalletContext = createContext(undefined);
 
 
 export const WalletProvider = ({ children }) => {
-
-  const [tablelandSdk, setTablelandSdk] = useState(false);
 
   const arbitrumNova = {
     id: 42170,
@@ -47,7 +42,7 @@ export const WalletProvider = ({ children }) => {
   );
   const projectId = 'd956959c5b97073bd3ce9c791dc65aa3';
 
-  const { wallets } = getDefaultWallets({
+  const { connectors } = getDefaultWallets({
     appName: 'Tablescan.io',
     projectId,
     chains
@@ -57,48 +52,12 @@ export const WalletProvider = ({ children }) => {
     appName: 'Tablescan.io',
   };
 
-  const connectors = connectorsForWallets([
-    ...wallets
-  ]);
-
   const wagmiConfig = createConfig({
     autoConnect: true,
     connectors,
     publicClient,
     webSocketPublicClient,
   });
-
-  const { chain } = useNetwork();
-
-  async function setupSdk() {
-
-    // try {
-
-    //     let chainName = "";
-    //     if (chain.name === "Ethereum") chainName = "ethereum";
-    //     if (chain.name === 'Goerli') chainName = "ethereum-goerli";
-    //     if (chain.name === "Polygon") chainName = "polygon";
-    //     if (chain.name === "Polygon Mumbai") chainName = "polygon-mumbai";
-    //     if (chain.name === "Optimism One") chainName = "optimism";
-    //     if (chain.name === "Optimism Goerli") chainName = "optimism-goerli";
-    //     if (chain.name === "Arbitrum One") chainName = "arbitrum";
-    //     if (chain.name === "Arbitrum Goerli") chainName = "arbitrum-goerli";
-
-    //     // const tableland = await connect({ network: "testnet", chain: chainName });
-    //     // await tableland.siwe();
-    //     // setTablelandSdk(tableland);
-    //     return true;
-
-    // } catch (error) {
-    //     setTablelandSdk(false);
-    //     return false;
-    // }
-  }
-
-  useEffect(() => {
-    if (chain) setupSdk();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chain])
 
   const cleanStatement = (tableId = "", tableName = "", statement = "") => {
 
@@ -112,7 +71,6 @@ export const WalletProvider = ({ children }) => {
 
     // console.log({nameSimple, statementCleaned});
 
-
     return { justName, statementCleaned };
   }
 
@@ -120,9 +78,7 @@ export const WalletProvider = ({ children }) => {
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains} theme={darkTheme()} modalSize="compact" coolMode showRecentTransactions={true} appInfo={appInfo}>
         <WalletContext.Provider value={{
-          cleanStatement,
-          setupSdk,
-          tablelandSdk
+          cleanStatement
         }}>
           {children}
         </WalletContext.Provider>
