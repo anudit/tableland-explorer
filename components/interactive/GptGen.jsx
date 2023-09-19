@@ -1,9 +1,8 @@
-import React, {useRef, useState} from "react";
-import { Box, Button, Textarea, InputGroup, InputRightElement } from "@chakra-ui/react";
-import {MoonIcon} from "@chakra-ui/icons";
-import { Parser } from "node-sql-parser";
-import { nameToSubgraph } from "@/utils/stringUtils";
 import fetcher from "@/utils/fetcher";
+import { nameToSubgraph } from "@/utils/stringUtils";
+import { Box, Button, InputGroup, InputRightElement, Textarea } from "@chakra-ui/react";
+import { Parser } from "node-sql-parser";
+import React, { useRef, useState } from "react";
 
 const getTableFromQuery = (query) => {
     try {
@@ -24,16 +23,16 @@ const getTableFromQuery = (query) => {
 }
 
 
-const GptInput = ({inputValue, setInputValue}) => {
+const GptInput = ({ inputValue, setInputValue }) => {
 
     const gptQuery = useRef(null);
     const [loading, setLoading] = useState(false);
 
-    async function getGptResult(){
+    async function getGptResult() {
 
         const completeTableName = getTableFromQuery(inputValue);
 
-        if(Boolean(inputValue) && Boolean(completeTableName)){
+        if (Boolean(inputValue) && Boolean(completeTableName)) {
 
 
             setLoading(true)
@@ -75,7 +74,7 @@ const GptInput = ({inputValue, setInputValue}) => {
             let partialTableName = completeTableName.replace(`_${data?.data?.tables[0]?.tableId}`, '');
 
             creationStatement = creationStatement.replace(partialTableName, completeTableName)
-            
+
 
             let resp = await fetch(`/api/gpt3`, {
                 method: "POST",
@@ -86,8 +85,8 @@ const GptInput = ({inputValue, setInputValue}) => {
                     query: gptQuery.current.value,
                     schema: creationStatement
                 })
-            }).then(e=>e.json());
-    
+            }).then(e => e.json());
+
             if (resp?.generatedSQL) {
                 setInputValue(resp?.generatedSQL.replace(';', ''))
             }
@@ -105,22 +104,22 @@ const GptInput = ({inputValue, setInputValue}) => {
     }
 
 
-  return (
-    <InputGroup size='md' py={2}>
-      <Textarea
-        ref={gptQuery}
-        pr='4.5rem'
-        mx={2}
-        borderColor="#eee5"
-        placeholder='Describe your query to ChatGPT and get back SQL'
-      />
-      <InputRightElement width='7rem'>
-        <Button h='1.75rem' size='sm' mr={4} mt={4} onClick={getGptResult} isLoading={loading} leftIcon={<Box>✨</Box>} fontWeight={400}>
-          Ask AI
-        </Button>
-      </InputRightElement>
-    </InputGroup>
-  );
+    return (
+        <InputGroup size='md' py={2}>
+            <Textarea
+                ref={gptQuery}
+                pr='4.5rem'
+                mx={2}
+                borderColor="#eee5"
+                placeholder='Describe your query to ChatGPT and get back SQL'
+            />
+            <InputRightElement width='7rem'>
+                <Button h='1.75rem' size='sm' mr={4} mt={4} onClick={getGptResult} isLoading={loading} leftIcon={<Box>✨</Box>} fontWeight={400}>
+                    Ask AI
+                </Button>
+            </InputRightElement>
+        </InputGroup>
+    );
 };
 
 export default GptInput;
