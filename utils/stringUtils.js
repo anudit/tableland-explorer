@@ -100,7 +100,7 @@ export const prettifyNumber = (num, digits = 2) => {
 export const cleanDecimals = (num) => new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(num);
 
 export const toProperCase = (inp) => {
-  return inp.replace(/\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+  return inp.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 };
 
 export const GAS_PER_KB = 30000;
@@ -210,7 +210,8 @@ export const networkDeets = {
   314: {
     name: "Filecoin",
     avatar: "https://res.cloudinary.com/anudit/image/upload/v1680283934/convo/fil.svg",
-    rpc: "https://filecoin-mainnet.chainstacklabs.com/rpc/v1",
+    // rpc: "https://filecoin-mainnet.chainstacklabs.com/rpc/v1",
+    subgraph: "https://subgraph.laconic.com/subgraphs/name/anudit/tableland",
     explorer: "https://filfox.info/en",
     contractAddress: "0x59EF8Bf2d6c102B4c42AEf9189e1a9F0ABfD652d",
     fromBlock: 2718630,
@@ -219,7 +220,7 @@ export const networkDeets = {
     blocktime: 120,
   },
   314159: {
-    name: "Filecoin Calibratoin",
+    name: "Filecoin Calibration",
     avatar: "https://res.cloudinary.com/anudit/image/upload/v1680283934/convo/fil.svg",
     rpc: "https://filecoin-calibration.chainstacklabs.com/rpc/v1",
     explorer: "https://calibration.filfox.info/en",
