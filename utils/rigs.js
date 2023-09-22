@@ -67,7 +67,7 @@ export async function getReservoirData(tokenId, metadataRefresh = false) {
     let res = await fetch(`https://api.reservoir.tools/tokens/v5?tokens=0x8eaa9ae1ac89b1c8c8a8104d08c045f78aadb42d:${tokenId}&sortBy=floorAskPrice&limit=20&includeTopBid=true&includeAttributes=true&includeQuantity=true&includeDynamicPricing=true&normalizeRoyalties=true`, {
         method: "GET",
         headers: {
-            "x-api-key": Buffer.from('ZDk3YjU4NGUtMjNlYS01ZjQ1LWFiMDEtNzdmM2UwMGQ3YTUw', 'base64')
+            "x-api-key": Buffer.from('MWNlZjZkMjAtMmJkYi01NWE1LWE0MGYtOTIzMDRiZGY3YmZh', 'base64')
         }
     });
 
