@@ -222,7 +222,8 @@ export const networkDeets = {
   314159: {
     name: "Filecoin Calibration",
     avatar: "https://res.cloudinary.com/anudit/image/upload/v1680283934/convo/fil.svg",
-    rpc: "https://filecoin-calibration.chainstacklabs.com/rpc/v1",
+    // rpc: "https://filecoin-calibration.chainstacklabs.com/rpc/v1",
+    subgraph: "https://calibration.graph.vdb.to/subgraphs/name/anudit/tableland",
     explorer: "https://calibration.filfox.info/en",
     contractAddress: "0x030BCf3D50cad04c2e57391B12740982A9308621",
     fromBlock: 587937,

@@ -1,24 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { HStack, useColorMode, Flex, Text } from '@chakra-ui/react';
-import Marquee from 'react-fast-marquee';
-import { getOpenStats } from '@/utils/rigs';
-import { TriangleUpIcon } from '@chakra-ui/icons';
-import { TriangleDownIcon } from '@chakra-ui/icons';
 import { EthIcon } from '@/public/icons';
+import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
+import { Flex, HStack, Text, useColorMode } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import Marquee from 'react-fast-marquee';
 
-const BottomStats = ({props}) => {
+const BottomStats = ({ props }) => {
 
     const { colorMode } = useColorMode();
     const [stats, setStats] = useState(false);
 
-    useEffect(()=>{
-        getOpenStats().then(e=>{
-            setStats(e.collection.stats);
-        });
-    },[])
+    useEffect(() => {
+        // getOpenStats().then(e=>{
+        //     setStats(e.collection.stats);
+        // });
+    }, [])
 
-    if(stats){
-        return(
+    if (stats) {
+        return (
             <Flex
                 w="100vw"
                 direction="row"
@@ -33,10 +31,10 @@ const BottomStats = ({props}) => {
                 fontSize='lg' fontWeight={600}
                 {...props}
             >
-               <Marquee
-                gradient={false}
-                pauseOnHover={true}
-                speed={30}
+                <Marquee
+                    gradient={false}
+                    pauseOnHover={true}
+                    speed={30}
                 >
                     <Stat
                         title='Volume (1d)'
@@ -102,7 +100,7 @@ const BottomStats = ({props}) => {
     }
 }
 
-const Stat = ({title, volume, change, unit=(<EthIcon mb={1}/>)}) => {
+const Stat = ({ title, volume, change, unit = (<EthIcon mb={1} />) }) => {
     return (
         <HStack mx={2} direction="row" spacing='12px'>
             <Text fontWeight={700}>
@@ -114,11 +112,11 @@ const Stat = ({title, volume, change, unit=(<EthIcon mb={1}/>)}) => {
             {
                 change && (change >= 0 ? (
                     <Text>
-                        <TriangleUpIcon color='green' mb={1}/> {change.toFixed(2)}{unit}
+                        <TriangleUpIcon color='green' mb={1} /> {change.toFixed(2)}{unit}
                     </Text>
                 ) : (
                     <Text>
-                        <TriangleDownIcon color='red' mb={1}/> {change.toFixed(2)}{unit}
+                        <TriangleDownIcon color='red' mb={1} /> {change.toFixed(2)}{unit}
                     </Text>
                 ))
             }
