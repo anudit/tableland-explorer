@@ -1,10 +1,10 @@
+import DetailsModal from '@/components/DetailsModal';
+import TableCard from "@/components/ExploreTableCard";
+import { Avatar, Flex, Heading, SimpleGrid, Skeleton, Stack, Text, useColorMode, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { SimpleGrid, Stack, Skeleton, Heading, useDisclosure, useColorMode, Flex, Avatar, Text } from "@chakra-ui/react";
 import useSWR from "swr";
 import { multifetch } from "../utils/fetcher";
 import { networkDeets } from "../utils/stringUtils";
-import DetailsModal from '@/components/DetailsModal';
-import TableCard from "@/components/ExploreTableCard";
 
 export default function Home() {
 
@@ -58,7 +58,7 @@ export default function Home() {
                 exploreData ? exploreData
                   .map(e => e?.data?.tables)
                   .flat()
-                  .sort(function(a, b) { return parseInt(b.created) - parseInt(a.created) })
+                  .sort(function (a, b) { return parseInt(b.created) - parseInt(a.created) })
                   .map((table, oid) => {
                     return (
                       <TableCard
@@ -81,7 +81,7 @@ export default function Home() {
             <ChainsSection />
           </Flex>
         </Flex>
-        <BottomStats />
+        {/* <BottomStats /> */}
       </>
     </PageShell>
   )
@@ -223,62 +223,62 @@ const ChainsSection = () => {
         </Flex>
       </Flex>
       <>
-      <br />
-      <Heading size='lg'>🏗️ Garage</Heading>
-      <br />
-      <SimpleGrid columns={2} spacingX='40px' spacingY='4px' top="0px" direction="column">
-        <Flex direction='column' align="left" key='numRigsInFlight' mb={2} w="120px">
-          <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-            Rigs In-flight
-          </Text>
-          <Skeleton isLoaded={Boolean(gdata)}>
-            <Text>
-              {parseInt(gdata['numRigsInFlight']) || 0}
+        <br />
+        <Heading size='lg'>🏗️ Garage</Heading>
+        <br />
+        <SimpleGrid columns={2} spacingX='40px' spacingY='4px' top="0px" direction="column">
+          <Flex direction='column' align="left" key='numRigsInFlight' mb={2} w="120px">
+            <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+              Rigs In-flight
             </Text>
-          </Skeleton>
-        </Flex>
-        <Flex direction='column' align="left" key='numRigsParked' mb={2} w="120px">
-          <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-            Rigs Parked
-          </Text>
-          <Skeleton isLoaded={Boolean(gdata)}>
-            <Text>
-              {3000 - parseInt(gdata['numRigsInFlight']) || 0}
+            <Skeleton isLoaded={Boolean(gdata)}>
+              <Text>
+                {parseInt(gdata['numRigsInFlight']) || 0}
+              </Text>
+            </Skeleton>
+          </Flex>
+          <Flex direction='column' align="left" key='numRigsParked' mb={2} w="120px">
+            <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+              Rigs Parked
             </Text>
-          </Skeleton>
-        </Flex>
-        <Flex direction='column' align="left" key='totalFlightTime' mb={2} w="120px">
-          <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-            Total Flight Time
-          </Text>
-          <Skeleton isLoaded={Boolean(gdata)}>
-            <Text>
-              {(parseInt(gdata['totalFlightTime'] * 12.07) / (60 * 60 * 24 * 365)).toFixed(2) || 0} years
+            <Skeleton isLoaded={Boolean(gdata)}>
+              <Text>
+                {3000 - parseInt(gdata['numRigsInFlight']) || 0}
+              </Text>
+            </Skeleton>
+          </Flex>
+          <Flex direction='column' align="left" key='totalFlightTime' mb={2} w="120px">
+            <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+              Total Flight Time
             </Text>
-          </Skeleton>
-        </Flex>
-        <Flex direction='column' align="left" key='avgFlightTime' mb={2} w="120px">
-          <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-            Avg. Flight Time
-          </Text>
-          <Skeleton isLoaded={Boolean(gdata)}>
-            <Text>
-              {(parseInt(gdata['avgFlightTime'] * 12.07) / (60 * 60 * 24)).toFixed(2) || 0} days
+            <Skeleton isLoaded={Boolean(gdata)}>
+              <Text>
+                {(parseInt(gdata['totalFlightTime'] * 12.07) / (60 * 60 * 24 * 365)).toFixed(2) || 0} years
+              </Text>
+            </Skeleton>
+          </Flex>
+          <Flex direction='column' align="left" key='avgFlightTime' mb={2} w="120px">
+            <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+              Avg. Flight Time
             </Text>
-          </Skeleton>
-        </Flex>
-        <Flex direction='column' align="left" key='numPilots' mb={2} w="120px">
-          <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
-            Number of Pilots
-          </Text>
-          <Skeleton isLoaded={Boolean(gdata)}>
-            <Text>
-              {parseInt(gdata['numPilots']) || 0}
+            <Skeleton isLoaded={Boolean(gdata)}>
+              <Text>
+                {(parseInt(gdata['avgFlightTime'] * 12.07) / (60 * 60 * 24)).toFixed(2) || 0} days
+              </Text>
+            </Skeleton>
+          </Flex>
+          <Flex direction='column' align="left" key='numPilots' mb={2} w="120px">
+            <Text fontSize='sm' color={colorMode === 'light' ? 'gray.600' : 'whiteAlpha.700'}>
+              Number of Pilots
             </Text>
-          </Skeleton>
-        </Flex>
-      </SimpleGrid>
-    </>
+            <Skeleton isLoaded={Boolean(gdata)}>
+              <Text>
+                {parseInt(gdata['numPilots']) || 0}
+              </Text>
+            </Skeleton>
+          </Flex>
+        </SimpleGrid>
+      </>
     </Flex>
   )
 }
@@ -286,9 +286,9 @@ const ChainsSection = () => {
 import { garageStatsQuery, getLatestRigActions } from "@/utils/rigs";
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
 import RigAction from "@/components/RigAction";
-import BottomStats from "@/components/BottomStats";
+import 'swiper/css';
+// import BottomStats from "@/components/BottomStats";
 import TableCardSkeleton from "@/components/ExploreTableCardShell";
 import PageShell from "@/components/PageShell";
 
